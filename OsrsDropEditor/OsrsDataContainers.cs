@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -51,9 +52,25 @@ namespace OsrsDropEditor
         /// </summary>
         public static void LoadNpcLinks()
         {
-            browser.Navigate(osrsWikiBestiaryLink);
+            if (!File.Exists(@"../../OfflineJson/links.json"))
+            {
+                browser.Navigate(osrsWikiBestiaryLink);
 
-            GetLinksOnPage();
+                GetLinksOnPage();
+
+                string linksAsJson = JsonConvert.SerializeObject(NpcLinks);
+                File.WriteAllText(@"../../OfflineJson/links.json", linksAsJson);
+
+                return;
+            }
+            using (FileStream stream = File.OpenRead(@"../../OfflineJson/links.json"))
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string cachedJson = reader.ReadToEnd();
+                    NpcLinks = JsonConvert.DeserializeObject<Dictionary<string, string>>(cachedJson);
+                }
+            }
         }
 
         private static void GetLinksOnPage()
@@ -94,15 +111,23 @@ namespace OsrsDropEditor
         /// </summary>
         public static void LoadRareDropTable()
         {
-            browser.Navigate(osrsWikiRareDropTableLink);
-
-            IEnumerable<HtmlNode> tableNodes = browser.SelectNodes("//*[local-name()='table' and contains(@class, 'wikitable')]");
-            foreach (HtmlNode tableNode in tableNodes)
+            if (!File.Exists(@"..\..\OfflineJson\raredrops.json"))
             {
-                IEnumerable<HtmlNode> dropRows = tableNode.SelectNodes(".//*[local-name()='tr' and not(.//*[local-name()='th'])]");
-                Dictionary<string, int> headerMap = GetHeaderMap(tableNode);
+                browser.Navigate(osrsWikiRareDropTableLink);
 
-                RareDropTable.AddRange(dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)));
+                IEnumerable<HtmlNode> tableNodes = browser.SelectNodes("//*[local-name()='table' and contains(@class, 'wikitable')]");
+                foreach (HtmlNode tableNode in tableNodes)
+                {
+                    IEnumerable<HtmlNode> dropRows = tableNode.SelectNodes(".//*[local-name()='tr' and not(.//*[local-name()='th'])]");
+                    Dictionary<string, int> headerMap = GetHeaderMap(tableNode);
+
+                    RareDropTable.AddRange(dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)));
+                }
+
+                string rareDropsAsJson = JsonConvert.SerializeObject(RareDropTable);
+                File.WriteAllText(@"../../OfflineJson/raredrops.json", rareDropsAsJson);
+
+                return;
             }
         }
         #endregion
