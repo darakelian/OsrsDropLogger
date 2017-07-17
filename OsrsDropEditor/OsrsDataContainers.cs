@@ -63,13 +63,11 @@ namespace OsrsDropEditor
 
                 return;
             }
-            using (FileStream stream = File.OpenRead(@"../../OfflineJson/links.json"))
+            else
             {
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    string cachedJson = reader.ReadToEnd();
+                string cachedJson = Utility.ReadFileToEnd("links.json");
+                if (!String.IsNullOrEmpty(cachedJson))
                     NpcLinks = JsonConvert.DeserializeObject<Dictionary<string, string>>(cachedJson);
-                }
             }
         }
 
@@ -98,12 +96,39 @@ namespace OsrsDropEditor
         /// </summary>
         public static void LoadItemPrices()
         {
-            browser.Navigate(osbPriceLink, true);
+            if (!Utility.FileExists("prices.json") || Utility.ShouldRefreshPrices())
+            {
+                try
+                {
+                    browser.Navigate(osbPriceLink, true);
 
-            JObject priceDataAsJson = (JObject)JToken.Parse(browser.InnerText);
-            IEnumerable<JToken> itemPricesJson = priceDataAsJson.Values();
+                    JObject priceDataAsJson = (JObject)JToken.Parse(browser.InnerText);
+                    IEnumerable<JToken> itemPricesJson = priceDataAsJson.Values();
 
-            ItemPrices = itemPricesJson.ToDictionary(itemToken => itemToken.Value<int>("id"), CreateItemPrice);
+                    ItemPrices = itemPricesJson.ToDictionary(itemToken => itemToken.Value<int>("id"), CreateItemPrice);
+
+                    string pricesAsJson = JsonConvert.SerializeObject(ItemPrices);
+                    File.WriteAllText(@"..\..\OfflineJson\prices.json", pricesAsJson);
+
+                    Properties.Settings.Default.TimeSinceLastRefresh = DateTime.Now;
+                    Properties.Settings.Default.Save();
+                }
+                catch (WebException)
+                {
+                    TryLoadItemPricesFromCache();
+                }
+            }
+            else
+            {
+                TryLoadItemPricesFromCache();
+            }
+        }
+
+        private static void TryLoadItemPricesFromCache()
+        {
+            string cachedItemPrices = Utility.ReadFileToEnd("prices.json");
+            if (!String.IsNullOrEmpty(cachedItemPrices))
+                ItemPrices = JsonConvert.DeserializeObject<Dictionary<int, ItemPrice>>(cachedItemPrices);
         }
 
         /// <summary>
@@ -128,6 +153,12 @@ namespace OsrsDropEditor
                 File.WriteAllText(@"../../OfflineJson/raredrops.json", rareDropsAsJson);
 
                 return;
+            }
+            else
+            {
+                string cachedRareDrops = Utility.ReadFileToEnd("raredrops.json");
+                if (!String.IsNullOrEmpty(cachedRareDrops))
+                    RareDropTable = JsonConvert.DeserializeObject<List<Drop>>(cachedRareDrops);
             }
         }
         #endregion
@@ -170,14 +201,22 @@ namespace OsrsDropEditor
             return headerMap;
         }
 
-        public static Drop GetDropFromRow(Dictionary<string, int> headers, HtmlNode row)
+        private static Drop GetDropFromRow(Dictionary<string, int> headers, HtmlNode row)
         {
             Drop drop = new Drop();
-            drop.ImageLink = row.SelectSingleNode($".//*[local-name()='td'][{headers["Image"]}]//*[local-name()='img']").Attributes["src"].Value;
+            drop.ImageLink = row.SelectSingleNode($".//*[local-name()='td'][{headers["Image"]}]//*[local-name()='img']").Attributes["data-src"].Value;
             drop.Name = row.SelectSingleNode($".//*[local-name()='td'][{headers["Item"]}]").InnerText.Trim();
 
-            string quantity = Regex.Match(row.SelectSingleNode($".//*[local-name()='td'][{headers["Quantity"]}]").InnerText.Trim(), @"\d+").Value;
-            drop.Quantity = Convert.ToInt32(quantity);
+            string quantity = row.SelectSingleNode($".//*[local-name()='td'][{headers["Quantity"]}]").InnerText.Trim();
+            if (Regex.IsMatch(quantity, @"^\d+$"))
+            {
+                drop.Quantity = Convert.ToInt32(quantity);
+            }
+            if (Regex.IsMatch(quantity, @"\d+-\d+"))
+            {
+                drop.Quantity = -1;
+                drop.IsRangeOfDrops = true;
+            }
 
             return drop;
         }
@@ -203,25 +242,42 @@ namespace OsrsDropEditor
             if (CachedDropTables.ContainsKey(npcName))
                 return CachedDropTables[npcName];
 
-            browser.Navigate(npcLink);
-
-            IEnumerable<HtmlNode> tableNodes = browser.SelectNodes("//*[local-name()='table' and contains(@class, 'dropstable')]");
-            foreach (HtmlNode tableNode in tableNodes)
+            if (!Utility.FileExists(npcName + ".json"))
             {
-                if (tableNode.Attributes["class"].Value.Contains("rdtable"))
+                try
                 {
-                    drops.Add(CreateRareDrop());
-                    continue;
-                }
-                IEnumerable<HtmlNode> dropRows = tableNode.SelectNodes(".//*[local-name()='tr' and not(.//*[local-name()='th'])]");
-                Dictionary<string, int> headerMap = GetHeaderMap(tableNode);
+                    browser.Navigate(npcLink);
 
-                drops.AddRange(dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)));
+                    IEnumerable<HtmlNode> tableNodes = browser.SelectNodes("//*[local-name()='table' and contains(@class, 'dropstable')]");
+                    foreach (HtmlNode tableNode in tableNodes)
+                    {
+                        if (tableNode.Attributes["class"].Value.Contains("rdtable"))
+                        {
+                            drops.Add(CreateRareDrop());
+                            continue;
+                        }
+                        IEnumerable<HtmlNode> dropRows = tableNode.SelectNodes(".//*[local-name()='tr' and not(.//*[local-name()='th'])]");
+                        Dictionary<string, int> headerMap = GetHeaderMap(tableNode);
+
+                        drops.AddRange(dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)));
+                    }
+
+                    string dropsAsJson = JsonConvert.SerializeObject(drops);
+                    File.WriteAllText($@"..\..\OfflineJson\DropTables\{npcName}.json", dropsAsJson);
+                }
+                catch (WebException)
+                {
+                    return Enumerable.Empty<Drop>();
+                }
+            }
+            else
+            {
+                string cachedDropJson = Utility.ReadFileToEnd($@"DropTables\{npcName}.json");
+                if (!String.IsNullOrEmpty(cachedDropJson))
+                    drops.AddRange(JsonConvert.DeserializeObject<List<Drop>>(cachedDropJson));
             }
 
-            CachedDropTables[npcName] = drops;
-
-            return drops;
+            return drops.Any() ? CachedDropTables[npcName] = drops : Enumerable.Empty<Drop>();
         }
 
         public static Drop CreateRareDrop()
@@ -256,6 +312,13 @@ namespace OsrsDropEditor
         public string ImageLink { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }
+
+        public bool IsRangeOfDrops { get; set; }
+        public int? RangeLowBound { get; set; }
+        public int? RangeHighBound { get; set; }
+
+        public bool HasMultipleQuantities { get; set; }
+        public int[] MultipleQuantities { get; set; }
 
         public override string ToString()
         {
