@@ -1,28 +1,32 @@
-﻿using HtmlAgilityPack;
-using System;
+﻿using Sgml;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
+using System.Xml;
 
 namespace OsrsDropEditor
 {
     class Browser
     {
 
-        internal HtmlDocument _document;
-        public HtmlNode Document { get { return _document.DocumentNode; } }
+        internal XmlDocument _document;
+        public XmlDocument Document { get { return _document; } }
 
-        public string InnerText { get { return _document.DocumentNode.InnerText; } }
+        public string InnerText { get { return _document.InnerText; } }
 
         internal string _uri;
         public string Uri { get { return _uri; } }
 
+        internal SgmlReader _sgmlReader;
+
         public Browser()
         {
-            _document = new HtmlDocument();
+            _sgmlReader = new SgmlReader();
+            _sgmlReader.DocType = "HTML";
+            _sgmlReader.WhitespaceHandling = WhitespaceHandling.All;
+            _sgmlReader.CaseFolding = CaseFolding.ToLower;
         }
 
         public void Navigate(string url, bool absolute = false)
@@ -33,20 +37,30 @@ namespace OsrsDropEditor
             using (Stream stream = response.GetResponseStream())
             {
                 StreamReader reader = new StreamReader(stream, Encoding.UTF8);
-                string responseString = reader.ReadToEnd();
-                _document.LoadHtml(responseString);
+
+                _sgmlReader.InputStream = reader;
+                _document = new XmlDocument();
+                _document.PreserveWhitespace = true;
+                _document.XmlResolver = null;
+                _document.Load(_sgmlReader);
+
                 _uri = request.RequestUri.ToString();
             }
         }
 
-        public HtmlNodeCollection SelectNodes(string xpath)
+        public IEnumerable<XmlNode> SelectNodes(string xpath)
         {
-            return _document.DocumentNode.SelectNodes(xpath);
+            return _document.SelectNodes(xpath).Cast<XmlNode>();
         }
 
-        public HtmlNode SelectSingleNode(string xpath)
+        public IEnumerable<XmlNode> SelectNodes(XmlNode node, string xpath)
         {
-            return _document.DocumentNode.SelectSingleNode(xpath);
+            return node.SelectNodes(xpath).Cast<XmlNode>();
+        }
+
+        public XmlNode SelectSingleNode(string xpath)
+        {
+            return _document.SelectSingleNode(xpath);
         }
 
     }

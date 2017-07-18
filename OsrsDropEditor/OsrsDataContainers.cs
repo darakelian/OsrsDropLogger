@@ -1,15 +1,12 @@
-﻿using HtmlAgilityPack;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Xml;
 
 namespace OsrsDropEditor
 {
@@ -71,23 +68,48 @@ namespace OsrsDropEditor
             }
         }
 
+        /// <summary>
+        /// Loads the links for all NPCs that have any drops at all. Note: this method is very, very slow so
+        /// don't delete the json file it creates or it will take a couple of minutes to load. The reason this
+        /// is slow is because there is no good way to check if the NPC has a drop table or not unless we
+        /// actually navigate to the page and try to get drop tables.
+        /// </summary>
         private static void GetLinksOnPage()
         {
-            IEnumerable<HtmlNode> linksOnPage = browser.SelectNodes("//*[local-name()='div']//*[local-name()='table']//*[local-name()='a' and not(contains(@class, 'CategoryTreeLabel')) and not(contains(., 'User')) and not(contains(., 'Bestiary/Levels'))]");
-            foreach (HtmlNode link in linksOnPage)
-                NpcLinks[link.InnerText] = link.Attributes["href"].Value;
+            IEnumerable<XmlNode> linksOnPage = browser.SelectNodes("//*[local-name()='div']//*[local-name()='table']//*[local-name()='a' and not(contains(@class, 'CategoryTreeLabel')) and not(contains(., 'User')) and not(contains(., 'Bestiary/Levels'))]");
+            string currentUri = browser.Uri;
+            foreach (XmlNode link in linksOnPage)
+            {
+                browser.Navigate(link.Attributes["href"].Value);
+                if (GetDropTables().Any())
+                    NpcLinks[link.InnerText] = link.Attributes["href"].Value;
+            }
+            browser.Navigate(currentUri, true);
 
-            HtmlNode nextPageLink = GetNextPageNode();
+            XmlNode nextPageLink = GetNextPageNode();
             if (nextPageLink != null)
             {
-                browser.Navigate(nextPageLink.Attributes["href"].Value, true);
+                browser.Navigate(nextPageLink.InnerText, true);
                 GetLinksOnPage();
             }
         }
 
-        private static HtmlNode GetNextPageNode()
+        /// <summary>
+        /// Gets all the drop tables on the page.
+        /// </summary>
+        /// <returns></returns>
+        private static IEnumerable<XmlNode> GetDropTables()
         {
-            return browser.SelectSingleNode("//*[local-name()='a' and contains(@href, 'Category:Bestiary') and contains(@class, 'paginator-next')]");
+            return browser.SelectNodes("//*[local-name()='table' and contains(@class, 'dropstable')]");
+        }
+
+        /// <summary>
+        /// Gets the link that navigates us to the next page for the monster links
+        /// </summary>
+        /// <returns></returns>
+        private static XmlNode GetNextPageNode()
+        {
+            return browser.SelectSingleNode("//*[local-name()='a' and contains(@href, 'Category:Bestiary') and contains(@class, 'paginator-next')]/@href");
         }
 
         /// <summary>
@@ -140,10 +162,10 @@ namespace OsrsDropEditor
             {
                 browser.Navigate(osrsWikiRareDropTableLink);
 
-                IEnumerable<HtmlNode> tableNodes = browser.SelectNodes("//*[local-name()='table' and contains(@class, 'wikitable')]");
-                foreach (HtmlNode tableNode in tableNodes)
+                IEnumerable<XmlNode> tableNodes = browser.SelectNodes("//*[local-name()='table' and contains(@class, 'wikitable')]");
+                foreach (XmlNode tableNode in tableNodes)
                 {
-                    IEnumerable<HtmlNode> dropRows = tableNode.SelectNodes(".//*[local-name()='tr' and not(.//*[local-name()='th'])]");
+                    IEnumerable<XmlNode> dropRows = browser.SelectNodes(tableNode, ".//*[local-name()='tr' and not(.//*[local-name()='th'])]");
                     Dictionary<string, int> headerMap = GetHeaderMap(tableNode);
 
                     RareDropTable.AddRange(dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)));
@@ -180,14 +202,14 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="tableNode"></param>
         /// <returns></returns>
-        public static Dictionary<string, int> GetHeaderMap(HtmlNode tableNode)
+        public static Dictionary<string, int> GetHeaderMap(XmlNode tableNode)
         {
             Dictionary<string, int> headerMap = new Dictionary<string, int>();
 
-            IEnumerable<HtmlNode> headers = tableNode.SelectNodes(".//*[local-name()='th']");
+            XmlNodeList headers = tableNode.SelectNodes(".//*[local-name()='th']");
             int count = 1;
 
-            foreach (HtmlNode header in headers)
+            foreach (XmlNode header in headers)
             {
                 if (header.SelectSingleNode("./@colspan") != null)
                 {
@@ -201,21 +223,30 @@ namespace OsrsDropEditor
             return headerMap;
         }
 
-        private static Drop GetDropFromRow(Dictionary<string, int> headers, HtmlNode row)
+        private static Drop GetDropFromRow(Dictionary<string, int> headers, XmlNode row)
         {
             Drop drop = new Drop();
-            drop.ImageLink = row.SelectSingleNode($".//*[local-name()='td'][{headers["Image"]}]//*[local-name()='img']").Attributes["data-src"].Value;
+            drop.ImageLink = row.SelectSingleNode($".//*[local-name()='td'][{headers["Image"]}]//*[local-name()='img']/@data-src").InnerText;
             drop.Name = row.SelectSingleNode($".//*[local-name()='td'][{headers["Item"]}]").InnerText.Trim();
 
-            string quantity = row.SelectSingleNode($".//*[local-name()='td'][{headers["Quantity"]}]").InnerText.Trim();
+            string quantity = row.SelectSingleNode($".//*[local-name()='td'][{headers["Quantity"]}]").InnerText.Replace("(noted)", "").Trim();
             if (Regex.IsMatch(quantity, @"^\d+$"))
             {
                 drop.Quantity = Convert.ToInt32(quantity);
             }
-            if (Regex.IsMatch(quantity, @"\d+-\d+"))
+            Match rangeMatch = Regex.Match(quantity, @"(\d+)–(\d+)");
+            if (rangeMatch.Success)
             {
                 drop.Quantity = -1;
                 drop.IsRangeOfDrops = true;
+                drop.RangeLowBound = Convert.ToInt32(rangeMatch.Groups[1].Value);
+                drop.RangeHighBound = Convert.ToInt32(rangeMatch.Groups[2].Value);
+            }
+            if (Regex.IsMatch(quantity, @"\d+; \d+"))
+            {
+                string[] quantities = quantity.Split(';');
+                drop.HasMultipleQuantities = true;
+                drop.MultipleQuantities = quantities.Select(q => Convert.ToInt32(q.Trim())).ToArray();
             }
 
             return drop;
@@ -233,6 +264,7 @@ namespace OsrsDropEditor
 
         public static IEnumerable<Drop> GetDropsForNpc(string npcName)
         {
+            //Dictionary<string, Drop> drops = new Dictionary<string, Drop>();
             List<Drop> drops = new List<Drop>();
 
             string npcLink = NpcLinks[npcName];
@@ -248,17 +280,19 @@ namespace OsrsDropEditor
                 {
                     browser.Navigate(npcLink);
 
-                    IEnumerable<HtmlNode> tableNodes = browser.SelectNodes("//*[local-name()='table' and contains(@class, 'dropstable')]");
-                    foreach (HtmlNode tableNode in tableNodes)
+                    IEnumerable<XmlNode> tableNodes = GetDropTables();
+                    foreach (XmlNode tableNode in tableNodes)
                     {
                         if (tableNode.Attributes["class"].Value.Contains("rdtable"))
                         {
                             drops.Add(CreateRareDrop());
                             continue;
                         }
-                        IEnumerable<HtmlNode> dropRows = tableNode.SelectNodes(".//*[local-name()='tr' and not(.//*[local-name()='th'])]");
+                        IEnumerable<XmlNode> dropRows = browser.SelectNodes(tableNode, ".//*[local-name()='tr' and not(.//*[local-name()='th'])]");
                         Dictionary<string, int> headerMap = GetHeaderMap(tableNode);
 
+                        //foreach (Drop drop in dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)))
+                        //drops[drop.Name] = drop;
                         drops.AddRange(dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)));
                     }
 
@@ -274,10 +308,13 @@ namespace OsrsDropEditor
             {
                 string cachedDropJson = Utility.ReadFileToEnd($@"DropTables\{npcName}.json");
                 if (!String.IsNullOrEmpty(cachedDropJson))
-                    drops.AddRange(JsonConvert.DeserializeObject<List<Drop>>(cachedDropJson));
+                {
+                    List<Drop> cachedDrops = JsonConvert.DeserializeObject<List<Drop>>(cachedDropJson);
+                    drops.AddRange(cachedDrops);
+                }
             }
 
-            return drops.Any() ? CachedDropTables[npcName] = drops : Enumerable.Empty<Drop>();
+            return CachedDropTables[npcName] = drops;
         }
 
         public static Drop CreateRareDrop()
@@ -307,6 +344,9 @@ namespace OsrsDropEditor
         public bool Members { get; set; }
     }
 
+    /// <summary>
+    /// Used to store information about drops.
+    /// </summary>
     public struct Drop
     {
         public string ImageLink { get; set; }
@@ -322,6 +362,11 @@ namespace OsrsDropEditor
 
         public override string ToString()
         {
+            if (IsRangeOfDrops)
+                return $"{Name}: {RangeLowBound}-{RangeHighBound}";
+            if (HasMultipleQuantities)
+                return $"{Name}: {String.Join(", ", MultipleQuantities)}";
+
             return $"{Name}: {Quantity}";
         }
     }

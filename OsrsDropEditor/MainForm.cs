@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
+using System.Drawing;
 
 namespace OsrsDropEditor
 {
@@ -43,14 +44,15 @@ namespace OsrsDropEditor
                 DataGridViewRow newRow = npcListGridView.Rows.Cast<DataGridViewRow>().Where(row => row.DataBoundItem.ToString().ToLower().Equals(name.ToLower())).First();
                 int index = newRow.Index;
 
-                npcListGridView.Rows[index].Selected = true;
-                npcListGridView.FirstDisplayedScrollingRowIndex = npcListGridView.SelectedRows[0].Index;
-
-                ShowDropsForNpc(newRow);
+                if (ShowDropsForNpc(newRow))
+                {
+                    npcListGridView.Rows[index].Selected = true;
+                    npcListGridView.FirstDisplayedScrollingRowIndex = npcListGridView.SelectedRows[0].Index;
+                }
             }
         }
 
-        private void ShowDropsForNpc(DataGridViewRow npcRow)
+        private bool ShowDropsForNpc(DataGridViewRow npcRow)
         {
             string npcName = npcRow.DataBoundItem.ToString();
             List<Drop> drops = OsrsDataContainers.GetDropsForNpc(npcName).ToList();
@@ -58,12 +60,31 @@ namespace OsrsDropEditor
             if (!drops.Any())
             {
                 MessageBox.Show(this, "Unable to load any drops for the NPC.", "Error", MessageBoxButtons.OK);
+                return false;
             }
-            Dictionary<string, string> imageLinks = drops.ToDictionary(drop => drop.Name, drop => drop.ImageLink);
+
+            npcNameTextBox.Text = npcName;
+
+            IEnumerable<Bitmap> images = Utility.GetImagesFromDrops(drops);
             dropsListView.Items.Clear();
             dropsListView.LargeImageList = new ImageList();
+            dropsListView.LargeImageList.ImageSize = new Size(64, 64);
+            dropsListView.LargeImageList.ColorDepth = ColorDepth.Depth32Bit;
+            dropsListView.LargeImageList.Images.AddRange(images.ToArray());
+
+            dropsListView.Items.AddRange(drops.Select(GetListViewItemForDrop).ToArray());
+
+            return true;
+        }
+
+        private ListViewItem GetListViewItemForDrop(Drop drop, int slot)
+        {
             ListViewItem item = new ListViewItem();
-            item.Text = "This is a test";
+            item.Tag = drop;
+            item.Text = drop.ToString();
+            item.ImageIndex = slot;
+
+            return item;
         }
 
         private void npcListGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
@@ -73,15 +94,24 @@ namespace OsrsDropEditor
             npcListGridView.Focus();
             DataGridViewRow row = npcListGridView.Rows[rowIndex];
             if (!row.Selected)
-            {
-                Console.WriteLine(row.DataBoundItem);
                 ShowDropsForNpc(row);
-            }
         }
 
-        public void dropListGridView_CellMouseDown(object sender, ListViewItemMouseHoverEventArgs e)
+        public void dropsListView_ItemActivate(object sender, EventArgs e)
         {
-            Drop dataBoundDrop = new Drop();
+            ListView listView = (ListView)sender;
+            ListViewItem listViewItem = listView.SelectedItems[0];
+            Drop dropToLog = (Drop)listViewItem.Tag;
+            if (dropToLog.IsRangeOfDrops)
+            {
+                AddDropRangeForm addDropRangeFrom = new AddDropRangeForm();
+                addDropRangeFrom.label1.Text = dropToLog.Name;
+                addDropRangeFrom.Show(this);
+            }
+            if (dropToLog.HasMultipleQuantities)
+            {
+
+            }
         }
     }
 
