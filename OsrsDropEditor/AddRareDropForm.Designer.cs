@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.rareDropsOptionList = new System.Windows.Forms.ComboBox();
-            this.addDropButton = new System.Windows.Forms.Button();
+            this.addRareDropButton = new System.Windows.Forms.Button();
             this.dropLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -41,14 +41,14 @@
             this.rareDropsOptionList.Size = new System.Drawing.Size(156, 21);
             this.rareDropsOptionList.TabIndex = 15;
             // 
-            // addDropButton
+            // addRareDropButton
             // 
-            this.addDropButton.Location = new System.Drawing.Point(16, 39);
-            this.addDropButton.Name = "addDropButton";
-            this.addDropButton.Size = new System.Drawing.Size(206, 23);
-            this.addDropButton.TabIndex = 14;
-            this.addDropButton.Text = "Add Drop";
-            this.addDropButton.UseVisualStyleBackColor = true;
+            this.addRareDropButton.Location = new System.Drawing.Point(16, 39);
+            this.addRareDropButton.Name = "addRareDropButton";
+            this.addRareDropButton.Size = new System.Drawing.Size(206, 23);
+            this.addRareDropButton.TabIndex = 14;
+            this.addRareDropButton.Text = "Add Drop";
+            this.addRareDropButton.UseVisualStyleBackColor = true;
             // 
             // dropLabel
             // 
@@ -65,7 +65,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(234, 72);
             this.Controls.Add(this.rareDropsOptionList);
-            this.Controls.Add(this.addDropButton);
+            this.Controls.Add(this.addRareDropButton);
             this.Controls.Add(this.dropLabel);
             this.Name = "AddRareDropForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -78,7 +78,7 @@
         #endregion
 
         public System.Windows.Forms.ComboBox rareDropsOptionList;
-        public System.Windows.Forms.Button addDropButton;
+        public System.Windows.Forms.Button addRareDropButton;
         private System.Windows.Forms.Label dropLabel;
     }
 }

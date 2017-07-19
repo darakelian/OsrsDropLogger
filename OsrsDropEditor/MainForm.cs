@@ -150,6 +150,7 @@ namespace OsrsDropEditor
             {
                 AddRareDropForm addRareDropForm = new AddRareDropForm();
                 addRareDropForm.rareDropsOptionList.Items.AddRange(osrsDropContainers.RareDropTable.Cast<object>().ToArray());
+                addRareDropForm.addRareDropButton.Click += AddRareDropButton_Click;
 
                 addRareDropForm.Show(this);
                 hasDropFormOpen = true;
@@ -181,6 +182,11 @@ namespace OsrsDropEditor
             }
         }
 
+        /// <summary>
+        /// Called when a drop is added with a custom range.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddDropButton_Click(object sender, EventArgs e)
         {
             Button button = (Button)sender;
@@ -200,6 +206,11 @@ namespace OsrsDropEditor
             }
         }
 
+        /// <summary>
+        /// Called when a drop is added with a selected drop amount.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddMultipleRangeDropButton_Click(object sender, EventArgs e)
         {
             Button button = (Button)sender;
@@ -212,6 +223,22 @@ namespace OsrsDropEditor
 
             form.Close();
             hasDropFormOpen = false;
+        }
+
+        private void AddRareDropButton_Click(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            AddRareDropForm form = (AddRareDropForm)button.TopLevelControl;
+            object selectedObject = form.rareDropsOptionList.SelectedItem;
+            
+            if (selectedObject != null)
+            {
+                Drop dropToLog = (Drop)selectedObject;
+                osrsDropContainers.LogDrop(dropToLog);
+
+                form.Close();
+                hasDropFormOpen = false;
+            }
         }
 
         /// <summary>

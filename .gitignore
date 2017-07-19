@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 /OsrsDropEditor/CachedImages
 /OsrsDropEditor/OfflineJson/DropTables
+logged_drops.json
