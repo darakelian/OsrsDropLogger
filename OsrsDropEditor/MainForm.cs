@@ -8,6 +8,8 @@ namespace OsrsDropEditor
 {
     public partial class MainForm : Form
     {
+        private OsrsDataContainers osrsDropContainers;
+
         public MainForm()
         {
             InitializeComponent();
@@ -20,15 +22,20 @@ namespace OsrsDropEditor
         /// <param name="e"></param>
         private void MainForm_Load(object sender, EventArgs e)
         {
-            OsrsDataContainers.LoadData();
+            osrsDropContainers = new OsrsDataContainers(this);
+
+            osrsDropContainers.LoadData();
 
             //Setup the grid view
-            npcNameBindingSource.DataSource = OsrsDataContainers.NpcLinks.Keys.Select(key => new NpcName { Name = key });
+            npcNameBindingSource.DataSource = osrsDropContainers.NpcLinks.Keys.Select(key => new NpcName { Name = key });
             npcListGridView.ClearSelection();
+
+            //Setup the logged drops grid view
+            loggedDropBindingSource.DataSource = osrsDropContainers.LoggedDrops.Values.ToList();
 
             //Setup the autocomplete for the textbox
             AutoCompleteStringCollection autoCompleteSource = new AutoCompleteStringCollection();
-            autoCompleteSource.AddRange(OsrsDataContainers.NpcLinks.Select(kvp => kvp.Key).ToArray());
+            autoCompleteSource.AddRange(osrsDropContainers.NpcLinks.Select(kvp => kvp.Key).ToArray());
             npcNameTextBox.AutoCompleteCustomSource = autoCompleteSource;
             npcNameTextBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
             npcNameTextBox.AutoCompleteMode = AutoCompleteMode.Suggest;
@@ -60,7 +67,7 @@ namespace OsrsDropEditor
         private bool ShowDropsForNpc(DataGridViewRow npcRow)
         {
             string npcName = npcRow.DataBoundItem.ToString();
-            List<Drop> drops = OsrsDataContainers.GetDropsForNpc(npcName).ToList();
+            List<Drop> drops = osrsDropContainers.GetDropsForNpc(npcName).ToList();
 
             if (!drops.Any())
             {
@@ -139,9 +146,17 @@ namespace OsrsDropEditor
                 addDropMultipleForm.Show(this);
                 hasDropFormOpen = true;
             }
+            else if (dropToLog.Name.Equals("RareDropTable"))
+            {
+                AddRareDropForm addRareDropForm = new AddRareDropForm();
+                addRareDropForm.rareDropsOptionList.Items.AddRange(osrsDropContainers.RareDropTable.Cast<object>().ToArray());
+
+                addRareDropForm.Show(this);
+                hasDropFormOpen = true;
+            }
             else
             {
-                OsrsDataContainers.LogDrop(dropToLog);
+                osrsDropContainers.LogDrop(dropToLog);
             }
         }
 
@@ -158,9 +173,10 @@ namespace OsrsDropEditor
                         return;
 
                     drop.Quantity = quantity;
-                    OsrsDataContainers.LogDrop(drop);
+                    osrsDropContainers.LogDrop(drop);
 
                     ((Form)box.TopLevelControl).Close();
+                    hasDropFormOpen = false;
                 }
             }
         }
@@ -177,9 +193,10 @@ namespace OsrsDropEditor
                     return;
 
                 drop.Quantity = quantity;
-                OsrsDataContainers.LogDrop(drop);
+                osrsDropContainers.LogDrop(drop);
 
                 form.Close();
+                hasDropFormOpen = false;
             }
         }
 
@@ -188,12 +205,24 @@ namespace OsrsDropEditor
             Button button = (Button)sender;
             AddDropMultipleForm form = (AddDropMultipleForm)button.TopLevelControl;
             Drop drop = (Drop)form.quantityOptionsListBox.Tag;
-            int quantitySelected = form.quantityOptionsListBox.SelectedIndex;
+            int quantitySelected = Convert.ToInt32(form.quantityOptionsListBox.SelectedItem);
 
             drop.Quantity = quantitySelected;
-            OsrsDataContainers.LogDrop(drop);
+            osrsDropContainers.LogDrop(drop);
 
             form.Close();
+            hasDropFormOpen = false;
+        }
+
+        /// <summary>
+        /// Clears all the drops from the logged drops view. TODO: reset other variables.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            osrsDropContainers.LoggedDrops.Clear();
+            loggedDropBindingSource.Clear();
         }
     }
 

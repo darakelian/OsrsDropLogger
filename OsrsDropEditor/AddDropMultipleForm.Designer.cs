@@ -37,7 +37,7 @@
             // 
             // addDropButton
             // 
-            this.addDropButton.Location = new System.Drawing.Point(16, 64);
+            this.addDropButton.Location = new System.Drawing.Point(16, 66);
             this.addDropButton.Name = "addDropButton";
             this.addDropButton.Size = new System.Drawing.Size(206, 23);
             this.addDropButton.TabIndex = 9;
@@ -46,7 +46,7 @@
             // 
             // dropLabel
             // 
-            this.dropLabel.Location = new System.Drawing.Point(64, 13);
+            this.dropLabel.Location = new System.Drawing.Point(64, 15);
             this.dropLabel.Name = "dropLabel";
             this.dropLabel.Size = new System.Drawing.Size(158, 13);
             this.dropLabel.TabIndex = 8;
@@ -55,7 +55,7 @@
             // rangeLabel
             // 
             this.rangeLabel.AutoSize = true;
-            this.rangeLabel.Location = new System.Drawing.Point(13, 37);
+            this.rangeLabel.Location = new System.Drawing.Point(13, 39);
             this.rangeLabel.Name = "rangeLabel";
             this.rangeLabel.Size = new System.Drawing.Size(46, 13);
             this.rangeLabel.TabIndex = 7;
@@ -64,7 +64,7 @@
             // dropNameLabel
             // 
             this.dropNameLabel.AutoSize = true;
-            this.dropNameLabel.Location = new System.Drawing.Point(13, 13);
+            this.dropNameLabel.Location = new System.Drawing.Point(13, 15);
             this.dropNameLabel.Name = "dropNameLabel";
             this.dropNameLabel.Size = new System.Drawing.Size(36, 13);
             this.dropNameLabel.TabIndex = 5;
@@ -73,7 +73,7 @@
             // quantityOptionsListBox
             // 
             this.quantityOptionsListBox.FormattingEnabled = true;
-            this.quantityOptionsListBox.Location = new System.Drawing.Point(66, 37);
+            this.quantityOptionsListBox.Location = new System.Drawing.Point(66, 39);
             this.quantityOptionsListBox.Name = "quantityOptionsListBox";
             this.quantityOptionsListBox.Size = new System.Drawing.Size(156, 21);
             this.quantityOptionsListBox.TabIndex = 10;

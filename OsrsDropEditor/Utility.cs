@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -110,6 +111,17 @@ namespace OsrsDropEditor
             }
 
             return images;
+        }
+
+        /// <summary>
+        /// Serializes an object to JSON then saves it to the provided path as a new file.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="objectToSave"></param>
+        public static void SaveObjectToJson(string path, object objectToSave)
+        {
+            string json = JsonConvert.SerializeObject(objectToSave);
+            File.WriteAllText(path, json);
         }
     }
 }

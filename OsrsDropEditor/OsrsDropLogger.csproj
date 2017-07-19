@@ -64,6 +64,12 @@
     <Compile Include="AddDropRangeForm.Designer.cs">
       <DependentUpon>AddDropRangeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddRareDropForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddRareDropForm.Designer.cs">
+      <DependentUpon>AddRareDropForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Browser.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -80,6 +86,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AddDropRangeForm.resx">
       <DependentUpon>AddDropRangeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddRareDropForm.resx">
+      <DependentUpon>AddRareDropForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -99,6 +108,7 @@
     <None Include="OfflineJson\prices.json" />
     <None Include="OfflineJson\raredrops.json" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\LoggedDrop.datasource" />
     <None Include="Properties\DataSources\NpcName.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -45,6 +45,11 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.totalValueLabel = new System.Windows.Forms.Label();
+            this.loggedDropView = new System.Windows.Forms.DataGridView();
+            this.loggedDropBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.nameDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.totalPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.npcListGridView)).BeginInit();
@@ -52,6 +57,8 @@
             this.userInteractionPanel.SuspendLayout();
             this.buttonTableLayoutPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.loggedDropView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loggedDropBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // npcNameBindingSource
@@ -145,14 +152,14 @@
             // 
             // userInteractionPanel
             // 
-            this.userInteractionPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.userInteractionPanel.Controls.Add(this.loggedDropView);
             this.userInteractionPanel.Controls.Add(this.totalValueLabel);
             this.userInteractionPanel.Controls.Add(this.buttonTableLayoutPanel);
-            this.userInteractionPanel.Location = new System.Drawing.Point(482, 25);
+            this.userInteractionPanel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.userInteractionPanel.Location = new System.Drawing.Point(483, 24);
             this.userInteractionPanel.Margin = new System.Windows.Forms.Padding(1);
             this.userInteractionPanel.Name = "userInteractionPanel";
-            this.userInteractionPanel.Size = new System.Drawing.Size(191, 343);
+            this.userInteractionPanel.Size = new System.Drawing.Size(191, 344);
             this.userInteractionPanel.TabIndex = 3;
             // 
             // buttonTableLayoutPanel
@@ -165,7 +172,7 @@
             this.buttonTableLayoutPanel.Controls.Add(this.pauseButton, 1, 0);
             this.buttonTableLayoutPanel.Controls.Add(this.resetButton, 2, 0);
             this.buttonTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonTableLayoutPanel.Location = new System.Drawing.Point(0, 316);
+            this.buttonTableLayoutPanel.Location = new System.Drawing.Point(0, 317);
             this.buttonTableLayoutPanel.Name = "buttonTableLayoutPanel";
             this.buttonTableLayoutPanel.RowCount = 1;
             this.buttonTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -204,6 +211,7 @@
             this.resetButton.TabIndex = 2;
             this.resetButton.Text = "Reset";
             this.resetButton.UseVisualStyleBackColor = true;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
             // menuStrip1
             // 
@@ -225,11 +233,63 @@
             // 
             this.totalValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.totalValueLabel.Location = new System.Drawing.Point(3, 297);
+            this.totalValueLabel.Location = new System.Drawing.Point(3, 298);
             this.totalValueLabel.Name = "totalValueLabel";
             this.totalValueLabel.Size = new System.Drawing.Size(185, 16);
             this.totalValueLabel.TabIndex = 1;
-            this.totalValueLabel.Text = "Total Value:";
+            this.totalValueLabel.Text = "Total Value: ";
+            // 
+            // loggedDropView
+            // 
+            this.loggedDropView.AllowUserToAddRows = false;
+            this.loggedDropView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.loggedDropView.AutoGenerateColumns = false;
+            this.loggedDropView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.loggedDropView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.nameDataGridViewTextBoxColumn1,
+            this.quantityDataGridViewTextBoxColumn,
+            this.totalPriceDataGridViewTextBoxColumn});
+            this.loggedDropView.DataSource = this.loggedDropBindingSource;
+            this.loggedDropView.Location = new System.Drawing.Point(0, 0);
+            this.loggedDropView.Name = "loggedDropView";
+            this.loggedDropView.ReadOnly = true;
+            this.loggedDropView.RowHeadersVisible = false;
+            this.loggedDropView.Size = new System.Drawing.Size(192, 295);
+            this.loggedDropView.TabIndex = 2;
+            // 
+            // loggedDropBindingSource
+            // 
+            this.loggedDropBindingSource.DataSource = typeof(OsrsDropEditor.LoggedDrop);
+            // 
+            // nameDataGridViewTextBoxColumn1
+            // 
+            this.nameDataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.nameDataGridViewTextBoxColumn1.DataPropertyName = "DisplayName";
+            this.nameDataGridViewTextBoxColumn1.FillWeight = 150F;
+            this.nameDataGridViewTextBoxColumn1.HeaderText = "Drop";
+            this.nameDataGridViewTextBoxColumn1.Name = "nameDataGridViewTextBoxColumn1";
+            this.nameDataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // quantityDataGridViewTextBoxColumn
+            // 
+            this.quantityDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
+            this.quantityDataGridViewTextBoxColumn.FillWeight = 75F;
+            this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
+            this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
+            this.quantityDataGridViewTextBoxColumn.ReadOnly = true;
+            this.quantityDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // totalPriceDataGridViewTextBoxColumn
+            // 
+            this.totalPriceDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.totalPriceDataGridViewTextBoxColumn.DataPropertyName = "TotalPrice";
+            this.totalPriceDataGridViewTextBoxColumn.FillWeight = 75F;
+            this.totalPriceDataGridViewTextBoxColumn.HeaderText = "Price";
+            this.totalPriceDataGridViewTextBoxColumn.Name = "totalPriceDataGridViewTextBoxColumn";
+            this.totalPriceDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // MainForm
             // 
@@ -253,6 +313,8 @@
             this.buttonTableLayoutPanel.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.loggedDropView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loggedDropBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -274,7 +336,12 @@
         private System.Windows.Forms.Button starButton;
         private System.Windows.Forms.Button pauseButton;
         private System.Windows.Forms.Button resetButton;
-        private System.Windows.Forms.Label totalValueLabel;
+        public System.Windows.Forms.DataGridView loggedDropView;
+        public System.Windows.Forms.BindingSource loggedDropBindingSource;
+        public System.Windows.Forms.Label totalValueLabel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn quantityDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn totalPriceDataGridViewTextBoxColumn;
     }
 }
 

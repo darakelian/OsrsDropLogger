@@ -21,13 +21,28 @@ namespace OsrsDropEditor
         private const string osrsWikiRareDropTableLink = "/wiki/Rare_drop_table";
         private const string osbPriceLink = "https://rsbuddy.com/exchange/summary.json";
 
-        private static Browser browser = new Browser();
+        private Browser browser = new Browser();
+        private MainForm mainForm;
+
+        /// <summary>
+        /// Stores all the drops that the user has logged. The key is the name of the item and the value is a
+        /// Drop object. When the user adds more of the same drop, we will increment the quantity of the
+        /// Drop object already stored in the dictionary. This is because we only really need the name and quantity
+        /// properties of the Drop.
+        /// </summary>
+        public Dictionary<string, LoggedDrop> LoggedDrops = new Dictionary<string, LoggedDrop>();
 
         /// <summary>
         /// Stores the links for the NPCs in a dictionary so we don't parse them
         /// all at once. Key is the name of the NPC and the value is the link.
         /// </summary>
-        public static Dictionary<string, string> NpcLinks = new Dictionary<string, string>();
+        public Dictionary<string, string> NpcLinks = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Stores drop tables in memory so that we don't have to do another navigation to retrieve the information
+        /// on a second click of the NPC in the list.
+        /// </summary>
+        public Dictionary<string, List<Drop>> CachedDropTables = new Dictionary<string, List<Drop>>();
 
         /// <summary>
         /// Stores the price for each item in an ItemPrice struct. Key is the ID
@@ -38,26 +53,17 @@ namespace OsrsDropEditor
         /// <summary>
         /// Stores all the drops in the rare drop table.
         /// </summary>
-        public static List<Drop> RareDropTable = new List<Drop>();
+        public List<Drop> RareDropTable = new List<Drop>();
 
-        /// <summary>
-        /// Stores drop tables in memory so that we don't have to do another navigation to retrieve the information
-        /// on a second click of the NPC in the list.
-        /// </summary>
-        public static Dictionary<string, List<Drop>> CachedDropTables = new Dictionary<string, List<Drop>>();
-
-        /// <summary>
-        /// Stores all the drops that the user has logged. The key is the name of the item and the value is a
-        /// Drop object. When the user adds more of the same drop, we will increment the quantity of the
-        /// Drop object already stored in the dictionary. This is because we only really need the name and quantity
-        /// properties of the Drop.
-        /// </summary>
-        public static Dictionary<string, LoggedDrop> LoggedDrops = new Dictionary<string, LoggedDrop>();
+        public OsrsDataContainers(MainForm mainForm)
+        {
+            this.mainForm = mainForm;
+        }
 
         /// <summary>
         /// Load up all the data we need for the app.
         /// </summary>
-        public static void LoadData()
+        public void LoadData()
         {
             LoadNpcLinks();
             LoadItemPrices();
@@ -67,7 +73,7 @@ namespace OsrsDropEditor
         /// <summary>
         /// Loads all the links for NPCs from the OSRS wiki and stores them in a dictionary.
         /// </summary>
-        public static void LoadNpcLinks()
+        public void LoadNpcLinks()
         {
             if (!File.Exists(@"../../OfflineJson/links.json"))
             {
@@ -94,7 +100,7 @@ namespace OsrsDropEditor
         /// is slow is because there is no good way to check if the NPC has a drop table or not unless we
         /// actually navigate to the page and try to get drop tables.
         /// </summary>
-        private static void GetLinksOnPage()
+        private void GetLinksOnPage()
         {
             IEnumerable<XmlNode> linksOnPage = browser.SelectNodes("//*[local-name()='div']//*[local-name()='table']//*[local-name()='a' and not(contains(@class, 'CategoryTreeLabel')) and not(contains(., 'User')) and not(contains(., 'Bestiary/Levels'))]");
             string currentUri = browser.Uri;
@@ -118,7 +124,7 @@ namespace OsrsDropEditor
         /// Gets all the drop tables on the page.
         /// </summary>
         /// <returns></returns>
-        private static IEnumerable<XmlNode> GetDropTables()
+        private IEnumerable<XmlNode> GetDropTables()
         {
             return browser.SelectNodes("//*[local-name()='table' and contains(@class, 'dropstable')]");
         }
@@ -127,7 +133,7 @@ namespace OsrsDropEditor
         /// Gets the link that navigates us to the next page for the monster links
         /// </summary>
         /// <returns></returns>
-        private static XmlNode GetNextPageNode()
+        private XmlNode GetNextPageNode()
         {
             return browser.SelectSingleNode("//*[local-name()='a' and contains(@href, 'Category:Bestiary') and contains(@class, 'paginator-next')]/@href");
         }
@@ -136,7 +142,7 @@ namespace OsrsDropEditor
         /// Loads all the prices for tradeable items from the OSB price data API and stores them in
         /// a dictionary.
         /// </summary>
-        public static void LoadItemPrices()
+        public void LoadItemPrices()
         {
             if (!Utility.FileExists("prices.json") || Utility.ShouldRefreshPrices())
             {
@@ -168,7 +174,7 @@ namespace OsrsDropEditor
             }
         }
 
-        private static void TryLoadItemPricesFromCache()
+        private void TryLoadItemPricesFromCache()
         {
             string cachedItemPrices = Utility.ReadFileToEnd("prices.json");
             if (!String.IsNullOrEmpty(cachedItemPrices))
@@ -178,7 +184,7 @@ namespace OsrsDropEditor
         /// <summary>
         /// Loads all the drops from the rare drop table page.
         /// </summary>
-        public static void LoadRareDropTable()
+        public void LoadRareDropTable()
         {
             if (!File.Exists(@"..\..\OfflineJson\raredrops.json"))
             {
@@ -211,7 +217,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="itemPriceJson">JToken containing the price data</param>
         /// <returns></returns>
-        public static ItemPrice CreateItemPrice(JToken itemPriceJson)
+        public ItemPrice CreateItemPrice(JToken itemPriceJson)
         {
             return JsonConvert.DeserializeObject<ItemPrice>(itemPriceJson.ToString());
         }
@@ -222,7 +228,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="tableNode"></param>
         /// <returns></returns>
-        public static Dictionary<string, int> GetHeaderMap(XmlNode tableNode)
+        public Dictionary<string, int> GetHeaderMap(XmlNode tableNode)
         {
             Dictionary<string, int> headerMap = new Dictionary<string, int>();
 
@@ -243,24 +249,33 @@ namespace OsrsDropEditor
             return headerMap;
         }
 
-        private static Drop GetDropFromRow(Dictionary<string, int> headers, XmlNode row)
+        /// <summary>
+        /// Converts an HTML row from the wiki to a Drop object.
+        /// </summary>
+        /// <param name="headers"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        private Drop GetDropFromRow(Dictionary<string, int> headers, XmlNode row)
         {
             Drop drop = new Drop();
-            drop.ImageLink = row.SelectSingleNode($".//*[local-name()='td'][{headers["Image"]}]//*[local-name()='img']/@data-src").InnerText;
+            drop.ImageLink = row.SelectSingleNode($".//*[local-name()='td'][{headers["Image"]}]//*[local-name()='img']/@src").InnerText;
             drop.Name = row.SelectSingleNode($".//*[local-name()='td'][{headers["Item"]}]").InnerText.Trim();
 
-            string quantity = row.SelectSingleNode($".//*[local-name()='td'][{headers["Quantity"]}]").InnerText.Replace("(noted)", "").Trim();
+            string quantity = row.SelectSingleNode($".//*[local-name()='td'][{headers["Quantity"]}]").InnerText.Replace("(noted)", "")
+                .Replace(",", "").Trim();
+
             if (Regex.IsMatch(quantity, @"^\d+$"))
             {
                 drop.Quantity = Convert.ToInt32(quantity);
             }
-            Match rangeMatch = Regex.Match(quantity, @"(\d+)–(\d+)");
-            if (rangeMatch.Success)
+            if (IsRangeQuantity(quantity))
             {
+                string[] quantities = quantity.Split('–').ToArray();
+
                 drop.Quantity = -1;
                 drop.IsRangeOfDrops = true;
-                drop.RangeLowBound = Convert.ToInt32(rangeMatch.Groups[1].Value);
-                drop.RangeHighBound = Convert.ToInt32(rangeMatch.Groups[2].Value);
+                drop.RangeLowBound = Convert.ToInt32(quantities[0]);
+                drop.RangeHighBound = Convert.ToInt32(quantities[1]);
             }
             if (Regex.IsMatch(quantity, @"\d+; \d+"))
             {
@@ -274,6 +289,11 @@ namespace OsrsDropEditor
             return drop;
         }
 
+        private bool IsRangeQuantity(string quantity)
+        {
+            return Regex.IsMatch(quantity, @"(\d+)–(\d+)");
+        }
+
         /// <summary>
         /// Returns the ID of the first item that matches the name provided to this method.
         /// </summary>
@@ -281,10 +301,10 @@ namespace OsrsDropEditor
         /// <returns></returns>
         public static int GetItemIdForName(string itemName)
         {
-            return ItemPrices.Values.Where(item => item.Name.ToLower().Contains(itemName)).First().Id;
+            return ItemPrices.Values.Where(item => item.Name.Contains(itemName)).FirstOrDefault().Id;
         }
 
-        public static IEnumerable<Drop> GetDropsForNpc(string npcName)
+        public IEnumerable<Drop> GetDropsForNpc(string npcName)
         {
             //Dictionary<string, Drop> drops = new Dictionary<string, Drop>();
             List<Drop> drops = new List<Drop>();
@@ -318,8 +338,7 @@ namespace OsrsDropEditor
                         drops.AddRange(dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)));
                     }
 
-                    string dropsAsJson = JsonConvert.SerializeObject(drops);
-                    File.WriteAllText($@"..\..\OfflineJson\DropTables\{npcName}.json", dropsAsJson);
+                    Utility.SaveObjectToJson($@"..\..\OfflineJson\DropTables\{npcName}.json", drops);
                 }
                 catch (WebException)
                 {
@@ -339,7 +358,7 @@ namespace OsrsDropEditor
             return CachedDropTables[npcName] = drops;
         }
 
-        public static Drop CreateRareDrop()
+        public Drop CreateRareDrop()
         {
             return new Drop
             {
@@ -349,7 +368,7 @@ namespace OsrsDropEditor
             };
         }
 
-        public static void LogDrop(Drop drop)
+        public void LogDrop(Drop drop)
         {
             string name = drop.Name;
             if (LoggedDrops.ContainsKey(name))
@@ -360,6 +379,31 @@ namespace OsrsDropEditor
             }
             else
                 LoggedDrops[name] = new LoggedDrop { Quantity = drop.Quantity, Name = drop.Name };
+
+            mainForm.loggedDropBindingSource.DataSource = LoggedDrops.Values.ToList();
+
+            string oldValueText = mainForm.totalValueLabel.Text;
+            mainForm.totalValueLabel.Text = Regex.Replace(oldValueText, @"(?<=Total Value: )(\d*)", Convert.ToString(GetTotalDropsValue()));
+
+            Utility.SaveObjectToJson(@"..\..\logged_drops.json", LoggedDrops.Values.ToList());
+        }
+
+        private int GetTotalDropsValue()
+        {
+            return LoggedDrops.Values.Sum(drop => drop.TotalPrice);
+        }
+
+        public static int GetPriceForDrops(LoggedDrop loggedDrop)
+        {
+            int itemId = GetItemIdForName(loggedDrop.Name);
+
+            if (loggedDrop.Name.Contains("Coin"))
+                return loggedDrop.Quantity;
+
+            if (itemId == 0)
+                return 0;
+
+            return ItemPrices[itemId].OverallAverage * loggedDrop.Quantity;
         }
     }
 
@@ -370,7 +414,11 @@ namespace OsrsDropEditor
     public struct ItemPrice
     {
         public int Id { get; set; }
+        [JsonProperty("overall_average")]
         public int OverallAverage { get; set; }
+        [JsonProperty("buy_average")]
+        public int BuyAverage { get; set; }
+        [JsonProperty("sell_average")]
         public int SellAverage { get; set; }
         public int Sp { get; set; }
         public string Name { get; set; }
@@ -407,7 +455,9 @@ namespace OsrsDropEditor
     public struct LoggedDrop
     {
         public string Name { get; set; }
+        public string DisplayName { get { return ToString(); } }
         public int Quantity { get; set; }
+        public int TotalPrice { get { return OsrsDataContainers.GetPriceForDrops(this); } }
 
         public override string ToString()
         {
