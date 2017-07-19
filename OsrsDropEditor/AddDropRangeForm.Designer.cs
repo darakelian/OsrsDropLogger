@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.dropNameLabel = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.rangeTextBox = new System.Windows.Forms.TextBox();
             this.rangeLabel = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.dropLabel = new System.Windows.Forms.Label();
             this.addDropButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -44,12 +44,12 @@
             this.dropNameLabel.TabIndex = 0;
             this.dropNameLabel.Text = "Drop: ";
             // 
-            // textBox1
+            // rangeTextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(67, 34);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(155, 20);
-            this.textBox1.TabIndex = 1;
+            this.rangeTextBox.Location = new System.Drawing.Point(67, 34);
+            this.rangeTextBox.Name = "rangeTextBox";
+            this.rangeTextBox.Size = new System.Drawing.Size(155, 20);
+            this.rangeTextBox.TabIndex = 1;
             // 
             // rangeLabel
             // 
@@ -60,13 +60,13 @@
             this.rangeLabel.TabIndex = 2;
             this.rangeLabel.Text = "Amount:";
             // 
-            // label1
+            // dropLabel
             // 
-            this.label1.Location = new System.Drawing.Point(64, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(158, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "label1";
+            this.dropLabel.Location = new System.Drawing.Point(64, 13);
+            this.dropLabel.Name = "dropLabel";
+            this.dropLabel.Size = new System.Drawing.Size(158, 13);
+            this.dropLabel.TabIndex = 3;
+            this.dropLabel.Text = "label1";
             // 
             // addDropButton
             // 
@@ -83,11 +83,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(234, 99);
             this.Controls.Add(this.addDropButton);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.dropLabel);
             this.Controls.Add(this.rangeLabel);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.rangeTextBox);
             this.Controls.Add(this.dropNameLabel);
             this.Name = "AddDropRangeForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add Drop (Range)";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -97,9 +98,9 @@
         #endregion
 
         private System.Windows.Forms.Label dropNameLabel;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label rangeLabel;
-        private System.Windows.Forms.Button addDropButton;
-        public System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label dropLabel;
+        public System.Windows.Forms.TextBox rangeTextBox;
+        public System.Windows.Forms.Button addDropButton;
     }
 }

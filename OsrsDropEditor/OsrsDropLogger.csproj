@@ -52,6 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddDropMultipleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddDropMultipleForm.Designer.cs">
+      <DependentUpon>AddDropMultipleForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="AddDropRangeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,6 +75,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility.cs" />
+    <EmbeddedResource Include="AddDropMultipleForm.resx">
+      <DependentUpon>AddDropMultipleForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AddDropRangeForm.resx">
       <DependentUpon>AddDropRangeForm.cs</DependentUpon>
     </EmbeddedResource>

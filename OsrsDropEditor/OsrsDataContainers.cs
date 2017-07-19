@@ -10,6 +10,9 @@ using System.Xml;
 
 namespace OsrsDropEditor
 {
+    /// <summary>
+    /// This class handles loading all the data as well as manipulating things like drop tables, prices etc.
+    /// </summary>
     class OsrsDataContainers
     {
         public const string OsrsWikiBase = "http://oldschoolrunescape.wikia.com";
@@ -32,11 +35,28 @@ namespace OsrsDropEditor
         /// </summary>
         public static Dictionary<int, ItemPrice> ItemPrices = new Dictionary<int, ItemPrice>();
 
+        /// <summary>
+        /// Stores all the drops in the rare drop table.
+        /// </summary>
         public static List<Drop> RareDropTable = new List<Drop>();
 
+        /// <summary>
+        /// Stores drop tables in memory so that we don't have to do another navigation to retrieve the information
+        /// on a second click of the NPC in the list.
+        /// </summary>
         public static Dictionary<string, List<Drop>> CachedDropTables = new Dictionary<string, List<Drop>>();
 
-        #region Loading of initial links/prices
+        /// <summary>
+        /// Stores all the drops that the user has logged. The key is the name of the item and the value is a
+        /// Drop object. When the user adds more of the same drop, we will increment the quantity of the
+        /// Drop object already stored in the dictionary. This is because we only really need the name and quantity
+        /// properties of the Drop.
+        /// </summary>
+        public static Dictionary<string, LoggedDrop> LoggedDrops = new Dictionary<string, LoggedDrop>();
+
+        /// <summary>
+        /// Load up all the data we need for the app.
+        /// </summary>
         public static void LoadData()
         {
             LoadNpcLinks();
@@ -122,7 +142,9 @@ namespace OsrsDropEditor
             {
                 try
                 {
+                    browser.ExpectNonHtmlResponse = true;
                     browser.Navigate(osbPriceLink, true);
+                    browser.ExpectNonHtmlResponse = false;
 
                     JObject priceDataAsJson = (JObject)JToken.Parse(browser.InnerText);
                     IEnumerable<JToken> itemPricesJson = priceDataAsJson.Values();
@@ -183,9 +205,7 @@ namespace OsrsDropEditor
                     RareDropTable = JsonConvert.DeserializeObject<List<Drop>>(cachedRareDrops);
             }
         }
-        #endregion
 
-        #region Helper methods for getting data
         /// <summary>
         /// Converts the JToken containing the price data to the ItemPrice struct.
         /// </summary>
@@ -245,6 +265,8 @@ namespace OsrsDropEditor
             if (Regex.IsMatch(quantity, @"\d+; \d+"))
             {
                 string[] quantities = quantity.Split(';');
+
+                drop.Quantity = -1;
                 drop.HasMultipleQuantities = true;
                 drop.MultipleQuantities = quantities.Select(q => Convert.ToInt32(q.Trim())).ToArray();
             }
@@ -326,10 +348,21 @@ namespace OsrsDropEditor
                 Quantity = 1
             };
         }
-        #endregion
+
+        public static void LogDrop(Drop drop)
+        {
+            string name = drop.Name;
+            if (LoggedDrops.ContainsKey(name))
+            {
+                LoggedDrop existingDrop = LoggedDrops[name];
+                existingDrop.Quantity += drop.Quantity;
+                LoggedDrops[name] = existingDrop;
+            }
+            else
+                LoggedDrops[name] = new LoggedDrop { Quantity = drop.Quantity, Name = drop.Name };
+        }
     }
 
-    #region Structs for serialization
     /// <summary>
     /// Used for deserializing OSB price data to a usable format. Value type because there is slightly
     /// less overhead and the price data is immutable anyways.
@@ -370,6 +403,15 @@ namespace OsrsDropEditor
             return $"{Name}: {Quantity}";
         }
     }
-    #endregion
 
+    public struct LoggedDrop
+    {
+        public string Name { get; set; }
+        public int Quantity { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name}: {Quantity}";
+        }
+    }
 }

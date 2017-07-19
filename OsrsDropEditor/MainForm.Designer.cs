@@ -38,12 +38,19 @@
             this.dropsPanel = new System.Windows.Forms.Panel();
             this.dropsListView = new System.Windows.Forms.ListView();
             this.userInteractionPanel = new System.Windows.Forms.Panel();
+            this.buttonTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.starButton = new System.Windows.Forms.Button();
+            this.pauseButton = new System.Windows.Forms.Button();
+            this.resetButton = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.totalValueLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.npcListGridView)).BeginInit();
             this.dropsPanel.SuspendLayout();
+            this.userInteractionPanel.SuspendLayout();
+            this.buttonTableLayoutPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -134,17 +141,69 @@
             this.dropsListView.Size = new System.Drawing.Size(270, 343);
             this.dropsListView.TabIndex = 0;
             this.dropsListView.UseCompatibleStateImageBehavior = false;
-            this.dropsListView.ItemActivate += dropsListView_ItemActivate;
+            this.dropsListView.ItemActivate += new System.EventHandler(this.dropsListView_ItemActivate);
             // 
             // userInteractionPanel
             // 
             this.userInteractionPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.userInteractionPanel.Controls.Add(this.totalValueLabel);
+            this.userInteractionPanel.Controls.Add(this.buttonTableLayoutPanel);
             this.userInteractionPanel.Location = new System.Drawing.Point(482, 25);
             this.userInteractionPanel.Margin = new System.Windows.Forms.Padding(1);
             this.userInteractionPanel.Name = "userInteractionPanel";
             this.userInteractionPanel.Size = new System.Drawing.Size(191, 343);
             this.userInteractionPanel.TabIndex = 3;
+            // 
+            // buttonTableLayoutPanel
+            // 
+            this.buttonTableLayoutPanel.ColumnCount = 3;
+            this.buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
+            this.buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
+            this.buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.34F));
+            this.buttonTableLayoutPanel.Controls.Add(this.starButton, 0, 0);
+            this.buttonTableLayoutPanel.Controls.Add(this.pauseButton, 1, 0);
+            this.buttonTableLayoutPanel.Controls.Add(this.resetButton, 2, 0);
+            this.buttonTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonTableLayoutPanel.Location = new System.Drawing.Point(0, 316);
+            this.buttonTableLayoutPanel.Name = "buttonTableLayoutPanel";
+            this.buttonTableLayoutPanel.RowCount = 1;
+            this.buttonTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.buttonTableLayoutPanel.Size = new System.Drawing.Size(191, 27);
+            this.buttonTableLayoutPanel.TabIndex = 0;
+            // 
+            // starButton
+            // 
+            this.starButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.starButton.Location = new System.Drawing.Point(0, 0);
+            this.starButton.Margin = new System.Windows.Forms.Padding(0);
+            this.starButton.Name = "starButton";
+            this.starButton.Size = new System.Drawing.Size(63, 27);
+            this.starButton.TabIndex = 0;
+            this.starButton.Text = "Start";
+            this.starButton.UseVisualStyleBackColor = true;
+            // 
+            // pauseButton
+            // 
+            this.pauseButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pauseButton.Location = new System.Drawing.Point(63, 0);
+            this.pauseButton.Margin = new System.Windows.Forms.Padding(0);
+            this.pauseButton.Name = "pauseButton";
+            this.pauseButton.Size = new System.Drawing.Size(63, 27);
+            this.pauseButton.TabIndex = 1;
+            this.pauseButton.Text = "Pause";
+            this.pauseButton.UseVisualStyleBackColor = true;
+            // 
+            // resetButton
+            // 
+            this.resetButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.resetButton.Location = new System.Drawing.Point(126, 0);
+            this.resetButton.Margin = new System.Windows.Forms.Padding(0);
+            this.resetButton.Name = "resetButton";
+            this.resetButton.Size = new System.Drawing.Size(65, 27);
+            this.resetButton.TabIndex = 2;
+            this.resetButton.Text = "Reset";
+            this.resetButton.UseVisualStyleBackColor = true;
             // 
             // menuStrip1
             // 
@@ -161,6 +220,16 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
+            // 
+            // totalValueLabel
+            // 
+            this.totalValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.totalValueLabel.Location = new System.Drawing.Point(3, 297);
+            this.totalValueLabel.Name = "totalValueLabel";
+            this.totalValueLabel.Size = new System.Drawing.Size(185, 16);
+            this.totalValueLabel.TabIndex = 1;
+            this.totalValueLabel.Text = "Total Value:";
             // 
             // MainForm
             // 
@@ -180,6 +249,8 @@
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.npcListGridView)).EndInit();
             this.dropsPanel.ResumeLayout(false);
+            this.userInteractionPanel.ResumeLayout(false);
+            this.buttonTableLayoutPanel.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -199,6 +270,11 @@
         private System.Windows.Forms.ListView dropsListView;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.TableLayoutPanel buttonTableLayoutPanel;
+        private System.Windows.Forms.Button starButton;
+        private System.Windows.Forms.Button pauseButton;
+        private System.Windows.Forms.Button resetButton;
+        private System.Windows.Forms.Label totalValueLabel;
     }
 }
 

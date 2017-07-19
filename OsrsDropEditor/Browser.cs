@@ -14,12 +14,15 @@ namespace OsrsDropEditor
         internal XmlDocument _document;
         public XmlDocument Document { get { return _document; } }
 
+        internal SgmlReader _sgmlReader;
+
         public string InnerText { get { return _document.InnerText; } }
 
         internal string _uri;
         public string Uri { get { return _uri; } }
 
-        internal SgmlReader _sgmlReader;
+        internal bool _expectNonHtmlResponse;
+        public bool ExpectNonHtmlResponse { get { return _expectNonHtmlResponse; } set { _expectNonHtmlResponse = value; } }
 
         public Browser()
         {
@@ -42,7 +45,14 @@ namespace OsrsDropEditor
                 _document = new XmlDocument();
                 _document.PreserveWhitespace = true;
                 _document.XmlResolver = null;
-                _document.Load(_sgmlReader);
+                if (_expectNonHtmlResponse)
+                {
+                    XmlNode wrappedJson = _document.CreateNode("element", "content", "");
+                    wrappedJson.InnerText = _sgmlReader.ReadOuterXml();
+                    _document.AppendChild(wrappedJson);
+                }
+                else
+                    _document.Load(_sgmlReader);
 
                 _uri = request.RequestUri.ToString();
             }

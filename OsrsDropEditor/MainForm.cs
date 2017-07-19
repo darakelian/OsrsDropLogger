@@ -35,6 +35,11 @@ namespace OsrsDropEditor
             npcNameTextBox.KeyDown += npcNameTextBox_KeyEnter;
         }
 
+        /// <summary>
+        /// Called whenever we hit enter on the NPC name textbox or an autocomplete action is performed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void npcNameTextBox_KeyEnter(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return)
@@ -97,24 +102,105 @@ namespace OsrsDropEditor
                 ShowDropsForNpc(row);
         }
 
+        private bool hasDropFormOpen = false;
+
         public void dropsListView_ItemActivate(object sender, EventArgs e)
         {
+            if (hasDropFormOpen)
+                return;
+
             ListView listView = (ListView)sender;
             ListViewItem listViewItem = listView.SelectedItems[0];
             Drop dropToLog = (Drop)listViewItem.Tag;
             if (dropToLog.IsRangeOfDrops)
             {
                 AddDropRangeForm addDropRangeFrom = new AddDropRangeForm();
-                addDropRangeFrom.label1.Text = dropToLog.Name;
-                addDropRangeFrom.Show(this);
-            }
-            if (dropToLog.HasMultipleQuantities)
-            {
+                addDropRangeFrom.dropLabel.Text = dropToLog.Name;
+                addDropRangeFrom.rangeTextBox.KeyDown += RangeTextBox_KeyDown;
+                addDropRangeFrom.addDropButton.Click += AddDropButton_Click;
+                addDropRangeFrom.Tag = dropToLog;
 
+                addDropRangeFrom.Show(this);
+                hasDropFormOpen = true;
             }
+            else if (dropToLog.HasMultipleQuantities)
+            {
+                AddDropMultipleForm addDropMultipleForm = new AddDropMultipleForm();
+                addDropMultipleForm.dropLabel.Text = dropToLog.Name;
+
+                foreach (int quantityOption in dropToLog.MultipleQuantities)
+                    addDropMultipleForm.quantityOptionsListBox.Items.Add(quantityOption);
+
+                addDropMultipleForm.quantityOptionsListBox.Text = dropToLog.MultipleQuantities[0].ToString();
+                addDropMultipleForm.quantityOptionsListBox.Tag = dropToLog;
+
+                addDropMultipleForm.addDropButton.Click += AddMultipleRangeDropButton_Click;
+
+                addDropMultipleForm.Show(this);
+                hasDropFormOpen = true;
+            }
+            else
+            {
+                OsrsDataContainers.LogDrop(dropToLog);
+            }
+        }
+
+        private void RangeTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return)
+            {
+                TextBox box = sender as TextBox;
+                Drop drop = (Drop)box.Tag;
+                int quantity = 1;
+                if (Int32.TryParse(box.Text, out quantity))
+                {
+                    if (quantity < drop.RangeLowBound || quantity > drop.RangeHighBound)
+                        return;
+
+                    drop.Quantity = quantity;
+                    OsrsDataContainers.LogDrop(drop);
+
+                    ((Form)box.TopLevelControl).Close();
+                }
+            }
+        }
+
+        private void AddDropButton_Click(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            AddDropRangeForm form = (AddDropRangeForm)button.TopLevelControl;
+            Drop drop = (Drop)form.Tag;
+            int quantity = 1;
+            if (Int32.TryParse(form.rangeTextBox.Text, out quantity))
+            {
+                if (quantity < drop.RangeLowBound || quantity > drop.RangeHighBound)
+                    return;
+
+                drop.Quantity = quantity;
+                OsrsDataContainers.LogDrop(drop);
+
+                form.Close();
+            }
+        }
+
+        private void AddMultipleRangeDropButton_Click(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            AddDropMultipleForm form = (AddDropMultipleForm)button.TopLevelControl;
+            Drop drop = (Drop)form.quantityOptionsListBox.Tag;
+            int quantitySelected = form.quantityOptionsListBox.SelectedIndex;
+
+            drop.Quantity = quantitySelected;
+            OsrsDataContainers.LogDrop(drop);
+
+            form.Close();
         }
     }
 
+    /// <summary>
+    /// We need to wrap the NPC's name in an object in order to have it properly show up in the grid
+    /// view otherwise it just displays the length of the string.
+    /// </summary>
     public struct NpcName
     {
         public string Name { get; set; }
