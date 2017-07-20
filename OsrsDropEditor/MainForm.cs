@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
 using System.Drawing;
+using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace OsrsDropEditor
 {
@@ -31,7 +33,8 @@ namespace OsrsDropEditor
             npcListGridView.ClearSelection();
 
             //Setup the logged drops grid view
-            loggedDropBindingSource.DataSource = osrsDropContainers.LoggedDrops.Values.ToList();
+            loggedDropBindingSource.DataSource = osrsDropContainers.LoggedDrops.Values;
+            loggedDropBindingSource.ListChanged += LoggedDropBindingSource_ListChanged;
 
             //Setup the autocomplete for the textbox
             AutoCompleteStringCollection autoCompleteSource = new AutoCompleteStringCollection();
@@ -40,6 +43,14 @@ namespace OsrsDropEditor
             npcNameTextBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
             npcNameTextBox.AutoCompleteMode = AutoCompleteMode.Suggest;
             npcNameTextBox.KeyDown += npcNameTextBox_KeyEnter;
+        }
+
+        private void LoggedDropBindingSource_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e)
+        {
+            UpdateTotalValueLabel();
+            loggedDropView.Refresh();
+
+            Utility.SaveObjectToJson(@"..\..\logged_drops.json", osrsDropContainers.LoggedDrops.Values);
         }
 
         /// <summary>
@@ -64,6 +75,12 @@ namespace OsrsDropEditor
             }
         }
 
+        /// <summary>
+        /// Attempts to populate the drop list view with all the drops that the NPC has. In the event of
+        /// being unable to find drops, we display an error letting the user know that there was a problem.
+        /// </summary>
+        /// <param name="npcRow"></param>
+        /// <returns></returns>
         private bool ShowDropsForNpc(DataGridViewRow npcRow)
         {
             string npcName = npcRow.DataBoundItem.ToString();
@@ -89,6 +106,13 @@ namespace OsrsDropEditor
             return true;
         }
 
+        /// <summary>
+        /// Converts a new ListViewItem using the provided Drop object. The slot is so we can determine what image
+        /// gets displayed in the ListView.
+        /// </summary>
+        /// <param name="drop"></param>
+        /// <param name="slot"></param>
+        /// <returns></returns>
         private ListViewItem GetListViewItemForDrop(Drop drop, int slot)
         {
             ListViewItem item = new ListViewItem();
@@ -99,6 +123,12 @@ namespace OsrsDropEditor
             return item;
         }
 
+        /// <summary>
+        /// Called whenever we click an NPC's name in the list. We also make sure that this code only
+        /// gets executed if the row isn't already selected.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void npcListGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
             int rowIndex = e.RowIndex;
@@ -109,8 +139,21 @@ namespace OsrsDropEditor
                 ShowDropsForNpc(row);
         }
 
+        /// <summary>
+        /// Keeps track of whether or not we are attempting to add a special type of drop. This is so that
+        /// we do not end up with multiple forms open at once if the user spam clicks an item that requires
+        /// showing a form.
+        /// </summary>
         private bool hasDropFormOpen = false;
 
+        /// <summary>
+        /// Called whenever an item is clicked in the NPC's drops panel. First we check to see if the drop is
+        /// a drop with a range of quantities. Next, we check if it is a drop with multiple possible quantities.
+        /// Third, we check to see if the drop is a rare drop table drop. If the drop meets any of those
+        /// criteria, we show the special form for handling those instances. Otherwise we just log the drop.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void dropsListView_ItemActivate(object sender, EventArgs e)
         {
             if (hasDropFormOpen)
@@ -161,6 +204,13 @@ namespace OsrsDropEditor
             }
         }
 
+        /// <summary>
+        /// Called whenever the user submits the input to the text box. Validates the quantity provided by making
+        /// sure that it is not outside the range specified in the drop object. If it successfully validates
+        /// then the drop is logged.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RangeTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return)
@@ -225,6 +275,11 @@ namespace OsrsDropEditor
             hasDropFormOpen = false;
         }
 
+        /// <summary>
+        /// Adds the selected rare drop to the logged drops.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddRareDropButton_Click(object sender, EventArgs e)
         {
             Button button = (Button)sender;
@@ -250,6 +305,50 @@ namespace OsrsDropEditor
         {
             osrsDropContainers.LoggedDrops.Clear();
             loggedDropBindingSource.Clear();
+        }
+
+        /// <summary>
+        /// Updates the text of the total value label to reflect the current value.
+        /// </summary>
+        public void UpdateTotalValueLabel()
+        {
+            string oldValueText = totalValueLabel.Text;
+            totalValueLabel.Text = Regex.Replace(oldValueText, @"(?<=Total Value: )(\d*)", Convert.ToString(osrsDropContainers.GetTotalDropsValue()));
+        }
+
+        private Stopwatch stopWatch;
+
+        private void starButton_Click(object sender, EventArgs e)
+        {
+            if (stopWatch == null)
+            {
+                stopWatch = new Stopwatch();
+                stopWatch.Start();
+                stopwatchUpdateTimer.Start();
+            }
+        }
+
+        private void pauseButton_Click(object sender, EventArgs e)
+        {
+            stopWatch?.Stop();
+            stopwatchUpdateTimer.Stop();
+            Text = Regex.Replace(Text, @"\s-\s([0-9]*):([0-9]*):([0-9]*)", "");
+        }
+
+        private void stopwatchUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            if (stopWatch != null && stopWatch.IsRunning)
+            {
+                TimeSpan span = stopWatch.Elapsed;
+                string spanToTimeStamp = span.ToString(@"hh\:mm\:ss");
+
+                string timestampText = $" - {spanToTimeStamp}";
+
+                if (!Text.Contains("-"))
+                    Text += timestampText;
+                else
+                    Text = Regex.Replace(Text, @"\s-\s([0-9]*):([0-9]*):([0-9]*)", timestampText);
+            }
         }
     }
 

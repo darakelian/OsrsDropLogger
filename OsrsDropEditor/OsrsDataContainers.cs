@@ -68,6 +68,10 @@ namespace OsrsDropEditor
             LoadNpcLinks();
             LoadItemPrices();
             LoadRareDropTable();
+
+            mainForm.loggedDropBindingSource.DataSource = LoggedDrops;
+
+            TryLoadSavedDrops();
         }
 
         /// <summary>
@@ -304,6 +308,11 @@ namespace OsrsDropEditor
             return ItemPrices.Values.Where(item => item.Name.Contains(itemName)).FirstOrDefault().Id;
         }
 
+        /// <summary>
+        /// Returns all drops that a given NPC can drop.
+        /// </summary>
+        /// <param name="npcName"></param>
+        /// <returns></returns>
         public IEnumerable<Drop> GetDropsForNpc(string npcName)
         {
             //Dictionary<string, Drop> drops = new Dictionary<string, Drop>();
@@ -358,6 +367,10 @@ namespace OsrsDropEditor
             return CachedDropTables[npcName] = drops;
         }
 
+        /// <summary>
+        /// Creates a dummy drop representing the rare drop table.
+        /// </summary>
+        /// <returns></returns>
         public Drop CreateRareDrop()
         {
             return new Drop
@@ -368,31 +381,46 @@ namespace OsrsDropEditor
             };
         }
 
+        /// <summary>
+        /// Adds a drop to the dictionary of logged drops.
+        /// </summary>
+        /// <param name="drop"></param>
         public void LogDrop(Drop drop)
         {
             string name = drop.Name;
+            LoggedDrop dropToAdd;
+
             if (LoggedDrops.ContainsKey(name))
             {
                 LoggedDrop existingDrop = LoggedDrops[name];
                 existingDrop.Quantity += drop.Quantity;
-                LoggedDrops[name] = existingDrop;
+                dropToAdd = LoggedDrops[name] = existingDrop;
+
+                int index = mainForm.loggedDropBindingSource.IndexOf(dropToAdd);
+                mainForm.loggedDropBindingSource.List[index] = dropToAdd;
             }
             else
-                LoggedDrops[name] = new LoggedDrop { Quantity = drop.Quantity, Name = drop.Name };
-
-            mainForm.loggedDropBindingSource.DataSource = LoggedDrops.Values.ToList();
-
-            string oldValueText = mainForm.totalValueLabel.Text;
-            mainForm.totalValueLabel.Text = Regex.Replace(oldValueText, @"(?<=Total Value: )(\d*)", Convert.ToString(GetTotalDropsValue()));
-
-            Utility.SaveObjectToJson(@"..\..\logged_drops.json", LoggedDrops.Values.ToList());
+            {
+                dropToAdd = LoggedDrops[name] = new LoggedDrop { Quantity = drop.Quantity, Name = drop.Name };
+                mainForm.loggedDropBindingSource.Add(dropToAdd);
+            }
         }
 
-        private int GetTotalDropsValue()
+        /// <summary>
+        /// Computes the sum of all logged drops.
+        /// </summary>
+        /// <returns></returns>
+        public int GetTotalDropsValue()
         {
             return LoggedDrops.Values.Sum(drop => drop.TotalPrice);
         }
 
+        /// <summary>
+        /// Computes the total value of the drops for a specific item ID. This method looks up the price of the
+        /// item and then multiplies it by the number of items.
+        /// </summary>
+        /// <param name="loggedDrop"></param>
+        /// <returns></returns>
         public static int GetPriceForDrops(LoggedDrop loggedDrop)
         {
             int itemId = GetItemIdForName(loggedDrop.Name);
@@ -404,6 +432,23 @@ namespace OsrsDropEditor
                 return 0;
 
             return ItemPrices[itemId].OverallAverage * loggedDrop.Quantity;
+        }
+
+        /// <summary>
+        /// Attempts to load the saved drops from the json file at program startup.
+        /// </summary>
+        private void TryLoadSavedDrops()
+        {
+            if (Utility.FileExists("logged_drops.json", ""))
+            {
+                string savedDropsJson = Utility.ReadFileToEnd("logged_drops.json", "");
+                List<LoggedDrop> savedDrops = JsonConvert.DeserializeObject<List<LoggedDrop>>(savedDropsJson);
+
+                LoggedDrops = savedDrops.ToDictionary(drop => drop.Name, drop => drop);
+                mainForm.loggedDropBindingSource.DataSource = LoggedDrops.Values;
+
+                mainForm.UpdateTotalValueLabel();
+            }
         }
     }
 
@@ -452,7 +497,7 @@ namespace OsrsDropEditor
         }
     }
 
-    public struct LoggedDrop
+    public class LoggedDrop
     {
         public string Name { get; set; }
         public string DisplayName { get { return ToString(); } }
@@ -462,6 +507,16 @@ namespace OsrsDropEditor
         public override string ToString()
         {
             return $"{Name}: {Quantity}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is LoggedDrop && ((LoggedDrop)obj).Name.Equals(this.Name);
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode() ^ Quantity.GetHashCode();
         }
     }
 }

@@ -19,11 +19,11 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public static string ReadFileToEnd(string fileName, string filePath = @"..\..\OfflineJson\")
+        public static string ReadFileToEnd(string fileName, string filePath = @"OfflineJson\")
         {
             try
             {
-                using (FileStream stream = File.OpenRead($@"{filePath}{fileName}"))
+                using (FileStream stream = File.OpenRead($@"..\..\{filePath}{fileName}"))
                 {
                     using (StreamReader reader = new StreamReader(stream))
                     {

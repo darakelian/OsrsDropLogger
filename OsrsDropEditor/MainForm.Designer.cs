@@ -29,41 +29,38 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.npcNameBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.npcNameTextBox = new System.Windows.Forms.TextBox();
             this.npcNameLabel = new System.Windows.Forms.Label();
             this.npcListGridView = new System.Windows.Forms.DataGridView();
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.npcNameBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dropsPanel = new System.Windows.Forms.Panel();
             this.dropsListView = new System.Windows.Forms.ListView();
             this.userInteractionPanel = new System.Windows.Forms.Panel();
+            this.loggedDropView = new System.Windows.Forms.DataGridView();
+            this.nameDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.totalPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.loggedDropBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.totalValueLabel = new System.Windows.Forms.Label();
             this.buttonTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.starButton = new System.Windows.Forms.Button();
             this.pauseButton = new System.Windows.Forms.Button();
             this.resetButton = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.totalValueLabel = new System.Windows.Forms.Label();
-            this.loggedDropView = new System.Windows.Forms.DataGridView();
-            this.loggedDropBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.nameDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.totalPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).BeginInit();
+            this.stopwatchUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.npcListGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).BeginInit();
             this.dropsPanel.SuspendLayout();
             this.userInteractionPanel.SuspendLayout();
-            this.buttonTableLayoutPanel.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loggedDropView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.loggedDropBindingSource)).BeginInit();
+            this.buttonTableLayoutPanel.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // npcNameBindingSource
-            // 
-            this.npcNameBindingSource.DataSource = typeof(OsrsDropEditor.NpcName);
             // 
             // panel1
             // 
@@ -126,6 +123,10 @@
             this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
             this.nameDataGridViewTextBoxColumn.ReadOnly = true;
             // 
+            // npcNameBindingSource
+            // 
+            this.npcNameBindingSource.DataSource = typeof(OsrsDropEditor.NpcName);
+            // 
             // dropsPanel
             // 
             this.dropsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -162,86 +163,10 @@
             this.userInteractionPanel.Size = new System.Drawing.Size(191, 344);
             this.userInteractionPanel.TabIndex = 3;
             // 
-            // buttonTableLayoutPanel
-            // 
-            this.buttonTableLayoutPanel.ColumnCount = 3;
-            this.buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
-            this.buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
-            this.buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.34F));
-            this.buttonTableLayoutPanel.Controls.Add(this.starButton, 0, 0);
-            this.buttonTableLayoutPanel.Controls.Add(this.pauseButton, 1, 0);
-            this.buttonTableLayoutPanel.Controls.Add(this.resetButton, 2, 0);
-            this.buttonTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonTableLayoutPanel.Location = new System.Drawing.Point(0, 317);
-            this.buttonTableLayoutPanel.Name = "buttonTableLayoutPanel";
-            this.buttonTableLayoutPanel.RowCount = 1;
-            this.buttonTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.buttonTableLayoutPanel.Size = new System.Drawing.Size(191, 27);
-            this.buttonTableLayoutPanel.TabIndex = 0;
-            // 
-            // starButton
-            // 
-            this.starButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.starButton.Location = new System.Drawing.Point(0, 0);
-            this.starButton.Margin = new System.Windows.Forms.Padding(0);
-            this.starButton.Name = "starButton";
-            this.starButton.Size = new System.Drawing.Size(63, 27);
-            this.starButton.TabIndex = 0;
-            this.starButton.Text = "Start";
-            this.starButton.UseVisualStyleBackColor = true;
-            // 
-            // pauseButton
-            // 
-            this.pauseButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pauseButton.Location = new System.Drawing.Point(63, 0);
-            this.pauseButton.Margin = new System.Windows.Forms.Padding(0);
-            this.pauseButton.Name = "pauseButton";
-            this.pauseButton.Size = new System.Drawing.Size(63, 27);
-            this.pauseButton.TabIndex = 1;
-            this.pauseButton.Text = "Pause";
-            this.pauseButton.UseVisualStyleBackColor = true;
-            // 
-            // resetButton
-            // 
-            this.resetButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resetButton.Location = new System.Drawing.Point(126, 0);
-            this.resetButton.Margin = new System.Windows.Forms.Padding(0);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(65, 27);
-            this.resetButton.TabIndex = 2;
-            this.resetButton.Text = "Reset";
-            this.resetButton.UseVisualStyleBackColor = true;
-            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(674, 24);
-            this.menuStrip1.TabIndex = 4;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
-            // 
-            // totalValueLabel
-            // 
-            this.totalValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.totalValueLabel.Location = new System.Drawing.Point(3, 298);
-            this.totalValueLabel.Name = "totalValueLabel";
-            this.totalValueLabel.Size = new System.Drawing.Size(185, 16);
-            this.totalValueLabel.TabIndex = 1;
-            this.totalValueLabel.Text = "Total Value: ";
-            // 
             // loggedDropView
             // 
             this.loggedDropView.AllowUserToAddRows = false;
+            this.loggedDropView.AllowUserToResizeRows = false;
             this.loggedDropView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -256,12 +181,9 @@
             this.loggedDropView.Name = "loggedDropView";
             this.loggedDropView.ReadOnly = true;
             this.loggedDropView.RowHeadersVisible = false;
+            this.loggedDropView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.loggedDropView.Size = new System.Drawing.Size(192, 295);
             this.loggedDropView.TabIndex = 2;
-            // 
-            // loggedDropBindingSource
-            // 
-            this.loggedDropBindingSource.DataSource = typeof(OsrsDropEditor.LoggedDrop);
             // 
             // nameDataGridViewTextBoxColumn1
             // 
@@ -291,6 +213,94 @@
             this.totalPriceDataGridViewTextBoxColumn.Name = "totalPriceDataGridViewTextBoxColumn";
             this.totalPriceDataGridViewTextBoxColumn.ReadOnly = true;
             // 
+            // loggedDropBindingSource
+            // 
+            this.loggedDropBindingSource.DataSource = typeof(OsrsDropEditor.LoggedDrop);
+            // 
+            // totalValueLabel
+            // 
+            this.totalValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.totalValueLabel.Location = new System.Drawing.Point(3, 298);
+            this.totalValueLabel.Name = "totalValueLabel";
+            this.totalValueLabel.Size = new System.Drawing.Size(185, 16);
+            this.totalValueLabel.TabIndex = 1;
+            this.totalValueLabel.Text = "Total Value: ";
+            // 
+            // buttonTableLayoutPanel
+            // 
+            this.buttonTableLayoutPanel.ColumnCount = 3;
+            this.buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
+            this.buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
+            this.buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.34F));
+            this.buttonTableLayoutPanel.Controls.Add(this.starButton, 0, 0);
+            this.buttonTableLayoutPanel.Controls.Add(this.pauseButton, 1, 0);
+            this.buttonTableLayoutPanel.Controls.Add(this.resetButton, 2, 0);
+            this.buttonTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonTableLayoutPanel.Location = new System.Drawing.Point(0, 317);
+            this.buttonTableLayoutPanel.Name = "buttonTableLayoutPanel";
+            this.buttonTableLayoutPanel.RowCount = 1;
+            this.buttonTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.buttonTableLayoutPanel.Size = new System.Drawing.Size(191, 27);
+            this.buttonTableLayoutPanel.TabIndex = 0;
+            // 
+            // starButton
+            // 
+            this.starButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.starButton.Location = new System.Drawing.Point(0, 0);
+            this.starButton.Margin = new System.Windows.Forms.Padding(0);
+            this.starButton.Name = "starButton";
+            this.starButton.Size = new System.Drawing.Size(63, 27);
+            this.starButton.TabIndex = 0;
+            this.starButton.Text = "Start";
+            this.starButton.UseVisualStyleBackColor = true;
+            this.starButton.Click += new System.EventHandler(this.starButton_Click);
+            // 
+            // pauseButton
+            // 
+            this.pauseButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pauseButton.Location = new System.Drawing.Point(63, 0);
+            this.pauseButton.Margin = new System.Windows.Forms.Padding(0);
+            this.pauseButton.Name = "pauseButton";
+            this.pauseButton.Size = new System.Drawing.Size(63, 27);
+            this.pauseButton.TabIndex = 1;
+            this.pauseButton.Text = "Pause";
+            this.pauseButton.UseVisualStyleBackColor = true;
+            this.pauseButton.Click += new System.EventHandler(this.pauseButton_Click);
+            // 
+            // resetButton
+            // 
+            this.resetButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.resetButton.Location = new System.Drawing.Point(126, 0);
+            this.resetButton.Margin = new System.Windows.Forms.Padding(0);
+            this.resetButton.Name = "resetButton";
+            this.resetButton.Size = new System.Drawing.Size(65, 27);
+            this.resetButton.TabIndex = 2;
+            this.resetButton.Text = "Reset";
+            this.resetButton.UseVisualStyleBackColor = true;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(674, 24);
+            this.menuStrip1.TabIndex = 4;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // stopwatchUpdateTimer
+            // 
+            this.stopwatchUpdateTimer.Interval = 250;
+            this.stopwatchUpdateTimer.Tick += new System.EventHandler(this.stopwatchUpdateTimer_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -304,17 +314,17 @@
             this.Name = "MainForm";
             this.Text = "OSRS Drop Logger";
             this.Load += new System.EventHandler(this.MainForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.npcListGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).EndInit();
             this.dropsPanel.ResumeLayout(false);
             this.userInteractionPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.loggedDropView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loggedDropBindingSource)).EndInit();
             this.buttonTableLayoutPanel.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.loggedDropView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loggedDropBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -342,6 +352,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn quantityDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn totalPriceDataGridViewTextBoxColumn;
+        private System.Windows.Forms.Timer stopwatchUpdateTimer;
     }
 }
 
