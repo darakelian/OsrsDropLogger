@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -30,7 +31,7 @@ namespace OsrsDropEditor
         /// Drop object already stored in the dictionary. This is because we only really need the name and quantity
         /// properties of the Drop.
         /// </summary>
-        public Dictionary<string, LoggedDrop> LoggedDrops = new Dictionary<string, LoggedDrop>();
+        public BindingList<LoggedDrop> LoggedDrops = new BindingList<LoggedDrop>();
 
         /// <summary>
         /// Stores the links for the NPCs in a dictionary so we don't parse them
@@ -79,14 +80,15 @@ namespace OsrsDropEditor
         /// </summary>
         public void LoadNpcLinks()
         {
-            if (!File.Exists(@"../../OfflineJson/links.json"))
+            if (!Utility.FileExists("links.json"))
             {
                 browser.Navigate(osrsWikiBestiaryLink);
 
                 GetLinksOnPage();
 
                 string linksAsJson = JsonConvert.SerializeObject(NpcLinks);
-                File.WriteAllText(@"../../OfflineJson/links.json", linksAsJson);
+                //File.WriteAllText(@"../../OfflineJson/links.json", linksAsJson);
+                Utility.WriteTextToFile("links.json", linksAsJson);
 
                 return;
             }
@@ -162,7 +164,8 @@ namespace OsrsDropEditor
                     ItemPrices = itemPricesJson.ToDictionary(itemToken => itemToken.Value<int>("id"), CreateItemPrice);
 
                     string pricesAsJson = JsonConvert.SerializeObject(ItemPrices);
-                    File.WriteAllText(@"..\..\OfflineJson\prices.json", pricesAsJson);
+                    //File.WriteAllText(@"..\..\OfflineJson\prices.json", pricesAsJson);
+                    Utility.WriteTextToFile("prices.json", pricesAsJson);
 
                     Properties.Settings.Default.TimeSinceLastRefresh = DateTime.Now;
                     Properties.Settings.Default.Save();
@@ -190,7 +193,7 @@ namespace OsrsDropEditor
         /// </summary>
         public void LoadRareDropTable()
         {
-            if (!File.Exists(@"..\..\OfflineJson\raredrops.json"))
+            if (!Utility.FileExists("raredrops.json"))
             {
                 browser.Navigate(osrsWikiRareDropTableLink);
 
@@ -204,7 +207,8 @@ namespace OsrsDropEditor
                 }
 
                 string rareDropsAsJson = JsonConvert.SerializeObject(RareDropTable);
-                File.WriteAllText(@"../../OfflineJson/raredrops.json", rareDropsAsJson);
+                //File.WriteAllText(@"..\..\OfflineJson\raredrops.json", rareDropsAsJson);
+                Utility.WriteTextToFile("raredrops.json", rareDropsAsJson);
 
                 return;
             }
@@ -262,7 +266,8 @@ namespace OsrsDropEditor
         private Drop GetDropFromRow(Dictionary<string, int> headers, XmlNode row)
         {
             Drop drop = new Drop();
-            drop.ImageLink = row.SelectSingleNode($".//*[local-name()='td'][{headers["Image"]}]//*[local-name()='img']/@src").InnerText;
+            XmlNode imageRow = row.SelectSingleNode($".//*[local-name()='td'][{headers["Image"]}]//*[local-name()='img']");
+            drop.ImageLink = imageRow.Attributes["src"].Value.Contains("http") ? imageRow.Attributes["src"].Value : imageRow.Attributes["data-src"].Value;
             drop.Name = row.SelectSingleNode($".//*[local-name()='td'][{headers["Item"]}]").InnerText.Trim();
 
             string quantity = row.SelectSingleNode($".//*[local-name()='td'][{headers["Quantity"]}]").InnerText.Replace("(noted)", "")
@@ -347,7 +352,7 @@ namespace OsrsDropEditor
                         drops.AddRange(dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)));
                     }
 
-                    Utility.SaveObjectToJson($@"..\..\OfflineJson\DropTables\{npcName}.json", drops);
+                    Utility.SaveObjectToJson($"{npcName}.json", @"OfflineJson\DropTables\", drops);
                 }
                 catch (WebException)
                 {
@@ -387,23 +392,33 @@ namespace OsrsDropEditor
         /// <param name="drop"></param>
         public void LogDrop(Drop drop)
         {
-            string name = drop.Name;
-            LoggedDrop dropToAdd;
+            LoggedDrop dropToAdd = new LoggedDrop(drop);
 
-            if (LoggedDrops.ContainsKey(name))
+            if (LoggedDrops.Contains(dropToAdd))
+            {
+                int existingDropIndex = LoggedDrops.IndexOf(dropToAdd);
+                dropToAdd.Quantity += LoggedDrops[existingDropIndex].Quantity;
+                LoggedDrops[existingDropIndex] = dropToAdd;
+            }
+            else
+            {
+                LoggedDrops.Add(dropToAdd);
+            }
+            /*if (LoggedDrops.ContainsKey(name))
             {
                 LoggedDrop existingDrop = LoggedDrops[name];
                 existingDrop.Quantity += drop.Quantity;
                 dropToAdd = LoggedDrops[name] = existingDrop;
 
-                int index = mainForm.loggedDropBindingSource.IndexOf(dropToAdd);
-                mainForm.loggedDropBindingSource.List[index] = dropToAdd;
+                //int index = mainForm.loggedDropBindingSource.IndexOf(dropToAdd);
+                //mainForm.loggedDropBindingSource.List[index] = dropToAdd;
             }
             else
             {
                 dropToAdd = LoggedDrops[name] = new LoggedDrop { Quantity = drop.Quantity, Name = drop.Name };
-                mainForm.loggedDropBindingSource.Add(dropToAdd);
+                //mainForm.loggedDropBindingSource.Add(dropToAdd);
             }
+            mainForm.loggedDropView.Refresh();*/
         }
 
         /// <summary>
@@ -412,7 +427,7 @@ namespace OsrsDropEditor
         /// <returns></returns>
         public int GetTotalDropsValue()
         {
-            return LoggedDrops.Values.Sum(drop => drop.TotalPrice);
+            return LoggedDrops.Sum(drop => drop.TotalPrice);
         }
 
         /// <summary>
@@ -439,13 +454,13 @@ namespace OsrsDropEditor
         /// </summary>
         private void TryLoadSavedDrops()
         {
-            if (Utility.FileExists("logged_drops.json", ""))
+            if (Utility.FileExists("logged_drops.json"))
             {
-                string savedDropsJson = Utility.ReadFileToEnd("logged_drops.json", "");
-                List<LoggedDrop> savedDrops = JsonConvert.DeserializeObject<List<LoggedDrop>>(savedDropsJson);
+                string savedDropsJson = Utility.ReadFileToEnd("logged_drops.json");
+                BindingList<LoggedDrop> savedDrops = JsonConvert.DeserializeObject<BindingList<LoggedDrop>>(savedDropsJson);
 
-                LoggedDrops = savedDrops.ToDictionary(drop => drop.Name, drop => drop);
-                mainForm.loggedDropBindingSource.DataSource = LoggedDrops.Values;
+                LoggedDrops = savedDrops;
+                mainForm.loggedDropBindingSource.DataSource = LoggedDrops;
 
                 mainForm.UpdateTotalValueLabel();
             }
@@ -504,6 +519,16 @@ namespace OsrsDropEditor
         public int Quantity { get; set; }
         public int TotalPrice { get { return OsrsDataContainers.GetPriceForDrops(this); } }
 
+        /// <summary>
+        /// Create a LoggedDrop object out of a Drop object.
+        /// </summary>
+        /// <param name="drop"></param>
+        public LoggedDrop(Drop drop)
+        {
+            Name = drop.Name;
+            Quantity = drop.Quantity;
+        }
+
         public override string ToString()
         {
             return $"{Name}: {Quantity}";
@@ -511,7 +536,7 @@ namespace OsrsDropEditor
 
         public override bool Equals(object obj)
         {
-            return obj is LoggedDrop && ((LoggedDrop)obj).Name.Equals(this.Name);
+            return obj is LoggedDrop && ((LoggedDrop)obj).Name.Equals(Name);
         }
 
         public override int GetHashCode()

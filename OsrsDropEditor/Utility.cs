@@ -13,17 +13,18 @@ namespace OsrsDropEditor
 {
     class Utility
     {
+        public static string RootPath => Properties.Settings.Default.FilePath;
 
         /// <summary>
         /// Attempts to load a file from the default path.
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public static string ReadFileToEnd(string fileName, string filePath = @"OfflineJson\")
+        public static string ReadFileToEnd(string fileName, string filePath = "OfflineJson")
         {
             try
             {
-                using (FileStream stream = File.OpenRead($@"..\..\{filePath}{fileName}"))
+                using (FileStream stream = File.OpenRead($@"{RootPath}\{filePath}\{fileName}"))
                 {
                     using (StreamReader reader = new StreamReader(stream))
                     {
@@ -39,9 +40,21 @@ namespace OsrsDropEditor
             }
         }
 
-        public static bool FileExists(string fileName, string path = "OfflineJson")
+        public static void WriteTextToFile(string fileName, string content, string filePath = "OfflineJson")
         {
-            return File.Exists($@"..\..\{path}\{fileName}");
+            try
+            {
+                File.WriteAllText($@"{RootPath}\{filePath}\{fileName}", content);
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+        }
+
+        public static bool FileExists(string fileName, string filePath = "OfflineJson")
+        {
+            return File.Exists($@"{RootPath}\{filePath}\{fileName}");
         }
 
         /// <summary>
@@ -57,9 +70,16 @@ namespace OsrsDropEditor
             return (DateTime.Now - timeSinceLastRefresh).Hours >= Properties.Settings.Default.DelayBetweenPriceUpdate;
         }
 
-        private const string placeHolderImagePath = @"..\..\missing_image.png";
-        private const string rareDropTableImagePath = @"..\..\rdt.png";
+        private const string placeHolderImagePath = @".\missing_image.png";
+        private const string rareDropTableImagePath = @".\rdt.png";
 
+        /// <summary>
+        /// Returns an enumerable of the bitmaps used to display the items. First it tries to load the image from
+        /// the saved files. If that doesn't work, it tries to download the image. In the case that the image
+        /// can't be downloaded, it falls back to the default error image.
+        /// </summary>
+        /// <param name="drops"></param>
+        /// <returns></returns>
         public static IEnumerable<Bitmap> GetImagesFromDrops(List<Drop> drops)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -79,7 +99,7 @@ namespace OsrsDropEditor
 
                 if (FileExists(name + ".png", "CachedImages"))
                 {
-                    Bitmap bitmap = (Bitmap)Image.FromFile($@"..\..\CachedImages\{name}.png", true);
+                    Bitmap bitmap = (Bitmap)Image.FromFile($@"{RootPath}\CachedImages\{name}.png", true);
                     images.Add(bitmap);
                 }
                 else
@@ -94,7 +114,9 @@ namespace OsrsDropEditor
                                 Bitmap bitmap = new Bitmap(stream);
                                 if (bitmap != null)
                                 {
-                                    bitmap.Save($@"..\..\CachedImages\{name}.png", ImageFormat.Png);
+                                    string path = $@"{RootPath}\CachedImages\";
+                                    (new FileInfo(path)).Directory.Create();
+                                    bitmap.Save($"{path}{name}.png", ImageFormat.Png);
                                     images.Add(bitmap);
                                 }
                             }
@@ -118,10 +140,15 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="path"></param>
         /// <param name="objectToSave"></param>
-        public static void SaveObjectToJson(string path, object objectToSave)
+        public static void SaveObjectToJson(string fileName, string filePath, object objectToSave)
         {
+            string basePath = $@"{RootPath}\{filePath}\";
+
+            FileInfo fileInfo = new FileInfo(basePath);
+            fileInfo.Directory.Create();
+
             string json = JsonConvert.SerializeObject(objectToSave);
-            File.WriteAllText(path, json);
+            File.WriteAllText($"{basePath}{fileName}", json);
         }
     }
 }

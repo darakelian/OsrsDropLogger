@@ -72,6 +72,7 @@
             // 
             // quantityOptionsListBox
             // 
+            this.quantityOptionsListBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.quantityOptionsListBox.FormattingEnabled = true;
             this.quantityOptionsListBox.Location = new System.Drawing.Point(66, 39);
             this.quantityOptionsListBox.Name = "quantityOptionsListBox";

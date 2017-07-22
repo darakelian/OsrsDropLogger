@@ -24,6 +24,23 @@ namespace OsrsDropEditor
         /// <param name="e"></param>
         private void MainForm_Load(object sender, EventArgs e)
         {
+            //Prompt for folder select
+            string savedPath = Properties.Settings.Default.FilePath;
+            if (String.IsNullOrEmpty(savedPath))
+            {
+                FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+                folderBrowserDialog.Description = "Select a folder to save data for offline functionality.";
+
+                DialogResult dialogResult = folderBrowserDialog.ShowDialog();
+                if (dialogResult == DialogResult.OK)
+                {
+                    Properties.Settings.Default.FilePath = folderBrowserDialog.SelectedPath;
+                    Properties.Settings.Default.Save();
+                    Console.WriteLine(Properties.Settings.Default.FilePath);
+                }
+                else
+                    Close();
+            }
             osrsDropContainers = new OsrsDataContainers(this);
 
             osrsDropContainers.LoadData();
@@ -33,7 +50,7 @@ namespace OsrsDropEditor
             npcListGridView.ClearSelection();
 
             //Setup the logged drops grid view
-            loggedDropBindingSource.DataSource = osrsDropContainers.LoggedDrops.Values;
+            loggedDropBindingSource.DataSource = osrsDropContainers.LoggedDrops;
             loggedDropBindingSource.ListChanged += LoggedDropBindingSource_ListChanged;
 
             //Setup the autocomplete for the textbox
@@ -50,7 +67,7 @@ namespace OsrsDropEditor
             UpdateTotalValueLabel();
             loggedDropView.Refresh();
 
-            Utility.SaveObjectToJson(@"..\..\logged_drops.json", osrsDropContainers.LoggedDrops.Values);
+            Utility.SaveObjectToJson("logged_drops.json", "OfflineJson", osrsDropContainers.LoggedDrops);
         }
 
         /// <summary>
