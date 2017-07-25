@@ -330,31 +330,54 @@ namespace OsrsDropEditor
         public void UpdateTotalValueLabel()
         {
             string oldValueText = totalValueLabel.Text;
-            totalValueLabel.Text = Regex.Replace(oldValueText, @"(?<=Total Value: )(\d*)", Convert.ToString(osrsDropContainers.GetTotalDropsValue()));
+            string formattedValue = Utility.FormatNumberForDisplay(osrsDropContainers.GetTotalDropsValue());
+
+            totalValueLabel.Text = Regex.Replace(oldValueText, @"(?<=Total Value: )(\d*(,)?)*(K|M)?", formattedValue);
+            totalValueToolTip.SetToolTip(totalValueLabel, "" + osrsDropContainers.GetTotalDropsValue());
         }
 
         private Stopwatch stopWatch;
+        private int gpAtStart;
 
         private void starButton_Click(object sender, EventArgs e)
         {
-            if (stopWatch == null)
+            if (stopWatch == null || !stopWatch.IsRunning)
             {
+                gpAtStart = osrsDropContainers.GetTotalDropsValue();
+
                 stopWatch = new Stopwatch();
                 stopWatch.Start();
                 stopwatchUpdateTimer.Start();
+                gpPerHourTimer.Start();
             }
         }
 
+        /// <summary>
+        /// Pauses the stopwatch and stopwatch update timer from running. The second press will reset the time completely.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pauseButton_Click(object sender, EventArgs e)
         {
+            if (stopWatch != null && !stopWatch.IsRunning)
+            {
+                Text = Regex.Replace(Text, @"\s-\s([0-9]*):([0-9]*):([0-9]*)", "");
+                CalculateGpPerHour(true);
+            }
+
             stopWatch?.Stop();
             stopwatchUpdateTimer.Stop();
-            Text = Regex.Replace(Text, @"\s-\s([0-9]*):([0-9]*):([0-9]*)", "");
+            gpPerHourTimer.Stop();
         }
 
+        /// <summary>
+        /// Updates the title of the main form to display the timer's value every second. Also calculates the GP/hr.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void stopwatchUpdateTimer_Tick(object sender, EventArgs e)
         {
-            if (stopWatch != null && stopWatch.IsRunning)
+            if (ShouldUpdateTimer())
             {
                 TimeSpan span = stopWatch.Elapsed;
                 string spanToTimeStamp = span.ToString(@"hh\:mm\:ss");
@@ -365,6 +388,46 @@ namespace OsrsDropEditor
                     Text += timestampText;
                 else
                     Text = Regex.Replace(Text, @"\s-\s([0-9]*):([0-9]*):([0-9]*)", timestampText);
+            }
+        }
+
+        /// <summary>
+        /// Checks to see if we should update the title of the main form.
+        /// </summary>
+        /// <returns></returns>
+        private bool ShouldUpdateTimer()
+        {
+            return stopWatch != null && stopWatch.IsRunning;
+        }
+
+        /// <summary>
+        /// Called whenever the gpPerHourTimer's 'Tick' function gets invoked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void gpPerHourTimer_Tick(object sender, EventArgs e)
+        {
+            CalculateGpPerHour();
+        }
+
+        /// <summary>
+        /// Calculates the GP/hour of the drops.
+        /// </summary>
+        /// <param name="overrideTimerCheck">Normally we only check if the timer is running, true indicates calculate the value anywas.</param>
+        private void CalculateGpPerHour(bool overrideTimerCheck = false)
+        {
+            if (ShouldUpdateTimer() || overrideTimerCheck)
+            {
+                long totalTime = stopWatch.ElapsedMilliseconds;
+                //Convert elapsed milliseconds to decimale value of total hours
+                float totalHours = (float)totalTime / (60 * 60 * 1000);
+                int totalValue = osrsDropContainers.GetTotalDropsValue() - gpAtStart;
+
+                float gpPerHour = totalValue / totalHours;
+
+                string gpPerHourAsText = Utility.FormatNumberForDisplay((int)gpPerHour);
+                gpPerHourLabel.Text = gpPerHourAsText;
+                totalValueToolTip.SetToolTip(gpPerHourLabel, $"GP/hr: {gpPerHourAsText}");
             }
         }
     }

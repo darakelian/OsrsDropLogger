@@ -51,6 +51,10 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopwatchUpdateTimer = new System.Windows.Forms.Timer(this.components);
+            this.totalValueToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.gpPerHourTimer = new System.Windows.Forms.Timer(this.components);
+            this.labelLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.gpPerHourLabel = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.npcListGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).BeginInit();
@@ -60,6 +64,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.loggedDropBindingSource)).BeginInit();
             this.buttonTableLayoutPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.labelLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -153,8 +158,8 @@
             // 
             // userInteractionPanel
             // 
+            this.userInteractionPanel.Controls.Add(this.labelLayoutPanel);
             this.userInteractionPanel.Controls.Add(this.loggedDropView);
-            this.userInteractionPanel.Controls.Add(this.totalValueLabel);
             this.userInteractionPanel.Controls.Add(this.buttonTableLayoutPanel);
             this.userInteractionPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.userInteractionPanel.Location = new System.Drawing.Point(483, 24);
@@ -221,9 +226,9 @@
             // 
             this.totalValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.totalValueLabel.Location = new System.Drawing.Point(3, 298);
+            this.totalValueLabel.Location = new System.Drawing.Point(3, 4);
             this.totalValueLabel.Name = "totalValueLabel";
-            this.totalValueLabel.Size = new System.Drawing.Size(185, 16);
+            this.totalValueLabel.Size = new System.Drawing.Size(121, 16);
             this.totalValueLabel.TabIndex = 1;
             this.totalValueLabel.Text = "Total Value: ";
             // 
@@ -301,6 +306,35 @@
             this.stopwatchUpdateTimer.Interval = 250;
             this.stopwatchUpdateTimer.Tick += new System.EventHandler(this.stopwatchUpdateTimer_Tick);
             // 
+            // gpPerHourTimer
+            // 
+            this.gpPerHourTimer.Interval = 10000;
+            this.gpPerHourTimer.Tick += new System.EventHandler(this.gpPerHourTimer_Tick);
+            // 
+            // labelLayoutPanel
+            // 
+            this.labelLayoutPanel.ColumnCount = 2;
+            this.labelLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.labelLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.labelLayoutPanel.Controls.Add(this.totalValueLabel, 0, 0);
+            this.labelLayoutPanel.Controls.Add(this.gpPerHourLabel, 1, 0);
+            this.labelLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.labelLayoutPanel.Location = new System.Drawing.Point(0, 297);
+            this.labelLayoutPanel.Name = "labelLayoutPanel";
+            this.labelLayoutPanel.RowCount = 1;
+            this.labelLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.labelLayoutPanel.Size = new System.Drawing.Size(191, 20);
+            this.labelLayoutPanel.TabIndex = 3;
+            // 
+            // gpPerHourLabel
+            // 
+            this.gpPerHourLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpPerHourLabel.Location = new System.Drawing.Point(130, 4);
+            this.gpPerHourLabel.Name = "gpPerHourLabel";
+            this.gpPerHourLabel.Size = new System.Drawing.Size(35, 16);
+            this.gpPerHourLabel.TabIndex = 2;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -325,6 +359,7 @@
             this.buttonTableLayoutPanel.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.labelLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -353,6 +388,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn quantityDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn totalPriceDataGridViewTextBoxColumn;
         private System.Windows.Forms.Timer stopwatchUpdateTimer;
+        private System.Windows.Forms.ToolTip totalValueToolTip;
+        private System.Windows.Forms.Timer gpPerHourTimer;
+        private System.Windows.Forms.TableLayoutPanel labelLayoutPanel;
+        private System.Windows.Forms.Label gpPerHourLabel;
     }
 }
 
