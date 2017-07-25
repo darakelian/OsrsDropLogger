@@ -132,10 +132,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="OfflineJson\DropTables\Zulrah.json" />
-    <None Include="OfflineJson\links.json" />
-    <None Include="OfflineJson\prices.json" />
-    <None Include="OfflineJson\raredrops.json" />
     <None Include="OsrsDropLogger_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\LoggedDrop.datasource" />
