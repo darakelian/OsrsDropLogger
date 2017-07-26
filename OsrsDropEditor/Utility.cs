@@ -150,5 +150,21 @@ namespace OsrsDropEditor
             string json = JsonConvert.SerializeObject(objectToSave);
             File.WriteAllText($"{basePath}{fileName}", json);
         }
+
+        /// <summary>
+        /// Converts a number without commas to display according to how it is done in OSRS (e.g. 999,999 becomes 999k).
+        /// This method will also place the appropriate commas.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string FormatNumberForDisplay(int value)
+        {
+            if (value >= 100_000 && value <= 9_999_999)
+                return $"{value / 1000}K";
+            else if (value >= 10_000_000)
+                return $"{value / 1_000_000}M";
+            else
+                return String.Format("{0:n0}", value);
+        }
     }
 }
