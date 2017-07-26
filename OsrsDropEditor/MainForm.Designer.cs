@@ -38,33 +38,33 @@
             this.dropsPanel = new System.Windows.Forms.Panel();
             this.dropsListView = new System.Windows.Forms.ListView();
             this.userInteractionPanel = new System.Windows.Forms.Panel();
+            this.labelLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.totalValueLabel = new System.Windows.Forms.Label();
+            this.gpPerHourLabel = new System.Windows.Forms.Label();
             this.loggedDropView = new System.Windows.Forms.DataGridView();
             this.nameDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.totalPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.loggedDropBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.totalValueLabel = new System.Windows.Forms.Label();
             this.buttonTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.starButton = new System.Windows.Forms.Button();
             this.pauseButton = new System.Windows.Forms.Button();
-            this.resetButton = new System.Windows.Forms.Button();
+            this.clearButton = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopwatchUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.totalValueToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.gpPerHourTimer = new System.Windows.Forms.Timer(this.components);
-            this.labelLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.gpPerHourLabel = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.npcListGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).BeginInit();
             this.dropsPanel.SuspendLayout();
             this.userInteractionPanel.SuspendLayout();
+            this.labelLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loggedDropView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.loggedDropBindingSource)).BeginInit();
             this.buttonTableLayoutPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            this.labelLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -168,6 +168,40 @@
             this.userInteractionPanel.Size = new System.Drawing.Size(191, 344);
             this.userInteractionPanel.TabIndex = 3;
             // 
+            // labelLayoutPanel
+            // 
+            this.labelLayoutPanel.ColumnCount = 2;
+            this.labelLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.labelLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.labelLayoutPanel.Controls.Add(this.totalValueLabel, 0, 0);
+            this.labelLayoutPanel.Controls.Add(this.gpPerHourLabel, 1, 0);
+            this.labelLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.labelLayoutPanel.Location = new System.Drawing.Point(0, 297);
+            this.labelLayoutPanel.Name = "labelLayoutPanel";
+            this.labelLayoutPanel.RowCount = 1;
+            this.labelLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.labelLayoutPanel.Size = new System.Drawing.Size(191, 20);
+            this.labelLayoutPanel.TabIndex = 3;
+            // 
+            // totalValueLabel
+            // 
+            this.totalValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.totalValueLabel.Location = new System.Drawing.Point(3, 4);
+            this.totalValueLabel.Name = "totalValueLabel";
+            this.totalValueLabel.Size = new System.Drawing.Size(121, 16);
+            this.totalValueLabel.TabIndex = 1;
+            this.totalValueLabel.Text = "Total Value: ";
+            // 
+            // gpPerHourLabel
+            // 
+            this.gpPerHourLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpPerHourLabel.Location = new System.Drawing.Point(130, 4);
+            this.gpPerHourLabel.Name = "gpPerHourLabel";
+            this.gpPerHourLabel.Size = new System.Drawing.Size(58, 16);
+            this.gpPerHourLabel.TabIndex = 2;
+            // 
             // loggedDropView
             // 
             this.loggedDropView.AllowUserToAddRows = false;
@@ -222,16 +256,6 @@
             // 
             this.loggedDropBindingSource.DataSource = typeof(OsrsDropEditor.LoggedDrop);
             // 
-            // totalValueLabel
-            // 
-            this.totalValueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.totalValueLabel.Location = new System.Drawing.Point(3, 4);
-            this.totalValueLabel.Name = "totalValueLabel";
-            this.totalValueLabel.Size = new System.Drawing.Size(121, 16);
-            this.totalValueLabel.TabIndex = 1;
-            this.totalValueLabel.Text = "Total Value: ";
-            // 
             // buttonTableLayoutPanel
             // 
             this.buttonTableLayoutPanel.ColumnCount = 3;
@@ -240,7 +264,7 @@
             this.buttonTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.34F));
             this.buttonTableLayoutPanel.Controls.Add(this.starButton, 0, 0);
             this.buttonTableLayoutPanel.Controls.Add(this.pauseButton, 1, 0);
-            this.buttonTableLayoutPanel.Controls.Add(this.resetButton, 2, 0);
+            this.buttonTableLayoutPanel.Controls.Add(this.clearButton, 2, 0);
             this.buttonTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.buttonTableLayoutPanel.Location = new System.Drawing.Point(0, 317);
             this.buttonTableLayoutPanel.Name = "buttonTableLayoutPanel";
@@ -259,7 +283,7 @@
             this.starButton.TabIndex = 0;
             this.starButton.Text = "Start";
             this.starButton.UseVisualStyleBackColor = true;
-            this.starButton.Click += new System.EventHandler(this.starButton_Click);
+            this.starButton.Click += new System.EventHandler(this.startButton_Click);
             // 
             // pauseButton
             // 
@@ -273,17 +297,17 @@
             this.pauseButton.UseVisualStyleBackColor = true;
             this.pauseButton.Click += new System.EventHandler(this.pauseButton_Click);
             // 
-            // resetButton
+            // clearButton
             // 
-            this.resetButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resetButton.Location = new System.Drawing.Point(126, 0);
-            this.resetButton.Margin = new System.Windows.Forms.Padding(0);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(65, 27);
-            this.resetButton.TabIndex = 2;
-            this.resetButton.Text = "Reset";
-            this.resetButton.UseVisualStyleBackColor = true;
-            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            this.clearButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.clearButton.Location = new System.Drawing.Point(126, 0);
+            this.clearButton.Margin = new System.Windows.Forms.Padding(0);
+            this.clearButton.Name = "clearButton";
+            this.clearButton.Size = new System.Drawing.Size(65, 27);
+            this.clearButton.TabIndex = 2;
+            this.clearButton.Text = "Clear";
+            this.clearButton.UseVisualStyleBackColor = true;
+            this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
             // menuStrip1
             // 
@@ -311,30 +335,6 @@
             this.gpPerHourTimer.Interval = 10000;
             this.gpPerHourTimer.Tick += new System.EventHandler(this.gpPerHourTimer_Tick);
             // 
-            // labelLayoutPanel
-            // 
-            this.labelLayoutPanel.ColumnCount = 2;
-            this.labelLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.labelLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.labelLayoutPanel.Controls.Add(this.totalValueLabel, 0, 0);
-            this.labelLayoutPanel.Controls.Add(this.gpPerHourLabel, 1, 0);
-            this.labelLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelLayoutPanel.Location = new System.Drawing.Point(0, 297);
-            this.labelLayoutPanel.Name = "labelLayoutPanel";
-            this.labelLayoutPanel.RowCount = 1;
-            this.labelLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.labelLayoutPanel.Size = new System.Drawing.Size(191, 20);
-            this.labelLayoutPanel.TabIndex = 3;
-            // 
-            // gpPerHourLabel
-            // 
-            this.gpPerHourLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gpPerHourLabel.Location = new System.Drawing.Point(130, 4);
-            this.gpPerHourLabel.Name = "gpPerHourLabel";
-            this.gpPerHourLabel.Size = new System.Drawing.Size(35, 16);
-            this.gpPerHourLabel.TabIndex = 2;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -354,12 +354,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).EndInit();
             this.dropsPanel.ResumeLayout(false);
             this.userInteractionPanel.ResumeLayout(false);
+            this.labelLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.loggedDropView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.loggedDropBindingSource)).EndInit();
             this.buttonTableLayoutPanel.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.labelLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -380,7 +380,7 @@
         private System.Windows.Forms.TableLayoutPanel buttonTableLayoutPanel;
         private System.Windows.Forms.Button starButton;
         private System.Windows.Forms.Button pauseButton;
-        private System.Windows.Forms.Button resetButton;
+        private System.Windows.Forms.Button clearButton;
         public System.Windows.Forms.DataGridView loggedDropView;
         public System.Windows.Forms.BindingSource loggedDropBindingSource;
         public System.Windows.Forms.Label totalValueLabel;

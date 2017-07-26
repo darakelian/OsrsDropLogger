@@ -318,7 +318,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void resetButton_Click(object sender, EventArgs e)
+        private void clearButton_Click(object sender, EventArgs e)
         {
             osrsDropContainers.LoggedDrops.Clear();
             loggedDropBindingSource.Clear();
@@ -339,17 +339,27 @@ namespace OsrsDropEditor
         private Stopwatch stopWatch;
         private int gpAtStart;
 
-        private void starButton_Click(object sender, EventArgs e)
+        private void startButton_Click(object sender, EventArgs e)
         {
-            if (stopWatch == null || !stopWatch.IsRunning)
+            if (stopWatch == null)
             {
                 gpAtStart = osrsDropContainers.GetTotalDropsValue();
 
                 stopWatch = new Stopwatch();
-                stopWatch.Start();
-                stopwatchUpdateTimer.Start();
-                gpPerHourTimer.Start();
+                StartTimers();
             }
+            else if (stopWatch != null && !stopWatch.IsRunning)
+            {
+                StartTimers();
+            } 
+        }
+
+
+        private void StartTimers()
+        {
+            stopWatch.Start();
+            stopwatchUpdateTimer.Start();
+            gpPerHourTimer.Start();
         }
 
         /// <summary>
@@ -363,6 +373,7 @@ namespace OsrsDropEditor
             {
                 Text = Regex.Replace(Text, @"\s-\s([0-9]*):([0-9]*):([0-9]*)", "");
                 CalculateGpPerHour(true);
+                stopWatch.Reset();
             }
 
             stopWatch?.Stop();
