@@ -430,13 +430,14 @@ namespace OsrsDropEditor
             if (ShouldUpdateTimer() || overrideTimerCheck)
             {
                 long totalTime = stopWatch.ElapsedMilliseconds;
+
                 //Convert elapsed milliseconds to decimale value of total hours
                 float totalHours = (float)totalTime / (60 * 60 * 1000);
-                int totalValue = osrsDropContainers.GetTotalDropsValue() - gpAtStart;
+                float totalValue = osrsDropContainers.GetTotalDropsValue() - gpAtStart;
 
-                float gpPerHour = totalValue / totalHours;
+                float gpPerHour = totalTime != 0 && overrideTimerCheck == false ? totalValue / totalHours : 0;
 
-                string gpPerHourAsText = Utility.FormatNumberForDisplay((int)gpPerHour);
+                string gpPerHourAsText = Utility.FormatNumberForDisplay(gpPerHour);
                 gpPerHourLabel.Text = gpPerHourAsText;
                 totalValueToolTip.SetToolTip(gpPerHourLabel, $"GP/hr: {gpPerHourAsText}");
             }

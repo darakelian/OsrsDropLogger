@@ -157,7 +157,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string FormatNumberForDisplay(int value)
+        public static string FormatNumberForDisplay(double value)
         {
             if (value >= 100_000 && value <= 9_999_999)
                 return $"{value / 1000}K";
