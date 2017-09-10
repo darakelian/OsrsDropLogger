@@ -434,12 +434,32 @@ namespace OsrsDropEditor
                 float totalHours = (float)totalTime / (60 * 60 * 1000);
                 int totalValue = osrsDropContainers.GetTotalDropsValue() - gpAtStart;
 
-                float gpPerHour = totalValue / totalHours;
+                float gpPerHour = totalTime != 0 && overrideTimerCheck ? 0 : totalValue / totalHours;
 
                 string gpPerHourAsText = Utility.FormatNumberForDisplay((int)gpPerHour);
                 gpPerHourLabel.Text = gpPerHourAsText;
                 totalValueToolTip.SetToolTip(gpPerHourLabel, $"GP/hr: {gpPerHourAsText}");
             }
+        }
+
+        /// <summary>
+        /// Opens up the settings menu.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new SettingsForm().Show(this);
+        }
+
+        /// <summary>
+        /// Refreshes the price before 6 hours has passed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void updatePricesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            osrsDropContainers.LoadItemPrices(true);
         }
     }
 

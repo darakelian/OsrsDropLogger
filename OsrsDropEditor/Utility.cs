@@ -4,10 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OsrsDropEditor
 {
@@ -40,18 +37,6 @@ namespace OsrsDropEditor
             }
         }
 
-        public static void WriteTextToFile(string fileName, string content, string filePath = "OfflineJson")
-        {
-            try
-            {
-                File.WriteAllText($@"{RootPath}\{filePath}\{fileName}", content);
-            }
-            catch (IOException e)
-            {
-                Console.WriteLine(e.StackTrace);
-            }
-        }
-
         public static bool FileExists(string fileName, string filePath = "OfflineJson")
         {
             return File.Exists($@"{RootPath}\{filePath}\{fileName}");
@@ -63,8 +48,11 @@ namespace OsrsDropEditor
         /// switched in the properties.
         /// </summary>
         /// <returns></returns>
-        public static bool ShouldRefreshPrices()
+        public static bool ShouldRefreshPrices(bool overrideSettings = false)
         {
+            if (overrideSettings)
+                return true;
+
             DateTime timeSinceLastRefresh = Properties.Settings.Default.TimeSinceLastRefresh;
 
             return (DateTime.Now - timeSinceLastRefresh).Hours >= Properties.Settings.Default.DelayBetweenPriceUpdate;
