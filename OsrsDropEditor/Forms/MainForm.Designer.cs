@@ -53,10 +53,12 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updatePricesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopwatchUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.totalValueToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.gpPerHourTimer = new System.Windows.Forms.Timer(this.components);
-            this.updatePricesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateDropsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateTreasureTrailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.npcListGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).BeginInit();
@@ -164,10 +166,10 @@
             this.userInteractionPanel.Controls.Add(this.loggedDropView);
             this.userInteractionPanel.Controls.Add(this.buttonTableLayoutPanel);
             this.userInteractionPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.userInteractionPanel.Location = new System.Drawing.Point(1127, 51);
+            this.userInteractionPanel.Location = new System.Drawing.Point(1127, 49);
             this.userInteractionPanel.Margin = new System.Windows.Forms.Padding(2);
             this.userInteractionPanel.Name = "userInteractionPanel";
-            this.userInteractionPanel.Size = new System.Drawing.Size(446, 770);
+            this.userInteractionPanel.Size = new System.Drawing.Size(446, 772);
             this.userInteractionPanel.TabIndex = 3;
             // 
             // labelLayoutPanel
@@ -178,7 +180,7 @@
             this.labelLayoutPanel.Controls.Add(this.totalValueLabel, 0, 0);
             this.labelLayoutPanel.Controls.Add(this.gpPerHourLabel, 1, 0);
             this.labelLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelLayoutPanel.Location = new System.Drawing.Point(0, 665);
+            this.labelLayoutPanel.Location = new System.Drawing.Point(0, 667);
             this.labelLayoutPanel.Margin = new System.Windows.Forms.Padding(7);
             this.labelLayoutPanel.Name = "labelLayoutPanel";
             this.labelLayoutPanel.RowCount = 1;
@@ -227,7 +229,7 @@
             this.loggedDropView.ReadOnly = true;
             this.loggedDropView.RowHeadersVisible = false;
             this.loggedDropView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.loggedDropView.Size = new System.Drawing.Size(448, 661);
+            this.loggedDropView.Size = new System.Drawing.Size(448, 663);
             this.loggedDropView.TabIndex = 2;
             // 
             // nameDataGridViewTextBoxColumn1
@@ -272,7 +274,7 @@
             this.buttonTableLayoutPanel.Controls.Add(this.pauseButton, 1, 0);
             this.buttonTableLayoutPanel.Controls.Add(this.clearButton, 2, 0);
             this.buttonTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonTableLayoutPanel.Location = new System.Drawing.Point(0, 710);
+            this.buttonTableLayoutPanel.Location = new System.Drawing.Point(0, 712);
             this.buttonTableLayoutPanel.Margin = new System.Windows.Forms.Padding(7);
             this.buttonTableLayoutPanel.Name = "buttonTableLayoutPanel";
             this.buttonTableLayoutPanel.RowCount = 1;
@@ -324,7 +326,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(14, 4, 0, 4);
-            this.menuStrip1.Size = new System.Drawing.Size(1573, 51);
+            this.menuStrip1.Size = new System.Drawing.Size(1573, 49);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -332,17 +334,26 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
-            this.updatePricesToolStripMenuItem});
+            this.updatePricesToolStripMenuItem,
+            this.updateDropsToolStripMenuItem,
+            this.updateTreasureTrailsToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(70, 43);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(70, 41);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(298, 42);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(385, 42);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
+            // updatePricesToolStripMenuItem
+            // 
+            this.updatePricesToolStripMenuItem.Name = "updatePricesToolStripMenuItem";
+            this.updatePricesToolStripMenuItem.Size = new System.Drawing.Size(385, 42);
+            this.updatePricesToolStripMenuItem.Text = "Update Prices";
+            this.updatePricesToolStripMenuItem.Click += new System.EventHandler(this.updatePricesToolStripMenuItem_Click);
             // 
             // stopwatchUpdateTimer
             // 
@@ -354,12 +365,17 @@
             this.gpPerHourTimer.Interval = 10000;
             this.gpPerHourTimer.Tick += new System.EventHandler(this.gpPerHourTimer_Tick);
             // 
-            // updatePricesToolStripMenuItem
+            // updateDropsToolStripMenuItem
             // 
-            this.updatePricesToolStripMenuItem.Name = "updatePricesToolStripMenuItem";
-            this.updatePricesToolStripMenuItem.Size = new System.Drawing.Size(298, 42);
-            this.updatePricesToolStripMenuItem.Text = "Update Prices";
-            this.updatePricesToolStripMenuItem.Click += new System.EventHandler(this.updatePricesToolStripMenuItem_Click);
+            this.updateDropsToolStripMenuItem.Name = "updateDropsToolStripMenuItem";
+            this.updateDropsToolStripMenuItem.Size = new System.Drawing.Size(385, 42);
+            this.updateDropsToolStripMenuItem.Text = "Update Drops";
+            // 
+            // updateTreasureTrailsToolStripMenuItem
+            // 
+            this.updateTreasureTrailsToolStripMenuItem.Name = "updateTreasureTrailsToolStripMenuItem";
+            this.updateTreasureTrailsToolStripMenuItem.Size = new System.Drawing.Size(385, 42);
+            this.updateTreasureTrailsToolStripMenuItem.Text = "Update Treasure Trails";
             // 
             // MainForm
             // 
@@ -421,6 +437,8 @@
         private System.Windows.Forms.Label gpPerHourLabel;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updatePricesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateDropsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateTreasureTrailsToolStripMenuItem;
     }
 }
 

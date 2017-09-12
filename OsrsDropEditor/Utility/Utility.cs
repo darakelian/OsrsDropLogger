@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Net;
 
 namespace OsrsDropEditor
@@ -72,55 +73,56 @@ namespace OsrsDropEditor
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            List<Bitmap> images = new List<Bitmap>();
+            return drops.Select(GetImageFromDrop);
+        }
 
-            foreach (Drop drop in drops)
+        /// <summary>
+        /// Allows loading of image for single drop.
+        /// </summary>
+        /// <param name="drop"></param>
+        /// <returns></returns>
+        private static Bitmap GetImageFromDrop(Drop drop)
+        {
+            string name = drop.Name;
+
+            if (name.Equals("RareDropTable"))
+                return (Bitmap)Image.FromFile(rareDropTableImagePath, true);
+            else if (FileExists(name + ".png", "CachedImages"))
+                return (Bitmap)Image.FromFile($@"{RootPath}\CachedImages\{name}.png", true);
+            else
             {
-                string name = drop.Name;
-
-                if (name.Equals("RareDropTable"))
+                string link = drop.ImageLink;
+                using (WebClient client = new WebClient())
                 {
-                    Bitmap bitmap = (Bitmap)Image.FromFile(rareDropTableImagePath, true);
-                    images.Add(bitmap);
-                    continue;
-                }
-
-                if (FileExists(name + ".png", "CachedImages"))
-                {
-                    Bitmap bitmap = (Bitmap)Image.FromFile($@"{RootPath}\CachedImages\{name}.png", true);
-                    images.Add(bitmap);
-                }
-                else
-                {
-                    string link = drop.ImageLink;
-                    using (WebClient client = new WebClient())
+                    try
                     {
-                        try
+                        using (Stream stream = client.OpenRead(link))
                         {
-                            using (Stream stream = client.OpenRead(link))
+                            Bitmap bitmap = new Bitmap(stream);
+                            if (bitmap != null)
                             {
-                                Bitmap bitmap = new Bitmap(stream);
-                                if (bitmap != null)
-                                {
-                                    string path = $@"{RootPath}\CachedImages\";
-                                    (new FileInfo(path)).Directory.Create();
-                                    bitmap.Save($"{path}{name}.png", ImageFormat.Png);
-                                    images.Add(bitmap);
-                                }
+                                string path = $@"{RootPath}\CachedImages\";
+                                (new FileInfo(path)).Directory.Create();
+                                bitmap.Save($"{path}{name}.png", ImageFormat.Png);
+                                return bitmap;
                             }
                         }
-                        catch (WebException e)
-                        {
-                            //Return the placeholder image here.
-                            Bitmap bitmap = (Bitmap)Image.FromFile(placeHolderImagePath, true);
-                            images.Add(bitmap);
-                            Console.WriteLine("Error downloading file: " + e.StackTrace);
-                        }
+                    }
+                    catch (WebException e)
+                    {
+                        //Return the placeholder image here.
+                        return GetPlaceHolderImage(e.StackTrace);
                     }
                 }
             }
 
-            return images;
+            return GetPlaceHolderImage();
+        }
+
+        private static Bitmap GetPlaceHolderImage(string stackTrace = "")
+        {
+            Console.WriteLine("Error downloading file: " + stackTrace);
+            return (Bitmap)Image.FromFile(placeHolderImagePath, true);
         }
 
         /// <summary>

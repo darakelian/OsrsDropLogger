@@ -81,51 +81,52 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddDropMultipleForm.cs">
+    <Compile Include="Forms\AddDropMultipleForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddDropMultipleForm.Designer.cs">
+    <Compile Include="Forms\AddDropMultipleForm.Designer.cs">
       <DependentUpon>AddDropMultipleForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddDropRangeForm.cs">
+    <Compile Include="Forms\AddDropRangeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddDropRangeForm.Designer.cs">
+    <Compile Include="Forms\AddDropRangeForm.Designer.cs">
       <DependentUpon>AddDropRangeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddRareDropForm.cs">
+    <Compile Include="Forms\AddRareDropForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddRareDropForm.Designer.cs">
+    <Compile Include="Forms\AddRareDropForm.Designer.cs">
       <DependentUpon>AddRareDropForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Browser.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Utility\Browser.cs" />
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="OsrsDataContainers.cs" />
+    <Compile Include="DataGathering\OsrsDataContainers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsForm.cs">
+    <Compile Include="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
+    <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utility.cs" />
-    <EmbeddedResource Include="AddDropMultipleForm.resx">
+    <Compile Include="DataGathering\TreasureTrailUtility.cs" />
+    <Compile Include="Utility\Utility.cs" />
+    <EmbeddedResource Include="Forms\AddDropMultipleForm.resx">
       <DependentUpon>AddDropMultipleForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddDropRangeForm.resx">
+    <EmbeddedResource Include="Forms\AddDropRangeForm.resx">
       <DependentUpon>AddDropRangeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddRareDropForm.resx">
+    <EmbeddedResource Include="Forms\AddRareDropForm.resx">
       <DependentUpon>AddRareDropForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -138,7 +139,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SettingsForm.resx">
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="OsrsDropLogger_TemporaryKey.pfx" />

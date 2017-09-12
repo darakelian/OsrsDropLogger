@@ -21,9 +21,11 @@ namespace OsrsDropEditor
         private const string osrsWikiBestiaryLink = "/wiki/Category:Bestiary";
         private const string osrsWikiRareDropTableLink = "/wiki/Rare_drop_table";
         private const string osbPriceLink = "https://rsbuddy.com/exchange/summary.json";
+        
 
         private Browser browser = new Browser();
         private MainForm mainForm;
+        private TreasureTrailUtility treasureTrailUtility;
 
         /// <summary>
         /// Stores all the drops that the user has logged. The key is the name of the item and the value is a
@@ -59,6 +61,7 @@ namespace OsrsDropEditor
         public OsrsDataContainers(MainForm mainForm)
         {
             this.mainForm = mainForm;
+            treasureTrailUtility = new TreasureTrailUtility(browser);
         }
 
         /// <summary>
@@ -69,6 +72,7 @@ namespace OsrsDropEditor
             LoadNpcLinks();
             LoadItemPrices();
             LoadRareDropTable();
+            treasureTrailUtility.GetTreasureTrailItems();
 
             mainForm.loggedDropBindingSource.DataSource = LoggedDrops;
 
