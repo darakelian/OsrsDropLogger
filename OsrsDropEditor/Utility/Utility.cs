@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Xml;
 
 namespace OsrsDropEditor
 {
@@ -74,6 +75,11 @@ namespace OsrsDropEditor
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             return drops.Select(GetImageFromDrop);
+        }
+
+        public static string GetImageLink(XmlNode imageRow)
+        {
+            return imageRow.Attributes["src"].Value.Contains("http") ? imageRow.Attributes["src"].Value : imageRow.Attributes["data-src"].Value;
         }
 
         /// <summary>

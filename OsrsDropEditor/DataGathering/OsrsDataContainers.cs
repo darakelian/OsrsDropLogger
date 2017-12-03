@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OsrsDropEditor.DataGathering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -243,10 +244,15 @@ namespace OsrsDropEditor
 
             foreach (XmlNode header in headers)
             {
-                if (header.SelectSingleNode("./@colspan") != null)
+                /*if (header.SelectSingleNode("./@colspan") != null || header.Attributes["class"]?.Value.Contains("unsortable"))
                 {
                     headerMap["Image"] = count;
-                    headerMap[header.InnerText.Trim()] = ++count;
+                    headerMap[header.InnerText.Trim()] = count++;
+                    continue;
+                }*/
+                if (String.IsNullOrWhiteSpace(header.InnerText))
+                {
+                    headerMap["Image"] = count;
                     continue;
                 }
                 headerMap[header.InnerText.Trim()] = ++count;
@@ -265,7 +271,7 @@ namespace OsrsDropEditor
         {
             Drop drop = new Drop();
             XmlNode imageRow = row.SelectSingleNode($".//*[local-name()='td'][{headers["Image"]}]//*[local-name()='img']");
-            drop.ImageLink = imageRow.Attributes["src"].Value.Contains("http") ? imageRow.Attributes["src"].Value : imageRow.Attributes["data-src"].Value;
+            drop.ImageLink = Utility.GetImageLink(imageRow);
             drop.Name = row.SelectSingleNode($".//*[local-name()='td'][{headers["Item"]}]").InnerText.Trim();
 
             string quantity = row.SelectSingleNode($".//*[local-name()='td'][{headers["Quantity"]}]").InnerText.Replace("(noted)", "")
@@ -447,84 +453,6 @@ namespace OsrsDropEditor
 
                 mainForm.UpdateTotalValueLabel();
             }
-        }
-    }
-
-    /// <summary>
-    /// Used for deserializing OSB price data to a usable format. Value type because there is slightly
-    /// less overhead and the price data is immutable anyways.
-    /// </summary>
-    public struct ItemPrice
-    {
-        public int Id { get; set; }
-        [JsonProperty("overall_average")]
-        public int OverallAverage { get; set; }
-        [JsonProperty("buy_average")]
-        public int BuyAverage { get; set; }
-        [JsonProperty("sell_average")]
-        public int SellAverage { get; set; }
-        public int Sp { get; set; }
-        public string Name { get; set; }
-        public bool Members { get; set; }
-    }
-
-    /// <summary>
-    /// Used to store information about drops.
-    /// </summary>
-    public struct Drop
-    {
-        public string ImageLink { get; set; }
-        public string Name { get; set; }
-        public int Quantity { get; set; }
-
-        public bool IsRangeOfDrops { get; set; }
-        public int? RangeLowBound { get; set; }
-        public int? RangeHighBound { get; set; }
-
-        public bool HasMultipleQuantities { get; set; }
-        public int[] MultipleQuantities { get; set; }
-
-        public override string ToString()
-        {
-            if (IsRangeOfDrops)
-                return $"{Name}: {RangeLowBound}-{RangeHighBound}";
-            if (HasMultipleQuantities)
-                return $"{Name}: {String.Join(", ", MultipleQuantities)}";
-
-            return $"{Name}: {Quantity}";
-        }
-    }
-
-    public class LoggedDrop
-    {
-        public string Name { get; set; }
-        public string DisplayName { get { return ToString(); } }
-        public int Quantity { get; set; }
-        public int TotalPrice { get { return OsrsDataContainers.GetPriceForDrops(this); } }
-
-        /// <summary>
-        /// Create a LoggedDrop object out of a Drop object.
-        /// </summary>
-        /// <param name="drop"></param>
-        public LoggedDrop(Drop drop)
-        {
-            Name = drop.Name;
-            Quantity = drop.Quantity;
-        }
-
-        public override string ToString()
-        {
-            return $"{Name}: {Quantity}";
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is LoggedDrop && ((LoggedDrop)obj).Name.Equals(Name);
-        }
-
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode() ^ Quantity.GetHashCode();
         }
     }
 }
