@@ -334,7 +334,7 @@ namespace OsrsDropEditor
             if (CachedDropTables.ContainsKey(npcName))
                 return CachedDropTables[npcName];
 
-            if (!Utility.FileExists(npcName + ".json"))
+            if (!Utility.FileExists(npcName + ".json", "OfflineJson\\DropTables"))
             {
                 try
                 {

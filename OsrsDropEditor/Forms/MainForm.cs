@@ -5,6 +5,7 @@ using System.Linq;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using OsrsDropEditor.DataGathering;
 
 namespace OsrsDropEditor
 {

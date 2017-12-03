@@ -1,4 +1,6 @@
-﻿namespace OsrsDropEditor
+﻿using OsrsDropEditor.DataGathering;
+
+namespace OsrsDropEditor
 {
     partial class MainForm
     {
@@ -262,7 +264,7 @@
             // 
             // loggedDropBindingSource
             // 
-            this.loggedDropBindingSource.DataSource = typeof(OsrsDropEditor.LoggedDrop);
+            this.loggedDropBindingSource.DataSource = typeof(LoggedDrop);
             // 
             // buttonTableLayoutPanel
             // 

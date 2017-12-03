@@ -81,6 +81,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataGathering\Drop.cs" />
+    <Compile Include="DataGathering\ItemPrice.cs" />
+    <Compile Include="DataGathering\LoggedDrop.cs" />
     <Compile Include="Forms\AddDropMultipleForm.cs">
       <SubType>Form</SubType>
     </Compile>
