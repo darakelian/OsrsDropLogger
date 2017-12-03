@@ -6,12 +6,15 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using OsrsDropEditor.DataGathering;
+using OsrsDropEditor.Forms;
 
 namespace OsrsDropEditor
 {
     public partial class MainForm : Form
     {
         private OsrsDataContainers osrsDropContainers;
+
+        private DataGridViewRow currentNpcRow;
 
         public MainForm()
         {
@@ -99,7 +102,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="npcRow"></param>
         /// <returns></returns>
-        private bool ShowDropsForNpc(DataGridViewRow npcRow)
+        private bool ShowDropsForNpc(DataGridViewRow npcRow, bool forceUpdate = false)
         {
             string npcName = npcRow.DataBoundItem.ToString();
             List<Drop> drops = osrsDropContainers.GetDropsForNpc(npcName).ToList();
@@ -120,6 +123,7 @@ namespace OsrsDropEditor
             dropsListView.LargeImageList.Images.AddRange(images.ToArray());
 
             dropsListView.Items.AddRange(drops.Select(GetListViewItemForDrop).ToArray());
+            currentNpcRow = npcRow;
 
             return true;
         }
@@ -461,6 +465,27 @@ namespace OsrsDropEditor
         private void updatePricesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             osrsDropContainers.LoadItemPrices(true);
+        }
+
+        /// <summary>
+        /// Refreshes the current drop table.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void updateDropsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentNpcRow != null)
+                ShowDropsForNpc(currentNpcRow, true);
+        }
+
+        /// <summary>
+        /// Shows the treasure trail form to let the user add their drop.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void logClueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new AddTreasureTrailRewardForm(osrsDropContainers).Show(this);
         }
     }
 

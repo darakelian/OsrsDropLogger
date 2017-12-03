@@ -15,7 +15,7 @@ namespace OsrsDropEditor
     /// <summary>
     /// This class handles loading all the data as well as manipulating things like drop tables, prices etc.
     /// </summary>
-    class OsrsDataContainers
+    public class OsrsDataContainers
     {
         public const string OsrsWikiBase = "http://oldschoolrunescape.wikia.com";
 

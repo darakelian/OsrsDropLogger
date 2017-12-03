@@ -102,6 +102,12 @@
     <Compile Include="Forms\AddRareDropForm.Designer.cs">
       <DependentUpon>AddRareDropForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AddTreasureTrailRewardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddTreasureTrailRewardForm.Designer.cs">
+      <DependentUpon>AddTreasureTrailRewardForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utility\Browser.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
@@ -128,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddRareDropForm.resx">
       <DependentUpon>AddRareDropForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AddTreasureTrailRewardForm.resx">
+      <DependentUpon>AddTreasureTrailRewardForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
