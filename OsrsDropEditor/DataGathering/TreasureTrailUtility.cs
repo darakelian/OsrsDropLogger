@@ -54,7 +54,7 @@ namespace OsrsDropEditor
             foreach (XmlNode clueRewardTable in clueRewardTables)
             {
                 IEnumerable<XmlNode> rewardImageLinks = browser.SelectNodes(clueRewardTable, ".//*[local-name()='img']");
-                treasureTrailRewardImageLinks[++index] = rewardImageLinks.Select(GetRewardForImage);
+                treasureTrailRewardImageLinks[index++] = rewardImageLinks.Select(GetRewardForImage);
             }            
         }
 

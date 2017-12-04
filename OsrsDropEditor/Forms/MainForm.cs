@@ -122,27 +122,10 @@ namespace OsrsDropEditor
             dropsListView.LargeImageList.ColorDepth = ColorDepth.Depth32Bit;
             dropsListView.LargeImageList.Images.AddRange(images.ToArray());
 
-            dropsListView.Items.AddRange(drops.Select(GetListViewItemForDrop).ToArray());
+            dropsListView.Items.AddRange(drops.Select(Utility.GetListViewItemFromDrop).ToArray());
             currentNpcRow = npcRow;
 
             return true;
-        }
-
-        /// <summary>
-        /// Converts a new ListViewItem using the provided Drop object. The slot is so we can determine what image
-        /// gets displayed in the ListView.
-        /// </summary>
-        /// <param name="drop"></param>
-        /// <param name="slot"></param>
-        /// <returns></returns>
-        private ListViewItem GetListViewItemForDrop(Drop drop, int slot)
-        {
-            ListViewItem item = new ListViewItem();
-            item.Tag = drop;
-            item.Text = drop.ToString();
-            item.ImageIndex = slot;
-
-            return item;
         }
 
         /// <summary>

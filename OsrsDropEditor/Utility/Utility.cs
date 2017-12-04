@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace OsrsDropEditor
@@ -187,6 +188,33 @@ namespace OsrsDropEditor
                 return $"{value / 1_000_000}M";
             else
                 return String.Format("{0:n0}", value);
+        }
+
+        public static ListViewItem GetListViewItemFromDrop(Drop drop, int slot)
+        {
+            return GetListViewItemFromObject(drop, slot);
+        }
+
+        public static ListViewItem GetListViewItemFromClueReward(ClueReward reward, int slot)
+        {
+            return GetListViewItemFromObject(reward, slot);
+        }
+
+        /// <summary>
+        /// Converts a new ListViewItem using the provided Drop object. The slot is so we can determine what image
+        /// gets displayed in the ListView.
+        /// </summary>
+        /// <param name="drop"></param>
+        /// <param name="slot"></param>
+        /// <returns></returns>
+        private static ListViewItem GetListViewItemFromObject(object dataObject, int slot)
+        {
+            ListViewItem item = new ListViewItem();
+            item.Tag = dataObject;
+            item.Text = dataObject is Drop ? ((Drop)dataObject).Name : ((ClueReward)dataObject).itemName;
+            item.ImageIndex = slot;
+
+            return item;
         }
     }
 }
