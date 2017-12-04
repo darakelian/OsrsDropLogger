@@ -132,6 +132,19 @@ namespace OsrsDropEditor.Forms
             ListView listView = (ListView)sender;
             ListViewItem listViewItem = listView.SelectedItems[0];
             ClueReward rewardToLog = (ClueReward)listViewItem.Tag;
+            QuantityInputForm quantityInputForm = new QuantityInputForm();
+
+            string input = String.Empty;
+
+            if (quantityInputForm.ShowDialog(this) == DialogResult.OK)
+            {
+                input = quantityInputForm.quantityTextInput.Text;
+            }
+            else
+            {
+                input = "0";
+            }
+            quantityInputForm.Dispose();
         }
     }
 }

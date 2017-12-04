@@ -86,6 +86,7 @@
             // 
             // commonListView
             // 
+            this.commonListView.Activation = System.Windows.Forms.ItemActivation.OneClick;
             this.commonListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonListView.Location = new System.Drawing.Point(2, 2);
             this.commonListView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
@@ -101,18 +102,19 @@
             this.easyRewardsTab.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.easyRewardsTab.Name = "easyRewardsTab";
             this.easyRewardsTab.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.easyRewardsTab.Size = new System.Drawing.Size(540, 397);
+            this.easyRewardsTab.Size = new System.Drawing.Size(514, 410);
             this.easyRewardsTab.TabIndex = 1;
             this.easyRewardsTab.Text = "Easy Rewards";
             this.easyRewardsTab.UseVisualStyleBackColor = true;
             // 
             // easyListView
             // 
+            this.easyListView.Activation = System.Windows.Forms.ItemActivation.OneClick;
             this.easyListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.easyListView.Location = new System.Drawing.Point(2, 2);
             this.easyListView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.easyListView.Name = "easyListView";
-            this.easyListView.Size = new System.Drawing.Size(536, 393);
+            this.easyListView.Size = new System.Drawing.Size(510, 406);
             this.easyListView.TabIndex = 0;
             this.easyListView.UseCompatibleStateImageBehavior = false;
             // 
@@ -122,18 +124,19 @@
             this.mediumRewardsTab.Location = new System.Drawing.Point(4, 22);
             this.mediumRewardsTab.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.mediumRewardsTab.Name = "mediumRewardsTab";
-            this.mediumRewardsTab.Size = new System.Drawing.Size(540, 397);
+            this.mediumRewardsTab.Size = new System.Drawing.Size(514, 410);
             this.mediumRewardsTab.TabIndex = 2;
             this.mediumRewardsTab.Text = "Medium Rewards";
             this.mediumRewardsTab.UseVisualStyleBackColor = true;
             // 
             // mediumListView
             // 
+            this.mediumListView.Activation = System.Windows.Forms.ItemActivation.OneClick;
             this.mediumListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mediumListView.Location = new System.Drawing.Point(0, 0);
             this.mediumListView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.mediumListView.Name = "mediumListView";
-            this.mediumListView.Size = new System.Drawing.Size(540, 397);
+            this.mediumListView.Size = new System.Drawing.Size(514, 410);
             this.mediumListView.TabIndex = 0;
             this.mediumListView.UseCompatibleStateImageBehavior = false;
             // 
@@ -143,18 +146,19 @@
             this.hardRewardsTab.Location = new System.Drawing.Point(4, 22);
             this.hardRewardsTab.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.hardRewardsTab.Name = "hardRewardsTab";
-            this.hardRewardsTab.Size = new System.Drawing.Size(540, 397);
+            this.hardRewardsTab.Size = new System.Drawing.Size(514, 410);
             this.hardRewardsTab.TabIndex = 3;
             this.hardRewardsTab.Text = "Hard Rewards";
             this.hardRewardsTab.UseVisualStyleBackColor = true;
             // 
             // hardListView
             // 
+            this.hardListView.Activation = System.Windows.Forms.ItemActivation.OneClick;
             this.hardListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hardListView.Location = new System.Drawing.Point(0, 0);
             this.hardListView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.hardListView.Name = "hardListView";
-            this.hardListView.Size = new System.Drawing.Size(540, 397);
+            this.hardListView.Size = new System.Drawing.Size(514, 410);
             this.hardListView.TabIndex = 0;
             this.hardListView.UseCompatibleStateImageBehavior = false;
             // 
@@ -164,18 +168,19 @@
             this.eliteRewardsTab.Location = new System.Drawing.Point(4, 22);
             this.eliteRewardsTab.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.eliteRewardsTab.Name = "eliteRewardsTab";
-            this.eliteRewardsTab.Size = new System.Drawing.Size(540, 397);
+            this.eliteRewardsTab.Size = new System.Drawing.Size(514, 410);
             this.eliteRewardsTab.TabIndex = 4;
             this.eliteRewardsTab.Text = "Elite Rewards";
             this.eliteRewardsTab.UseVisualStyleBackColor = true;
             // 
             // eliteListView
             // 
+            this.eliteListView.Activation = System.Windows.Forms.ItemActivation.OneClick;
             this.eliteListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.eliteListView.Location = new System.Drawing.Point(0, 0);
             this.eliteListView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.eliteListView.Name = "eliteListView";
-            this.eliteListView.Size = new System.Drawing.Size(540, 397);
+            this.eliteListView.Size = new System.Drawing.Size(514, 410);
             this.eliteListView.TabIndex = 0;
             this.eliteListView.UseCompatibleStateImageBehavior = false;
             // 
@@ -185,18 +190,19 @@
             this.masterRewardsTab.Location = new System.Drawing.Point(4, 22);
             this.masterRewardsTab.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.masterRewardsTab.Name = "masterRewardsTab";
-            this.masterRewardsTab.Size = new System.Drawing.Size(540, 397);
+            this.masterRewardsTab.Size = new System.Drawing.Size(514, 410);
             this.masterRewardsTab.TabIndex = 5;
             this.masterRewardsTab.Text = "Master Rewards";
             this.masterRewardsTab.UseVisualStyleBackColor = true;
             // 
             // masterListView
             // 
+            this.masterListView.Activation = System.Windows.Forms.ItemActivation.OneClick;
             this.masterListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.masterListView.Location = new System.Drawing.Point(0, 0);
             this.masterListView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.masterListView.Name = "masterListView";
-            this.masterListView.Size = new System.Drawing.Size(540, 397);
+            this.masterListView.Size = new System.Drawing.Size(514, 410);
             this.masterListView.TabIndex = 0;
             this.masterListView.UseCompatibleStateImageBehavior = false;
             // 
