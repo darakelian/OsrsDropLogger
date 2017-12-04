@@ -123,7 +123,9 @@ namespace OsrsDropEditor.Forms
         /// <param name="e"></param>
         private void logRewardButton_Click(object sender, EventArgs e)
         {
-
+            foreach (Drop drop in clueDrops)
+                osrsDataContainers.LogDrop(drop);
+            Dispose();
         }
 
         /// <summary>
