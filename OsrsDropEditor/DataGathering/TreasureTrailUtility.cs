@@ -53,14 +53,14 @@ namespace OsrsDropEditor
             int index = 0;
             foreach (XmlNode clueRewardTable in clueRewardTables)
             {
-                IEnumerable<XmlNode> rewardImageLinks = browser.SelectNodes(clueRewardTable, ".//*[local-name()='img']");
+                IEnumerable<XmlNode> rewardImageLinks = browser.SelectNodes(clueRewardTable, ".//*[local-name()='img' and not(.//*[local-name()='noscript'])]");
                 treasureTrailRewardImageLinks[index++] = rewardImageLinks.Select(GetRewardForImage);
             }            
         }
 
         private ClueReward GetRewardForImage(XmlNode rewardImage)
         {
-            string itemName = rewardImage.Attributes["alt"].Value;
+            string itemName = rewardImage.Attributes["alt"].Value.Replace("&#039;", "'");
             string imagePath = rewardImage.Attributes["src"]?.Value ?? rewardImage.Attributes["data-src"]?.Value;
 
             return new ClueReward { itemName = itemName, imagePath = imagePath };
