@@ -115,8 +115,8 @@ namespace OsrsDropEditor
             }
             else if (dataObject is ClueReward)
             {
-                name = ((ClueReward)dataObject).itemName;
-                link = ((ClueReward)dataObject).imagePath;
+                name = ((ClueReward)dataObject).ItemName;
+                link = ((ClueReward)dataObject).ImagePath;
             }
 
             if (name.Equals("RareDropTable"))
@@ -211,7 +211,7 @@ namespace OsrsDropEditor
         {
             ListViewItem item = new ListViewItem();
             item.Tag = dataObject;
-            item.Text = dataObject is Drop ? ((Drop)dataObject).Name : ((ClueReward)dataObject).itemName;
+            item.Text = dataObject is Drop ? ((Drop)dataObject).Name : ((ClueReward)dataObject).ItemName;
             item.ImageIndex = slot;
 
             return item;

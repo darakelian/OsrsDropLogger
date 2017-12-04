@@ -58,18 +58,23 @@ namespace OsrsDropEditor
             }            
         }
 
+        /// <summary>
+        /// Converts a reward image XmlNode into a ClueReward object
+        /// </summary>
+        /// <param name="rewardImage"></param>
+        /// <returns></returns>
         private ClueReward GetRewardForImage(XmlNode rewardImage)
         {
             string itemName = rewardImage.Attributes["alt"].Value.Replace("&#039;", "'");
             string imagePath = rewardImage.Attributes["src"]?.Value ?? rewardImage.Attributes["data-src"]?.Value;
 
-            return new ClueReward { itemName = itemName, imagePath = imagePath };
+            return new ClueReward { ItemName = itemName, ImagePath = imagePath };
         }
     }
 
     public struct ClueReward
     {
-        public string itemName { get; set; }
-        public string imagePath { get; set; }
+        public string ItemName { get; set; }
+        public string ImagePath { get; set; }
     }
 }

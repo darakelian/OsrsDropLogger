@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OsrsDropEditor.DataGathering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,10 +15,13 @@ namespace OsrsDropEditor.Forms
     {
         private OsrsDataContainers osrsDataContainers;
 
+        List<Drop> clueDrops;
+
         public AddTreasureTrailRewardForm(OsrsDataContainers osrsDataContainers)
         {
             InitializeComponent();
             this.osrsDataContainers = osrsDataContainers;
+            clueDrops = new List<Drop>();
 
             SetupCommonRewards();
             SetupEasyRewards();
@@ -145,6 +149,35 @@ namespace OsrsDropEditor.Forms
                 input = "0";
             }
             quantityInputForm.Dispose();
+            try
+            {
+                int quantity = Convert.ToInt32(input);
+                Drop drop = new Drop();
+                drop.Quantity = quantity;
+                drop.Name = rewardToLog.ItemName;
+                if (clueDrops.Contains(drop))
+                {
+                    int existingDropIndex = clueDrops.IndexOf(drop);
+                    drop.Quantity += clueDrops[existingDropIndex].Quantity;
+                    clueDrops[existingDropIndex] = drop;
+                }
+                else
+                {
+                    clueDrops.Add(drop);
+                }
+                refreshRewardsLog();
+            }
+            catch (FormatException)
+            {
+                return;
+            }
+        }
+
+        private void refreshRewardsLog()
+        {
+            rewardsLogBox.Clear();
+            foreach (Drop drop in clueDrops)
+                rewardsLogBox.AppendText(drop.ToString() + "\n");
         }
     }
 }
