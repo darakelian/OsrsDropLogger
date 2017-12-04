@@ -211,7 +211,7 @@ namespace OsrsDropEditor
         {
             ListViewItem item = new ListViewItem();
             item.Tag = dataObject;
-            item.Text = dataObject is Drop ? ((Drop)dataObject).Name : ((ClueReward)dataObject).ItemName;
+            item.Text = dataObject is Drop ? ((Drop)dataObject).ToString() : ((ClueReward)dataObject).ToString();
             item.ImageIndex = slot;
 
             return item;

@@ -173,7 +173,7 @@ namespace OsrsDropEditor
                 addDropRangeFrom.dropLabel.Text = dropToLog.Name;
                 addDropRangeFrom.rangeTextBox.KeyDown += RangeTextBox_KeyDown;
                 addDropRangeFrom.addDropButton.Click += AddDropButton_Click;
-                addDropRangeFrom.Tag = dropToLog;
+                addDropRangeFrom.rangeTextBox.Tag = dropToLog;
 
                 addDropRangeFrom.Show(this);
                 hasDropFormOpen = true;
