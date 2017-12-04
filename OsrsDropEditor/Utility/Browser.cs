@@ -1,4 +1,5 @@
 ﻿using Sgml;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -34,27 +35,34 @@ namespace OsrsDropEditor
 
         public void Navigate(string url, bool absolute = false)
         {
-            HttpWebRequest request = WebRequest.Create( absolute ? url : OsrsDataContainers.OsrsWikiBase + url) as HttpWebRequest;
-            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-
-            using (Stream stream = response.GetResponseStream())
+            HttpWebRequest request = WebRequest.Create(absolute ? url : OsrsDataContainers.OsrsWikiBase + url) as HttpWebRequest;
+            try
             {
-                StreamReader reader = new StreamReader(stream, Encoding.UTF8);
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
 
-                _sgmlReader.InputStream = reader;
-                _document = new XmlDocument();
-                _document.PreserveWhitespace = true;
-                _document.XmlResolver = null;
-                if (_expectNonHtmlResponse)
+                using (Stream stream = response.GetResponseStream())
                 {
-                    XmlNode wrappedJson = _document.CreateNode("element", "content", "");
-                    wrappedJson.InnerText = _sgmlReader.ReadOuterXml();
-                    _document.AppendChild(wrappedJson);
-                }
-                else
-                    _document.Load(_sgmlReader);
+                    StreamReader reader = new StreamReader(stream, Encoding.UTF8);
 
-                _uri = request.RequestUri.ToString();
+                    _sgmlReader.InputStream = reader;
+                    _document = new XmlDocument();
+                    _document.PreserveWhitespace = true;
+                    _document.XmlResolver = null;
+                    if (_expectNonHtmlResponse)
+                    {
+                        XmlNode wrappedJson = _document.CreateNode("element", "content", "");
+                        wrappedJson.InnerText = _sgmlReader.ReadOuterXml();
+                        _document.AppendChild(wrappedJson);
+                    }
+                    else
+                        _document.Load(_sgmlReader);
+
+                    _uri = request.RequestUri.ToString();
+                }
+            }
+            catch (WebException)
+            {
+                Console.WriteLine("Unable to navigate to webpage.");
             }
         }
 

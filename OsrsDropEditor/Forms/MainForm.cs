@@ -5,12 +5,16 @@ using System.Linq;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using OsrsDropEditor.DataGathering;
+using OsrsDropEditor.Forms;
 
 namespace OsrsDropEditor
 {
     public partial class MainForm : Form
     {
         private OsrsDataContainers osrsDropContainers;
+
+        private DataGridViewRow currentNpcRow;
 
         public MainForm()
         {
@@ -98,7 +102,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="npcRow"></param>
         /// <returns></returns>
-        private bool ShowDropsForNpc(DataGridViewRow npcRow)
+        private bool ShowDropsForNpc(DataGridViewRow npcRow, bool forceUpdate = false)
         {
             string npcName = npcRow.DataBoundItem.ToString();
             List<Drop> drops = osrsDropContainers.GetDropsForNpc(npcName).ToList();
@@ -118,26 +122,10 @@ namespace OsrsDropEditor
             dropsListView.LargeImageList.ColorDepth = ColorDepth.Depth32Bit;
             dropsListView.LargeImageList.Images.AddRange(images.ToArray());
 
-            dropsListView.Items.AddRange(drops.Select(GetListViewItemForDrop).ToArray());
+            dropsListView.Items.AddRange(drops.Select(Utility.GetListViewItemFromDrop).ToArray());
+            currentNpcRow = npcRow;
 
             return true;
-        }
-
-        /// <summary>
-        /// Converts a new ListViewItem using the provided Drop object. The slot is so we can determine what image
-        /// gets displayed in the ListView.
-        /// </summary>
-        /// <param name="drop"></param>
-        /// <param name="slot"></param>
-        /// <returns></returns>
-        private ListViewItem GetListViewItemForDrop(Drop drop, int slot)
-        {
-            ListViewItem item = new ListViewItem();
-            item.Tag = drop;
-            item.Text = drop.ToString();
-            item.ImageIndex = slot;
-
-            return item;
         }
 
         /// <summary>
@@ -460,6 +448,27 @@ namespace OsrsDropEditor
         private void updatePricesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             osrsDropContainers.LoadItemPrices(true);
+        }
+
+        /// <summary>
+        /// Refreshes the current drop table.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void updateDropsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentNpcRow != null)
+                ShowDropsForNpc(currentNpcRow, true);
+        }
+
+        /// <summary>
+        /// Shows the treasure trail form to let the user add their drop.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void logClueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new AddTreasureTrailRewardForm(osrsDropContainers).Show(this);
         }
     }
 
