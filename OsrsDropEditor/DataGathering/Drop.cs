@@ -31,5 +31,15 @@ namespace OsrsDropEditor.DataGathering
 
             return $"{Name}: {Quantity}";
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Drop && ((Drop)obj).Name.Equals(Name);
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode() ^ Quantity.GetHashCode();
+        }
     }
 }
