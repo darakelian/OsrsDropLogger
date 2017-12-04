@@ -18,6 +18,48 @@ namespace OsrsDropEditor.Forms
         {
             InitializeComponent();
             this.osrsDataContainers = osrsDataContainers;
+
+            SetupCommonRewards();
+            SetupEasyRewards();
+            SetupMediumRewards();
+            SetupHardRewards();
+            SetupEliteRewards();
+            SetupMasterRewards();
+        }
+
+        private void SetupCommonRewards()
+        {
+            IEnumerable<ClueReward> commonRewards = osrsDataContainers.GetTreasureTrailRewards()[TreasureTrailUtility.COMMON_REWARDS];
+            IEnumerable<Bitmap> images = Utility.GetImagesFromClues(commonRewards);
+            commonListView.Items.Clear();
+            commonListView.LargeImageList = new ImageList();
+            commonListView.LargeImageList.ImageSize = new Size(64, 64);
+            commonListView.LargeImageList.ColorDepth = ColorDepth.Depth32Bit;
+        }
+
+        private void SetupEasyRewards()
+        {
+            
+        }
+
+        private void SetupMediumRewards()
+        {
+
+        }
+
+        private void SetupHardRewards()
+        {
+
+        }
+
+        private void SetupEliteRewards()
+        {
+
+        }
+
+        private void SetupMasterRewards()
+        {
+
         }
     }
 }

@@ -454,5 +454,10 @@ namespace OsrsDropEditor
                 mainForm.UpdateTotalValueLabel();
             }
         }
+
+        public Dictionary<int, IEnumerable<ClueReward>> GetTreasureTrailRewards()
+        {
+            return treasureTrailUtility.treasureTrailRewardImageLinks;
+        }
     }
 }

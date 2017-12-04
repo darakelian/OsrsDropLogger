@@ -11,12 +11,12 @@ namespace OsrsDropEditor
     {
         private const string osrsWikiTreasureTrailRewardsLink = "/wiki/Treasure_Trails";
 
-        public readonly int COMMON_REWARDS = 0;
-        public readonly int EASY_REWARDS = 1;
-        public readonly int MEDIUM_REWARDS = 2;
-        public readonly int HARD_REWARDS = 3;
-        public readonly int ELITE_REWARDS = 4;
-        public readonly int MASTER_REWARDS = 5;
+        public static readonly int COMMON_REWARDS = 0;
+        public static readonly int EASY_REWARDS = 1;
+        public static readonly int MEDIUM_REWARDS = 2;
+        public static readonly int HARD_REWARDS = 3;
+        public static readonly int ELITE_REWARDS = 4;
+        public static readonly int MASTER_REWARDS = 5;
 
         private Browser browser;
 
@@ -24,7 +24,7 @@ namespace OsrsDropEditor
         /// Dictionary with links for the images; key is an integer representing
         /// the level of reward and the value is a list of ClueReward objects
         /// </summary>
-        private Dictionary<int, IEnumerable<ClueReward>> treasureTrailRewardImageLinks;
+        public Dictionary<int, IEnumerable<ClueReward>> treasureTrailRewardImageLinks;
 
         public TreasureTrailUtility(Browser browser)
         {

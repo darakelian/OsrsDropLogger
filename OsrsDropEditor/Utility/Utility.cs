@@ -75,7 +75,21 @@ namespace OsrsDropEditor
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            return drops.Select(GetImageFromDrop);
+            return drops.Select(drop => GetImageFromObject(drop));
+        }
+
+        /// <summary>
+        /// Returns an enumerable of the bitmaps used to display the items. First it tries to load the image from
+        /// the saved files. If that doesn't work, it tries to download the image. In the case that the image
+        /// can't be downloaded, it falls back to the default error image.
+        /// </summary>
+        /// <param name="rewards"></param>
+        /// <returns></returns>
+        public static IEnumerable<Bitmap> GetImagesFromClues(List<ClueReward> rewards)
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            return rewards.Select(reward => GetImageFromObject(reward));
         }
 
         public static string GetImageLink(XmlNode imageRow)
@@ -84,13 +98,25 @@ namespace OsrsDropEditor
         }
 
         /// <summary>
-        /// Allows loading of image for single drop.
+        /// Allows loading of image for single drop or clue reward object.
         /// </summary>
         /// <param name="drop"></param>
         /// <returns></returns>
-        private static Bitmap GetImageFromDrop(Drop drop)
+        private static Bitmap GetImageFromObject(object dataObject)
         {
-            string name = drop.Name;
+            string name = String.Empty;
+            string link = String.Empty;
+
+            if (dataObject is Drop)
+            {
+                name = ((Drop)dataObject).Name;
+                link = ((Drop)dataObject).ImageLink;
+            }
+            else if (dataObject is ClueReward)
+            {
+                name = ((ClueReward)dataObject).itemName;
+                link = ((ClueReward)dataObject).imagePath;
+            }
 
             if (name.Equals("RareDropTable"))
                 return (Bitmap)Image.FromFile(rareDropTableImagePath, true);
@@ -98,7 +124,6 @@ namespace OsrsDropEditor
                 return (Bitmap)Image.FromFile($@"{RootPath}\CachedImages\{name}.png", true);
             else
             {
-                string link = drop.ImageLink;
                 using (WebClient client = new WebClient())
                 {
                     try
