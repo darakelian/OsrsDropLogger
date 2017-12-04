@@ -165,7 +165,7 @@ namespace OsrsDropEditor
         /// <param name="objectToSave"></param>
         public static void SaveObjectToJson(string fileName, string filePath, object objectToSave)
         {
-            string basePath = $@"{RootPath}\{filePath}";
+            string basePath = $@"{RootPath}\{filePath}\";
 
             FileInfo fileInfo = new FileInfo(basePath);
             fileInfo.Directory.Create();

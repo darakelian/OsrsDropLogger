@@ -435,7 +435,10 @@ namespace OsrsDropEditor
             if (itemId == 0)
                 return 0;
 
-            return ItemPrices[itemId].OverallAverage * loggedDrop.Quantity;
+            ItemPrice price = ItemPrices[itemId];
+            int priceToUse = price.OverallAverage > 0 ? price.OverallAverage : (price.SellAverage + price.BuyAverage) / 2;
+
+            return priceToUse * loggedDrop.Quantity;
         }
 
         /// <summary>
