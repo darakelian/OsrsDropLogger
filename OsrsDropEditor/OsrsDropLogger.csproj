@@ -96,6 +96,12 @@
     <Compile Include="Forms\AddDropRangeForm.Designer.cs">
       <DependentUpon>AddDropRangeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AddPageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddPageForm.Designer.cs">
+      <DependentUpon>AddPageForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AddRareDropForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddDropRangeForm.resx">
       <DependentUpon>AddDropRangeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AddPageForm.resx">
+      <DependentUpon>AddPageForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddRareDropForm.resx">
       <DependentUpon>AddRareDropForm.cs</DependentUpon>

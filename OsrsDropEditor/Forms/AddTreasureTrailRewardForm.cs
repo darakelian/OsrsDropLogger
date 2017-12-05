@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -138,25 +139,35 @@ namespace OsrsDropEditor.Forms
             ListView listView = (ListView)sender;
             ListViewItem listViewItem = listView.SelectedItems[0];
             ClueReward rewardToLog = (ClueReward)listViewItem.Tag;
-            QuantityInputForm quantityInputForm = new QuantityInputForm();
 
-            string input = String.Empty;
+            string input = "0";
+            string page = String.Empty;
 
-            if (quantityInputForm.ShowDialog(this) == DialogResult.OK)
+            if (rewardToLog.ItemName.Contains("page"))
             {
-                input = quantityInputForm.quantityTextInput.Text;
+                AddPageForm addPageForm = new AddPageForm();
+                if (addPageForm.ShowDialog(this) == DialogResult.OK)
+                {
+                    input = addPageForm.quantityTextInput.Text;
+                    page = addPageForm.pageListBox.SelectedItem.ToString().ToLower();
+                    addPageForm.Dispose();
+                }
             }
             else
             {
-                input = "0";
+                QuantityInputForm quantityInputForm = new QuantityInputForm();
+                if (quantityInputForm.ShowDialog(this) == DialogResult.OK)
+                {
+                    input = quantityInputForm.quantityTextInput.Text;
+                    quantityInputForm.Dispose();
+                }
             }
-            quantityInputForm.Dispose();
             try
             {
                 int quantity = Convert.ToInt32(input);
                 Drop drop = new Drop();
                 drop.Quantity = quantity;
-                drop.Name = rewardToLog.ItemName;
+                drop.Name = rewardToLog.ItemName.Replace("page", page);
                 if (clueDrops.Contains(drop))
                 {
                     int existingDropIndex = clueDrops.IndexOf(drop);
