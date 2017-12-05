@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -66,6 +67,11 @@ namespace OsrsDropEditor
         private ClueReward GetRewardForImage(XmlNode rewardImage)
         {
             string itemName = rewardImage.Attributes["alt"].Value.Replace("&#039;", "'");
+            if (itemName.Contains("page"))
+            {
+                //Strip off page names
+                itemName = Regex.Replace(itemName, @"(\s+\d)", "");
+            }
             string imagePath = rewardImage.Attributes["src"]?.Value ?? rewardImage.Attributes["data-src"]?.Value;
 
             return new ClueReward { ItemName = itemName, ImagePath = imagePath };
@@ -76,5 +82,10 @@ namespace OsrsDropEditor
     {
         public string ItemName { get; set; }
         public string ImagePath { get; set; }
+
+        public override string ToString()
+        {
+            return ItemName;
+        }
     }
 }
