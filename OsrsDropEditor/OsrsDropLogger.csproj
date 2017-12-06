@@ -137,6 +137,7 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DataGathering\TreasureTrailUtility.cs" />
+    <Compile Include="Utility\Highscores.cs" />
     <Compile Include="Utility\Utility.cs" />
     <EmbeddedResource Include="Forms\AddDropMultipleForm.resx">
       <DependentUpon>AddDropMultipleForm.cs</DependentUpon>
