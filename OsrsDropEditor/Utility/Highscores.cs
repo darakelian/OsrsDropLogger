@@ -109,6 +109,11 @@ namespace OsrsDropEditor
 
             return new LevelContainer(level, experience);
         }
+
+        public int GetExperienceForSkill(string skillName)
+        {
+            return playerSkillLevels.Where(kvp => skillName.ToLower().Contains(kvp.Key.ToLower())).First().Value.Experience;
+        }
     }
 
     public struct LevelContainer

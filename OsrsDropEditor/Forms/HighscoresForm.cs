@@ -65,6 +65,7 @@ namespace OsrsDropEditor.Forms
                 {
                     string prefix = skillName == "Overall" ? "Overall: " : "";
                     skillLabel.Text = $"{prefix}{highscores.playerSkillLevels[skillName].Level.ToString()}";
+                    xpTooltip.SetToolTip(skillLabel, $"XP: {highscores.GetExperienceForSkill(skillName)}");
                 }
             }
         }
