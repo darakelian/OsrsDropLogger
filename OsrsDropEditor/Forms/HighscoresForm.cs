@@ -30,6 +30,7 @@ namespace OsrsDropEditor.Forms
             highscores = new Highscores();
             highscores.GetHighscoresForPlayer(username, gamemode);
             setupImages();
+            setupLabels();
         }
 
         private void HighscoresForm_Load(object sender, EventArgs e)
@@ -52,8 +53,19 @@ namespace OsrsDropEditor.Forms
                     else
                         Console.WriteLine($"Couldn't set icon for: {skillName}");
                 }
-                else
-                    Console.WriteLine($"Couldn't set icon for: {skillName}");
+            }
+        }
+
+        private void setupLabels()
+        {
+            foreach (string skillName in highscores.playerSkillLevels.Keys)
+            {
+                Label skillLabel = (Label)Controls.Find(skillName.ToLower() + "Label", true).FirstOrDefault();
+                if (skillLabel != null)
+                {
+                    string prefix = skillName == "Overall" ? "Overall: " : "";
+                    skillLabel.Text = $"{prefix}{highscores.playerSkillLevels[skillName].Level.ToString()}";
+                }
             }
         }
     }
