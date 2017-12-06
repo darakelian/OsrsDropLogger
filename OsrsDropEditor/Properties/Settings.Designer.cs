@@ -72,7 +72,7 @@ namespace OsrsDropEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
         public string gamemode {
             get {
                 return ((string)(this["gamemode"]));

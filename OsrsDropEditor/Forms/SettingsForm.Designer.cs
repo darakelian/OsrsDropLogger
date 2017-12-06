@@ -101,8 +101,8 @@
         #endregion
 
         private System.Windows.Forms.Label usernameLabel;
-        private System.Windows.Forms.TextBox usernameInput;
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.ComboBox gameModeListBox;
+        public System.Windows.Forms.TextBox usernameInput;
     }
 }

@@ -437,7 +437,18 @@ namespace OsrsDropEditor
         /// <param name="e"></param>
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new SettingsForm().Show(this);
+            SettingsForm form = new SettingsForm();
+
+            //Attempt to load existing username and gamemode from settings before showing
+            string username = Properties.Settings.Default.username;
+            string gamemode = Properties.Settings.Default.gamemode;
+
+            if (!String.IsNullOrEmpty(username))
+                form.usernameInput.Text = username;
+            if (!String.IsNullOrEmpty(gamemode))
+                form.gameModeListBox.Text = gamemode;
+
+            form.Show(this);
         }
 
         /// <summary>
