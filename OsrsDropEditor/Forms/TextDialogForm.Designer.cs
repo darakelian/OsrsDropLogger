@@ -1,6 +1,6 @@
 ﻿namespace OsrsDropEditor.Forms
 {
-    partial class QuantityInputForm
+    partial class TextDialogForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,17 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.quantityTextInput = new System.Windows.Forms.TextBox();
+            this.textInput = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // quantityTextInput
+            // textInput
             // 
-            this.quantityTextInput.Location = new System.Drawing.Point(13, 13);
-            this.quantityTextInput.Name = "quantityTextInput";
-            this.quantityTextInput.Size = new System.Drawing.Size(259, 20);
-            this.quantityTextInput.TabIndex = 0;
+            this.textInput.Location = new System.Drawing.Point(13, 13);
+            this.textInput.Name = "textInput";
+            this.textInput.Size = new System.Drawing.Size(259, 20);
+            this.textInput.TabIndex = 0;
             // 
             // okButton
             // 
@@ -60,7 +60,7 @@
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
-            // QuantityInputForm
+            // TextDialogForm
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -69,13 +69,13 @@
             this.ClientSize = new System.Drawing.Size(284, 67);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
-            this.Controls.Add(this.quantityTextInput);
+            this.Controls.Add(this.textInput);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "QuantityInputForm";
+            this.Name = "TextDialogForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Enter Amount";
+            this.Text = "Enter Text";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -83,7 +83,7 @@
 
         #endregion
 
-        public System.Windows.Forms.TextBox quantityTextInput;
+        public System.Windows.Forms.TextBox textInput;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
     }

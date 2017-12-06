@@ -216,5 +216,15 @@ namespace OsrsDropEditor
 
             return item;
         }
+
+        /// <summary>
+        /// Saves the given username in the application settings.
+        /// </summary>
+        /// <param name="username"></param>
+        public static void SaveUsername(string username)
+        {
+            Properties.Settings.Default.username = username;
+            Properties.Settings.Default.Save();
+        }
     }
 }

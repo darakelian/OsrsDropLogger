@@ -17,7 +17,7 @@ namespace OsrsDropEditor
         /// <param name="e"></param>
         private void usernameInput_TextChanged(object sender, EventArgs e)
         {
-            saveUsername((TextBox)sender);
+            Utility.SaveUsername(((TextBox)sender).Text);
         }
 
         private void usernameInput_KeyDown(object sender, KeyEventArgs e)
@@ -25,14 +25,8 @@ namespace OsrsDropEditor
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return)
             {
                 e.SuppressKeyPress = true;
-                saveUsername((TextBox)sender);
+                Utility.SaveUsername(((TextBox)sender).Text);
             }
-        }
-
-        private void saveUsername(TextBox box)
-        {
-            Properties.Settings.Default.username = box.Text;
-            Properties.Settings.Default.Save();
         }
 
         /// <summary>

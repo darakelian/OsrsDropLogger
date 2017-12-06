@@ -155,10 +155,10 @@ namespace OsrsDropEditor.Forms
             }
             else
             {
-                QuantityInputForm quantityInputForm = new QuantityInputForm();
+                TextDialogForm quantityInputForm = new TextDialogForm();
                 if (quantityInputForm.ShowDialog(this) == DialogResult.OK)
                 {
-                    input = quantityInputForm.quantityTextInput.Text;
+                    input = quantityInputForm.textInput.Text;
                     quantityInputForm.Dispose();
                 }
             }

@@ -481,6 +481,38 @@ namespace OsrsDropEditor
         {
             new AddTreasureTrailRewardForm(osrsDropContainers).Show(this);
         }
+
+        /// <summary>
+        /// Display highscores information to the user. Prompt them to enter a username if they haven't already.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void highscoresToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string username = Properties.Settings.Default.username;
+            //Check for username saved in settings
+            if (String.IsNullOrEmpty(username))
+            {
+                DialogResult promptForUsername = MessageBox.Show(this, "Would you like to enter your username for highscores functionality?", "Warning", MessageBoxButtons.YesNo);
+                if (promptForUsername == DialogResult.Yes)
+                {
+                    //Prompt them for the username now
+                    TextDialogForm textDialogForm = new TextDialogForm();
+                    if (textDialogForm.ShowDialog(this) == DialogResult.OK)
+                    {
+                        username = textDialogForm.textInput.Text;
+                        textDialogForm.Dispose();
+                        Utility.SaveUsername(username);
+                    }
+                    else
+                        return;
+                }
+                else
+                    return;
+            }
+
+            //Open up the highscores form
+        }
     }
 
     /// <summary>

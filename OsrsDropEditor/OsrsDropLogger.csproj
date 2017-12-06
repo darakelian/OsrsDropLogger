@@ -114,11 +114,11 @@
     <Compile Include="Forms\AddTreasureTrailRewardForm.Designer.cs">
       <DependentUpon>AddTreasureTrailRewardForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\QuantityInputForm.cs">
+    <Compile Include="Forms\TextDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\QuantityInputForm.Designer.cs">
-      <DependentUpon>QuantityInputForm.cs</DependentUpon>
+    <Compile Include="Forms\TextDialogForm.Designer.cs">
+      <DependentUpon>TextDialogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\Browser.cs" />
     <Compile Include="Forms\MainForm.cs">
@@ -157,8 +157,8 @@
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\QuantityInputForm.resx">
-      <DependentUpon>QuantityInputForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\TextDialogForm.resx">
+      <DependentUpon>TextDialogForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
