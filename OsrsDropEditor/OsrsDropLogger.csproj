@@ -185,8 +185,8 @@
     </EmbeddedResource>
     <None Include="OsrsDropLogger_TemporaryKey.pfx" />
     <None Include="packages.config" />
-    <None Include="Properties\DataSources\LoggedDrop.datasource" />
     <None Include="Properties\DataSources\NpcName.datasource" />
+    <None Include="Properties\DataSources\OsrsDropEditor.DataGathering.LoggedDrop.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -29,6 +29,7 @@ namespace OsrsDropEditor.Forms
 
             highscores = new Highscores();
             highscores.GetHighscoresForPlayer(username, gamemode);
+            setupImages();
         }
 
         private void HighscoresForm_Load(object sender, EventArgs e)
@@ -36,6 +37,24 @@ namespace OsrsDropEditor.Forms
             if (Owner != null)
                 Location = new Point(Owner.Location.X + Owner.Width / 2 - Width / 2,
                     Owner.Location.Y + Owner.Height / 2 - Height / 2);
+        }
+
+        private void setupImages()
+        {
+            foreach (string skillName in highscores.playerSkillLevels.Keys)
+            {
+                PictureBox pictureBox = (PictureBox)Controls.Find(skillName.ToLower() + "Icon", true).FirstOrDefault();
+                if (pictureBox != null)
+                {
+                    Bitmap icon = Utility.GetImageFromFile(skillName);
+                    if (icon != null)
+                        pictureBox.Image = icon;
+                    else
+                        Console.WriteLine($"Couldn't set icon for: {skillName}");
+                }
+                else
+                    Console.WriteLine($"Couldn't set icon for: {skillName}");
+            }
         }
     }
 }

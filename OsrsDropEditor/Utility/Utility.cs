@@ -125,7 +125,7 @@ namespace OsrsDropEditor
         /// <param name="name"></param>
         /// <param name="link"></param>
         /// <returns></returns>
-        public static Bitmap GetImageFromLink(string name, string link)
+        public static Bitmap GetImageFromLink(string name, string link, bool relative = false)
         {
             if (name.Equals("RareDropTable"))
                 return (Bitmap)Image.FromFile(rareDropTableImagePath, true);
@@ -137,7 +137,8 @@ namespace OsrsDropEditor
                 {
                     try
                     {
-                        using (Stream stream = client.OpenRead(link))
+                        string destinationUrl = relative ? OsrsDataContainers.OsrsWikiBase + link : link;
+                        using (Stream stream = client.OpenRead(destinationUrl))
                         {
                             Bitmap bitmap = new Bitmap(stream);
                             if (bitmap != null)

@@ -53,10 +53,10 @@ namespace OsrsDropEditor
             this.updateDropsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateTreasureTrailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logClueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.highscoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopwatchUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.totalValueToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.gpPerHourTimer = new System.Windows.Forms.Timer(this.components);
-            this.highscoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.totalPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -331,6 +331,13 @@ namespace OsrsDropEditor
             this.logClueToolStripMenuItem.Text = "Log Clue";
             this.logClueToolStripMenuItem.Click += new System.EventHandler(this.logClueToolStripMenuItem_Click);
             // 
+            // highscoresToolStripMenuItem
+            // 
+            this.highscoresToolStripMenuItem.Name = "highscoresToolStripMenuItem";
+            this.highscoresToolStripMenuItem.Size = new System.Drawing.Size(78, 20);
+            this.highscoresToolStripMenuItem.Text = "Highscores";
+            this.highscoresToolStripMenuItem.Click += new System.EventHandler(this.highscoresToolStripMenuItem_Click);
+            // 
             // stopwatchUpdateTimer
             // 
             this.stopwatchUpdateTimer.Interval = 250;
@@ -340,13 +347,6 @@ namespace OsrsDropEditor
             // 
             this.gpPerHourTimer.Interval = 10000;
             this.gpPerHourTimer.Tick += new System.EventHandler(this.gpPerHourTimer_Tick);
-            // 
-            // highscoresToolStripMenuItem
-            // 
-            this.highscoresToolStripMenuItem.Name = "highscoresToolStripMenuItem";
-            this.highscoresToolStripMenuItem.Size = new System.Drawing.Size(78, 20);
-            this.highscoresToolStripMenuItem.Text = "Highscores";
-            this.highscoresToolStripMenuItem.Click += new System.EventHandler(this.highscoresToolStripMenuItem_Click);
             // 
             // nameDataGridViewTextBoxColumn1
             // 

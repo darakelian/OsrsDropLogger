@@ -17,7 +17,7 @@ namespace OsrsDropEditor
 
         private Dictionary<string, string> playerTypeLinks;
 
-        private Dictionary<string, LevelContainer> playerSkillLevels = new Dictionary<string, LevelContainer>();
+        public Dictionary<string, LevelContainer> playerSkillLevels = new Dictionary<string, LevelContainer>();
 
         private string[] skills;
 
@@ -67,12 +67,12 @@ namespace OsrsDropEditor
             foreach (string skill in skills)
             {
                 //Get image link
-                XmlNode imageLinkNode = browser.SelectSingleNode($"//*[local-name()='a' and contains(@href, '{skill}')]");
+                XmlNode imageLinkNode = browser.SelectSingleNode($"//*[local-name()='a' and contains(@href, '{skill}') and contains(@href, '.png')]");
                 if (imageLinkNode != null)
                 {
                     string link = imageLinkNode.SelectSingleNode("./@href").InnerText;
                     //We don't need the image at this point, just attempt to fetch it
-                    Utility.GetImageFromLink(skill, link);
+                    Utility.GetImageFromLink(skill, link, !link.Contains("http"));
                 }
             }
         }
