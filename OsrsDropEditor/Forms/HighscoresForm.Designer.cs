@@ -36,7 +36,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Name = "HighscoresForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Highscores";
+            this.Load += new System.EventHandler(this.HighscoresForm_Load);
             this.ResumeLayout(false);
 
         }

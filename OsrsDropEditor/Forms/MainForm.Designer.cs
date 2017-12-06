@@ -35,8 +35,6 @@ namespace OsrsDropEditor
             this.npcNameTextBox = new System.Windows.Forms.TextBox();
             this.npcNameLabel = new System.Windows.Forms.Label();
             this.npcListGridView = new System.Windows.Forms.DataGridView();
-            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.npcNameBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dropsPanel = new System.Windows.Forms.Panel();
             this.dropsListView = new System.Windows.Forms.ListView();
             this.userInteractionPanel = new System.Windows.Forms.Panel();
@@ -44,10 +42,6 @@ namespace OsrsDropEditor
             this.totalValueLabel = new System.Windows.Forms.Label();
             this.gpPerHourLabel = new System.Windows.Forms.Label();
             this.loggedDropView = new System.Windows.Forms.DataGridView();
-            this.nameDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.totalPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.loggedDropBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.buttonTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.starButton = new System.Windows.Forms.Button();
             this.pauseButton = new System.Windows.Forms.Button();
@@ -63,16 +57,22 @@ namespace OsrsDropEditor
             this.totalValueToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.gpPerHourTimer = new System.Windows.Forms.Timer(this.components);
             this.highscoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nameDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.totalPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.loggedDropBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.npcNameBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.npcListGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).BeginInit();
             this.dropsPanel.SuspendLayout();
             this.userInteractionPanel.SuspendLayout();
             this.labelLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loggedDropView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loggedDropBindingSource)).BeginInit();
             this.buttonTableLayoutPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.loggedDropBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -127,18 +127,6 @@ namespace OsrsDropEditor
             this.npcListGridView.Size = new System.Drawing.Size(207, 321);
             this.npcListGridView.TabIndex = 1;
             this.npcListGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.npcListGridView_CellMouseDown);
-            // 
-            // nameDataGridViewTextBoxColumn
-            // 
-            this.nameDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
-            this.nameDataGridViewTextBoxColumn.HeaderText = "NPC Name";
-            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            this.nameDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // npcNameBindingSource
-            // 
-            this.npcNameBindingSource.DataSource = typeof(OsrsDropEditor.NpcName);
             // 
             // dropsPanel
             // 
@@ -231,38 +219,6 @@ namespace OsrsDropEditor
             this.loggedDropView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.loggedDropView.Size = new System.Drawing.Size(192, 295);
             this.loggedDropView.TabIndex = 2;
-            // 
-            // nameDataGridViewTextBoxColumn1
-            // 
-            this.nameDataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.nameDataGridViewTextBoxColumn1.DataPropertyName = "DisplayName";
-            this.nameDataGridViewTextBoxColumn1.FillWeight = 150F;
-            this.nameDataGridViewTextBoxColumn1.HeaderText = "Drop";
-            this.nameDataGridViewTextBoxColumn1.Name = "nameDataGridViewTextBoxColumn1";
-            this.nameDataGridViewTextBoxColumn1.ReadOnly = true;
-            // 
-            // quantityDataGridViewTextBoxColumn
-            // 
-            this.quantityDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
-            this.quantityDataGridViewTextBoxColumn.FillWeight = 75F;
-            this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
-            this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
-            this.quantityDataGridViewTextBoxColumn.ReadOnly = true;
-            this.quantityDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // totalPriceDataGridViewTextBoxColumn
-            // 
-            this.totalPriceDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.totalPriceDataGridViewTextBoxColumn.DataPropertyName = "TotalPrice";
-            this.totalPriceDataGridViewTextBoxColumn.FillWeight = 75F;
-            this.totalPriceDataGridViewTextBoxColumn.HeaderText = "Total Price";
-            this.totalPriceDataGridViewTextBoxColumn.Name = "totalPriceDataGridViewTextBoxColumn";
-            this.totalPriceDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // loggedDropBindingSource
-            // 
-            this.loggedDropBindingSource.DataSource = typeof(OsrsDropEditor.DataGathering.LoggedDrop);
             // 
             // buttonTableLayoutPanel
             // 
@@ -392,6 +348,50 @@ namespace OsrsDropEditor
             this.highscoresToolStripMenuItem.Text = "Highscores";
             this.highscoresToolStripMenuItem.Click += new System.EventHandler(this.highscoresToolStripMenuItem_Click);
             // 
+            // nameDataGridViewTextBoxColumn1
+            // 
+            this.nameDataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.nameDataGridViewTextBoxColumn1.DataPropertyName = "DisplayName";
+            this.nameDataGridViewTextBoxColumn1.FillWeight = 150F;
+            this.nameDataGridViewTextBoxColumn1.HeaderText = "Drop";
+            this.nameDataGridViewTextBoxColumn1.Name = "nameDataGridViewTextBoxColumn1";
+            this.nameDataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // quantityDataGridViewTextBoxColumn
+            // 
+            this.quantityDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
+            this.quantityDataGridViewTextBoxColumn.FillWeight = 75F;
+            this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
+            this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
+            this.quantityDataGridViewTextBoxColumn.ReadOnly = true;
+            this.quantityDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // totalPriceDataGridViewTextBoxColumn
+            // 
+            this.totalPriceDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.totalPriceDataGridViewTextBoxColumn.DataPropertyName = "TotalPrice";
+            this.totalPriceDataGridViewTextBoxColumn.FillWeight = 75F;
+            this.totalPriceDataGridViewTextBoxColumn.HeaderText = "Total Price";
+            this.totalPriceDataGridViewTextBoxColumn.Name = "totalPriceDataGridViewTextBoxColumn";
+            this.totalPriceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // loggedDropBindingSource
+            // 
+            this.loggedDropBindingSource.DataSource = typeof(OsrsDropEditor.DataGathering.LoggedDrop);
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "NPC Name";
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            this.nameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // npcNameBindingSource
+            // 
+            this.npcNameBindingSource.DataSource = typeof(OsrsDropEditor.NpcName);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -403,20 +403,21 @@ namespace OsrsDropEditor
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "OSRS Drop Logger";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.npcListGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).EndInit();
             this.dropsPanel.ResumeLayout(false);
             this.userInteractionPanel.ResumeLayout(false);
             this.labelLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.loggedDropView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.loggedDropBindingSource)).EndInit();
             this.buttonTableLayoutPanel.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.loggedDropBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.npcNameBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

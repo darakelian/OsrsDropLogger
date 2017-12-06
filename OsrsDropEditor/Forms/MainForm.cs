@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using OsrsDropEditor.DataGathering;
 using OsrsDropEditor.Forms;
+using System.Net;
 
 namespace OsrsDropEditor
 {
@@ -19,6 +20,7 @@ namespace OsrsDropEditor
         public MainForm()
         {
             InitializeComponent();
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
 
         /// <summary>
@@ -490,6 +492,8 @@ namespace OsrsDropEditor
         private void highscoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string username = Properties.Settings.Default.username;
+            string gamemode = Properties.Settings.Default.gamemode;
+
             //Check for username saved in settings
             if (String.IsNullOrEmpty(username))
             {
@@ -512,7 +516,7 @@ namespace OsrsDropEditor
             }
 
             //Open up the highscores form
-            HighscoresForm highscoresForm = new HighscoresForm();
+            HighscoresForm highscoresForm = new HighscoresForm(username, gamemode);
             highscoresForm.Show(this);
         }
     }

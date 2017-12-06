@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Xml;
 
 namespace OsrsDropEditor
 {
@@ -19,6 +20,8 @@ namespace OsrsDropEditor
         private Dictionary<string, LevelContainer> playerSkillLevels = new Dictionary<string, LevelContainer>();
 
         private string[] skills;
+
+        private readonly string skillIconsPage = "/wiki/Skills";
 
         public Highscores()
         {
@@ -58,6 +61,20 @@ namespace OsrsDropEditor
                 "Hunter",
                 "Construction"
             };
+
+            //Load the images from the wiki and cache them
+            browser.Navigate(skillIconsPage);
+            foreach (string skill in skills)
+            {
+                //Get image link
+                XmlNode imageLinkNode = browser.SelectSingleNode($"//*[local-name()='a' and contains(@href, '{skill}')]");
+                if (imageLinkNode != null)
+                {
+                    string link = imageLinkNode.SelectSingleNode("./@href").InnerText;
+                    //We don't need the image at this point, just attempt to fetch it
+                    Utility.GetImageFromLink(skill, link);
+                }
+            }
         }
 
         public void GetHighscoresForPlayer(string name)
@@ -65,9 +82,14 @@ namespace OsrsDropEditor
             GetHighscoresForPlayer(name, "normal");
         }
 
+        /// <summary>
+        /// Navigates to the highscores API page and creates the highscores data structure.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="playerType"></param>
         public void GetHighscoresForPlayer(string name, string playerType)
         {
-            string link = playerTypeLinks[playerType];
+            string link = playerTypeLinks[playerTypeLinks.Keys.FirstOrDefault(key => playerType.ToLower().Contains(key))];
 
             browser.ExpectNonHtmlResponse = true;
             browser.Navigate(link + HttpUtility.UrlEncode(name), true);

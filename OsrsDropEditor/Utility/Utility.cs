@@ -74,8 +74,6 @@ namespace OsrsDropEditor
         /// <returns></returns>
         public static IEnumerable<Bitmap> GetImagesFromDrops(List<Drop> drops)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
             return drops.Select(drop => GetImageFromObject(drop));
         }
 
@@ -88,8 +86,6 @@ namespace OsrsDropEditor
         /// <returns></returns>
         public static IEnumerable<Bitmap> GetImagesFromClues(List<ClueReward> rewards)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
             return rewards.Select(reward => GetImageFromObject(reward));
         }
 
@@ -119,10 +115,22 @@ namespace OsrsDropEditor
                 link = ((ClueReward)dataObject).ImagePath;
             }
 
+            return GetImageFromLink(name, link);
+        }
+
+        /// <summary>
+        /// Returns a Bitmap image from the link provided. If the image has already been downloaded,
+        /// we return that one instead.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="link"></param>
+        /// <returns></returns>
+        public static Bitmap GetImageFromLink(string name, string link)
+        {
             if (name.Equals("RareDropTable"))
                 return (Bitmap)Image.FromFile(rareDropTableImagePath, true);
             else if (FileExists(name + ".png", "CachedImages"))
-                return (Bitmap)Image.FromFile($@"{RootPath}\CachedImages\{name}.png", true);
+                return GetImageFromFile(name);
             else
             {
                 using (WebClient client = new WebClient())
@@ -143,13 +151,17 @@ namespace OsrsDropEditor
                     }
                     catch (WebException e)
                     {
-                        //Return the placeholder image here.
                         return GetPlaceHolderImage(e.StackTrace);
                     }
                 }
             }
 
             return GetPlaceHolderImage();
+        }
+
+        public static Bitmap GetImageFromFile(string name)
+        {
+            return (Bitmap)Image.FromFile($@"{RootPath}\CachedImages\{name}.png", true);
         }
 
         private static Bitmap GetPlaceHolderImage(string stackTrace = "")
