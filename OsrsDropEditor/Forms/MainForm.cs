@@ -512,6 +512,8 @@ namespace OsrsDropEditor
             }
 
             //Open up the highscores form
+            HighscoresForm highscoresForm = new HighscoresForm();
+            highscoresForm.Show(this);
         }
     }
 
