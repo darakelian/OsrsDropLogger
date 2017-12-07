@@ -115,6 +115,12 @@
     <Compile Include="Forms\AddTreasureTrailRewardForm.Designer.cs">
       <DependentUpon>AddTreasureTrailRewardForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\CompareHighscoresForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CompareHighscoresForm.Designer.cs">
+      <DependentUpon>CompareHighscoresForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\HighscoresForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -160,6 +166,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddTreasureTrailRewardForm.resx">
       <DependentUpon>AddTreasureTrailRewardForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CompareHighscoresForm.resx">
+      <DependentUpon>CompareHighscoresForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HighscoresForm.resx">
       <DependentUpon>HighscoresForm.cs</DependentUpon>

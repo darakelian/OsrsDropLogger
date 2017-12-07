@@ -26,6 +26,7 @@ namespace OsrsDropEditor.Forms
             InitializeComponent();
             this.username = username;
             this.gamemode = gamemode;
+            Text += $" - {username}";
 
             highscores = new Highscores();
             highscores.GetHighscoresForPlayer(username, gamemode);
@@ -68,6 +69,19 @@ namespace OsrsDropEditor.Forms
                     xpTooltip.SetToolTip(skillLabel, $"XP: {highscores.GetExperienceForSkill(skillName)}");
                 }
             }
+        }
+
+        /// <summary>
+        /// Opens up the compare highscores list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void compareButton_Click(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(compareUsername.Text))
+                return;
+
+            new CompareHighscoresForm(username, compareUsername.Text).ShowDialog(this);
         }
     }
 }

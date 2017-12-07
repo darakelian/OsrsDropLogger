@@ -101,6 +101,8 @@
             this.attackLabel = new System.Windows.Forms.Label();
             this.attackIcon = new System.Windows.Forms.PictureBox();
             this.xpTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.compareButton = new System.Windows.Forms.Button();
+            this.compareUsername = new System.Windows.Forms.TextBox();
             this.iconTablePanel.SuspendLayout();
             this.panel23.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hunterIcon)).BeginInit();
@@ -152,8 +154,8 @@
             // 
             // overallLabel
             // 
-            this.overallLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.overallLabel.Location = new System.Drawing.Point(0, 0);
+            this.overallLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.overallLabel.Location = new System.Drawing.Point(0, 398);
             this.overallLabel.Name = "overallLabel";
             this.overallLabel.Size = new System.Drawing.Size(326, 23);
             this.overallLabel.TabIndex = 0;
@@ -189,8 +191,8 @@
             this.iconTablePanel.Controls.Add(this.panel3, 2, 0);
             this.iconTablePanel.Controls.Add(this.panel2, 1, 0);
             this.iconTablePanel.Controls.Add(this.panel1, 0, 0);
-            this.iconTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.iconTablePanel.Location = new System.Drawing.Point(0, 23);
+            this.iconTablePanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.iconTablePanel.Location = new System.Drawing.Point(0, 66);
             this.iconTablePanel.Name = "iconTablePanel";
             this.iconTablePanel.RowCount = 8;
             this.iconTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
@@ -871,11 +873,30 @@
             this.attackIcon.TabIndex = 0;
             this.attackIcon.TabStop = false;
             // 
+            // compareButton
+            // 
+            this.compareButton.Location = new System.Drawing.Point(222, 17);
+            this.compareButton.Name = "compareButton";
+            this.compareButton.Size = new System.Drawing.Size(92, 20);
+            this.compareButton.TabIndex = 2;
+            this.compareButton.Text = "Compare";
+            this.compareButton.UseVisualStyleBackColor = true;
+            this.compareButton.Click += new System.EventHandler(this.compareButton_Click);
+            // 
+            // compareUsername
+            // 
+            this.compareUsername.Location = new System.Drawing.Point(12, 17);
+            this.compareUsername.Name = "compareUsername";
+            this.compareUsername.Size = new System.Drawing.Size(202, 20);
+            this.compareUsername.TabIndex = 3;
+            // 
             // HighscoresForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(326, 355);
+            this.ClientSize = new System.Drawing.Size(326, 421);
+            this.Controls.Add(this.compareUsername);
+            this.Controls.Add(this.compareButton);
             this.Controls.Add(this.iconTablePanel);
             this.Controls.Add(this.overallLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -933,6 +954,7 @@
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.attackIcon)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1010,5 +1032,7 @@
         private System.Windows.Forms.Label hitpointsLabel;
         private System.Windows.Forms.Label attackLabel;
         private System.Windows.Forms.ToolTip xpTooltip;
+        private System.Windows.Forms.Button compareButton;
+        private System.Windows.Forms.TextBox compareUsername;
     }
 }
