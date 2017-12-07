@@ -100,6 +100,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.attackLabel = new System.Windows.Forms.Label();
             this.attackIcon = new System.Windows.Forms.PictureBox();
+            this.levelProgressBar = new System.Windows.Forms.ProgressBar();
             this.xpTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.compareButton = new System.Windows.Forms.Button();
             this.compareUsername = new System.Windows.Forms.TextBox();
@@ -191,6 +192,7 @@
             this.iconTablePanel.Controls.Add(this.panel3, 2, 0);
             this.iconTablePanel.Controls.Add(this.panel2, 1, 0);
             this.iconTablePanel.Controls.Add(this.panel1, 0, 0);
+            this.iconTablePanel.Controls.Add(this.levelProgressBar, 2, 7);
             this.iconTablePanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.iconTablePanel.Location = new System.Drawing.Point(0, 66);
             this.iconTablePanel.Name = "iconTablePanel";
@@ -225,6 +227,7 @@
             this.hunterLabel.TabIndex = 2;
             this.hunterLabel.Text = "label1";
             this.hunterLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.hunterLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // hunterIcon
             // 
@@ -254,6 +257,7 @@
             this.constructionLabel.TabIndex = 2;
             this.constructionLabel.Text = "label1";
             this.constructionLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.constructionLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // constructionIcon
             // 
@@ -283,6 +287,7 @@
             this.farmingLabel.TabIndex = 2;
             this.farmingLabel.Text = "label1";
             this.farmingLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.farmingLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // farmingIcon
             // 
@@ -312,6 +317,7 @@
             this.slayerLabel.TabIndex = 2;
             this.slayerLabel.Text = "label1";
             this.slayerLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.slayerLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // slayerIcon
             // 
@@ -341,6 +347,7 @@
             this.runecraftingLabel.TabIndex = 2;
             this.runecraftingLabel.Text = "label1";
             this.runecraftingLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.runecraftingLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // runecraftingIcon
             // 
@@ -370,6 +377,7 @@
             this.woodcuttingLabel.TabIndex = 2;
             this.woodcuttingLabel.Text = "label1";
             this.woodcuttingLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.woodcuttingLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // woodcuttingIcon
             // 
@@ -399,6 +407,7 @@
             this.fletchingLabel.TabIndex = 2;
             this.fletchingLabel.Text = "label1";
             this.fletchingLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.fletchingLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // fletchingIcon
             // 
@@ -428,6 +437,7 @@
             this.magicLabel.TabIndex = 2;
             this.magicLabel.Text = "label1";
             this.magicLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.magicLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // magicIcon
             // 
@@ -457,6 +467,7 @@
             this.firemakingLabel.TabIndex = 2;
             this.firemakingLabel.Text = "label1";
             this.firemakingLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.firemakingLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // firemakingIcon
             // 
@@ -486,6 +497,7 @@
             this.craftingLabel.TabIndex = 2;
             this.craftingLabel.Text = "label1";
             this.craftingLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.craftingLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // craftingIcon
             // 
@@ -515,6 +527,7 @@
             this.prayerLabel.TabIndex = 2;
             this.prayerLabel.Text = "label1";
             this.prayerLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.prayerLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // prayerIcon
             // 
@@ -544,6 +557,7 @@
             this.cookingLabel.TabIndex = 2;
             this.cookingLabel.Text = "label1";
             this.cookingLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.cookingLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // cookingIcon
             // 
@@ -573,6 +587,7 @@
             this.thievingLabel.TabIndex = 2;
             this.thievingLabel.Text = "label1";
             this.thievingLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.thievingLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // thievingIcon
             // 
@@ -602,6 +617,7 @@
             this.rangedLabel.TabIndex = 2;
             this.rangedLabel.Text = "label1";
             this.rangedLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.rangedLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // rangedIcon
             // 
@@ -631,6 +647,7 @@
             this.fishingLabel.TabIndex = 2;
             this.fishingLabel.Text = "label1";
             this.fishingLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.fishingLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // fishingIcon
             // 
@@ -660,6 +677,7 @@
             this.herbloreLabel.TabIndex = 2;
             this.herbloreLabel.Text = "label1";
             this.herbloreLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.herbloreLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // herbloreIcon
             // 
@@ -689,6 +707,7 @@
             this.defenceLabel.TabIndex = 2;
             this.defenceLabel.Text = "label1";
             this.defenceLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.defenceLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // defenceIcon
             // 
@@ -718,6 +737,7 @@
             this.smithingLabel.TabIndex = 2;
             this.smithingLabel.Text = "label1";
             this.smithingLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.smithingLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // smithingIcon
             // 
@@ -747,6 +767,7 @@
             this.agilityLabel.TabIndex = 2;
             this.agilityLabel.Text = "label1";
             this.agilityLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.agilityLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // agilityIcon
             // 
@@ -776,6 +797,7 @@
             this.strengthLabel.TabIndex = 2;
             this.strengthLabel.Text = "label1";
             this.strengthLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.strengthLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // strengthIcon
             // 
@@ -805,6 +827,7 @@
             this.miningLabel.TabIndex = 2;
             this.miningLabel.Text = "label1";
             this.miningLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.miningLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // miningIcon
             // 
@@ -834,6 +857,7 @@
             this.hitpointsLabel.TabIndex = 2;
             this.hitpointsLabel.Text = "label1";
             this.hitpointsLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.hitpointsLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // hitpointsIcon
             // 
@@ -863,6 +887,7 @@
             this.attackLabel.TabIndex = 1;
             this.attackLabel.Text = "label1";
             this.attackLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.attackLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // attackIcon
             // 
@@ -872,6 +897,14 @@
             this.attackIcon.Size = new System.Drawing.Size(36, 35);
             this.attackIcon.TabIndex = 0;
             this.attackIcon.TabStop = false;
+            // 
+            // levelProgressBar
+            // 
+            this.levelProgressBar.Location = new System.Drawing.Point(219, 290);
+            this.levelProgressBar.Name = "levelProgressBar";
+            this.levelProgressBar.Size = new System.Drawing.Size(104, 23);
+            this.levelProgressBar.Step = 1;
+            this.levelProgressBar.TabIndex = 46;
             // 
             // compareButton
             // 
@@ -1034,5 +1067,6 @@
         private System.Windows.Forms.ToolTip xpTooltip;
         private System.Windows.Forms.Button compareButton;
         private System.Windows.Forms.TextBox compareUsername;
+        private System.Windows.Forms.ProgressBar levelProgressBar;
     }
 }

@@ -91,5 +91,11 @@ namespace OsrsDropEditor.Forms
                 return;
             }
         }
+
+        private void skillLabel_MouseHover(object sender, EventArgs e)
+        {
+            string skillName = ((Label)sender).Name.Replace("Label", "");
+            levelProgressBar.Value = (int)highscores.GetPercentNextLevel(skillName);
+        }
     }
 }

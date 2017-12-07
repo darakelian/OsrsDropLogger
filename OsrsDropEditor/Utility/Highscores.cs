@@ -125,6 +125,11 @@ namespace OsrsDropEditor
         {
             return playerSkillLevels.Where(kvp => skillName.ToLower().Contains(kvp.Key.ToLower())).FirstOrDefault().Value.Experience;
         }
+
+        public double GetPercentNextLevel(string skillName)
+        {
+            return Utility.GetPercentageToNextLevel(GetExperienceForSkill(skillName), GetLevelForSkill(skillName));
+        }
     }
 
     public struct LevelContainer

@@ -245,7 +245,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="targetLevel"></param>
         /// <returns></returns>
-        public static int GetExperienceForLevel(int targetLevel)
+        public static double GetExperienceForLevel(int targetLevel)
         {
             double experience = 0;
             for (int x = 1; x <= targetLevel - 1; x++)
@@ -254,7 +254,19 @@ namespace OsrsDropEditor
                 experience += Math.Floor(sumTemp);
             }
             experience /= 4;
-            return (int) Math.Floor(experience);
+            //XP in RS is capped to 200M
+            return Math.Min(Math.Floor(experience), 200_000_000_000);
+        }
+
+        /// <summary>
+        /// Computes the percentage towards the next level.
+        /// </summary>
+        /// <param name="currentXp"></param>
+        /// <param name="currentLevel"></param>
+        /// <returns></returns>
+        public static double GetPercentageToNextLevel(int currentXp, int currentLevel)
+        {
+            return 100 * currentXp / GetExperienceForLevel(currentLevel + 1);
         }
     }
 }
