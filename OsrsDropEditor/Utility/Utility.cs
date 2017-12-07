@@ -239,5 +239,22 @@ namespace OsrsDropEditor
             Properties.Settings.Default.username = username;
             Properties.Settings.Default.Save();
         }
+
+        /// <summary>
+        /// Computes the amount of experience necessary for a given level
+        /// </summary>
+        /// <param name="targetLevel"></param>
+        /// <returns></returns>
+        public static int GetExperienceForLevel(int targetLevel)
+        {
+            double experience = 0;
+            for (int x = 1; x <= targetLevel - 1; x++)
+            {
+                double sumTemp = x + 300 * Math.Pow(2, (double)x / 7);
+                experience += Math.Floor(sumTemp);
+            }
+            experience /= 4;
+            return (int) Math.Floor(experience);
+        }
     }
 }
