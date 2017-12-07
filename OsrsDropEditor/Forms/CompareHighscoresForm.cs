@@ -20,8 +20,9 @@ namespace OsrsDropEditor.Forms
 
             yourHighscores = new Highscores();
             theirHighscores = new Highscores();
-            yourHighscores.GetHighscoresForPlayer(username);
-            theirHighscores.GetHighscoresForPlayer(opponentName);
+            if (!yourHighscores.GetHighscoresForPlayer(username) || !theirHighscores.GetHighscoresForPlayer(opponentName)) {
+                throw new Exception("Couldn't load player highscore information.");
+            }
         }
 
         /// <summary>
@@ -36,31 +37,25 @@ namespace OsrsDropEditor.Forms
                 int yourLevel = yourHighscores.GetLevelForSkill(skill);
                 int theirLevel = theirHighscores.GetLevelForSkill(skill);
 
+                int yourXp = yourHighscores.GetExperienceForSkill(skill);
+                int theirXp = theirHighscores.GetExperienceForSkill(skill);
+
                 bool youHigher = yourLevel > theirLevel;
                 bool tie = yourLevel == theirLevel;
 
-                var index = levelsGridView.Rows.Add();
+                //Initialize row
+                int index = levelsGridView.Rows.Add();
                 DataGridViewRow dataGridViewRow = levelsGridView.Rows[index];
                 dataGridViewRow.Cells[0].Value = skill;
                 dataGridViewRow.Cells[1].Value = yourLevel;
+                dataGridViewRow.Cells[1].ToolTipText = $"XP: {yourXp}";
                 dataGridViewRow.Cells[2].Value = theirLevel;
-                if (tie)
-                {
-                    dataGridViewRow.Cells[1].Style.BackColor = Color.LightGray;
-                    dataGridViewRow.Cells[2].Style.BackColor = Color.LightGray;
-                }
-                else if (youHigher)
-                {
-                    dataGridViewRow.Cells[1].Style.BackColor = Color.Green;
-                    dataGridViewRow.Cells[2].Style.BackColor = Color.Red;
-                }
-                else
-                {
-                    dataGridViewRow.Cells[1].Style.BackColor = Color.Red;
-                    dataGridViewRow.Cells[2].Style.BackColor = Color.Green;
-                }
+                dataGridViewRow.Cells[2].ToolTipText = $"XP: {theirXp}";
 
-                //levelsGridView.Rows.Add(dataGridViewRow);
+                //Set cell colors
+                dataGridViewRow.Cells[1].Style.BackColor = youHigher ? Color.Green : tie ? Color.LightGray : Color.Red;
+                dataGridViewRow.Cells[2].Style.BackColor = youHigher ? Color.Red : tie ? Color.LightGray : Color.Green;
+
                 levelsGridView.Refresh();
             }
         }

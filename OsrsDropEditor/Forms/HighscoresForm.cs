@@ -81,7 +81,15 @@ namespace OsrsDropEditor.Forms
             if (String.IsNullOrEmpty(compareUsername.Text))
                 return;
 
-            new CompareHighscoresForm(username, compareUsername.Text).ShowDialog(this);
+            try
+            {
+                new CompareHighscoresForm(username, compareUsername.Text).ShowDialog(this);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unable to compare highscores --- check spelling of username.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
         }
     }
 }

@@ -73,9 +73,9 @@ namespace OsrsDropEditor
             }
         }
 
-        public void GetHighscoresForPlayer(string name)
+        public bool GetHighscoresForPlayer(string name)
         {
-            GetHighscoresForPlayer(name, "normal");
+            return GetHighscoresForPlayer(name, "normal");
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="name"></param>
         /// <param name="playerType"></param>
-        public void GetHighscoresForPlayer(string name, string playerType)
+        public bool GetHighscoresForPlayer(string name, string playerType)
         {
             string link = PlayerTypeLinks[PlayerTypeLinks.Keys.FirstOrDefault(key => playerType.ToLower().Contains(key))];
 
@@ -96,13 +96,15 @@ namespace OsrsDropEditor
             catch (WebException)
             {
                 Console.WriteLine("Unable to load highscores");
-                return;
+                return false;
             }
 
             string[] experienceRows = browser.InnerText.Split('\n');
 
             for (int i = 0; i < Skills.Length; i++)
                 playerSkillLevels[Skills[i]] = GetLevelContainerForRow(experienceRows[i]);
+
+            return true;
         }
 
         private LevelContainer GetLevelContainerForRow(string row)

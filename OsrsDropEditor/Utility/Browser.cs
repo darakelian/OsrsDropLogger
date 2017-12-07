@@ -62,9 +62,10 @@ namespace OsrsDropEditor
                     _uri = request.RequestUri.ToString();
                 }
             }
-            catch (WebException)
+            catch (WebException e)
             {
                 Console.WriteLine("Unable to navigate to webpage.");
+                throw e;
             }
         }
 
