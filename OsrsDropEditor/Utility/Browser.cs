@@ -35,7 +35,9 @@ namespace OsrsDropEditor
 
         public void Navigate(string url, bool absolute = false)
         {
-            HttpWebRequest request = WebRequest.Create(absolute ? url : OsrsDataContainers.OsrsWikiBase + url) as HttpWebRequest;
+            string destinationUrl = absolute ? url : OsrsDataContainers.OsrsWikiBase + url;
+
+            HttpWebRequest request = WebRequest.Create(destinationUrl) as HttpWebRequest;
             try
             {
                 HttpWebResponse response = request.GetResponse() as HttpWebResponse;
@@ -60,9 +62,10 @@ namespace OsrsDropEditor
                     _uri = request.RequestUri.ToString();
                 }
             }
-            catch (WebException)
+            catch (WebException e)
             {
                 Console.WriteLine("Unable to navigate to webpage.");
+                throw e;
             }
         }
 

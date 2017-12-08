@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using OsrsDropEditor.DataGathering;
 using OsrsDropEditor.Forms;
+using System.Net;
 
 namespace OsrsDropEditor
 {
@@ -19,6 +20,7 @@ namespace OsrsDropEditor
         public MainForm()
         {
             InitializeComponent();
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
 
         /// <summary>
@@ -85,7 +87,10 @@ namespace OsrsDropEditor
             {
                 TextBox box = sender as TextBox;
                 string name = box.Text;
-                DataGridViewRow newRow = npcListGridView.Rows.Cast<DataGridViewRow>().Where(row => row.DataBoundItem.ToString().ToLower().Equals(name.ToLower())).First();
+                DataGridViewRow newRow = npcListGridView.Rows.Cast<DataGridViewRow>().Where(row => row.DataBoundItem.ToString().ToLower().Equals(name.ToLower())).FirstOrDefault();
+                if (newRow == null)
+                    return;
+
                 int index = newRow.Index;
 
                 if (ShowDropsForNpc(newRow))
@@ -437,7 +442,18 @@ namespace OsrsDropEditor
         /// <param name="e"></param>
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new SettingsForm().Show(this);
+            SettingsForm form = new SettingsForm();
+
+            //Attempt to load existing username and gamemode from settings before showing
+            string username = Properties.Settings.Default.username;
+            string gamemode = Properties.Settings.Default.gamemode;
+
+            if (!String.IsNullOrEmpty(username))
+                form.usernameInput.Text = username;
+            if (!String.IsNullOrEmpty(gamemode))
+                form.gameModeListBox.Text = gamemode;
+
+            form.Show(this);
         }
 
         /// <summary>
@@ -469,6 +485,42 @@ namespace OsrsDropEditor
         private void logClueToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new AddTreasureTrailRewardForm(osrsDropContainers).Show(this);
+        }
+
+        /// <summary>
+        /// Display highscores information to the user. Prompt them to enter a username if they haven't already.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void highscoresToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string username = Properties.Settings.Default.username;
+            string gamemode = Properties.Settings.Default.gamemode;
+
+            //Check for username saved in settings
+            if (String.IsNullOrEmpty(username))
+            {
+                DialogResult promptForUsername = MessageBox.Show(this, "Would you like to enter your username for highscores functionality?", "Warning", MessageBoxButtons.YesNo);
+                if (promptForUsername == DialogResult.Yes)
+                {
+                    //Prompt them for the username now
+                    TextDialogForm textDialogForm = new TextDialogForm();
+                    if (textDialogForm.ShowDialog(this) == DialogResult.OK)
+                    {
+                        username = textDialogForm.textInput.Text;
+                        textDialogForm.Dispose();
+                        Utility.SaveUsername(username);
+                    }
+                    else
+                        return;
+                }
+                else
+                    return;
+            }
+
+            //Open up the highscores form
+            HighscoresForm highscoresForm = new HighscoresForm(username, gamemode);
+            highscoresForm.Show(this);
         }
     }
 

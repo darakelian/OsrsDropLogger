@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace OsrsDropEditor.Forms
 {
-    public partial class QuantityInputForm : Form
+    public partial class TextDialogForm : Form
     {
-        public QuantityInputForm()
+        public TextDialogForm()
         {
             InitializeComponent();
         }

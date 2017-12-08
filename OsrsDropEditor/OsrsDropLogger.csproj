@@ -64,6 +64,7 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="SgmlReaderDll, Version=1.8.11.0, Culture=neutral, PublicKeyToken=46b2db9ca481831b, processorArchitecture=MSIL">
       <HintPath>..\packages\SgmlReader.1.8.11\lib\4.0\SgmlReaderDll.dll</HintPath>
     </Reference>
@@ -81,6 +82,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\CustomProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DataGathering\Drop.cs" />
     <Compile Include="DataGathering\ItemPrice.cs" />
     <Compile Include="DataGathering\LoggedDrop.cs" />
@@ -114,11 +118,23 @@
     <Compile Include="Forms\AddTreasureTrailRewardForm.Designer.cs">
       <DependentUpon>AddTreasureTrailRewardForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\QuantityInputForm.cs">
+    <Compile Include="Forms\CompareHighscoresForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\QuantityInputForm.Designer.cs">
-      <DependentUpon>QuantityInputForm.cs</DependentUpon>
+    <Compile Include="Forms\CompareHighscoresForm.Designer.cs">
+      <DependentUpon>CompareHighscoresForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HighscoresForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HighscoresForm.Designer.cs">
+      <DependentUpon>HighscoresForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TextDialogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TextDialogForm.Designer.cs">
+      <DependentUpon>TextDialogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\Browser.cs" />
     <Compile Include="Forms\MainForm.cs">
@@ -137,6 +153,7 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DataGathering\TreasureTrailUtility.cs" />
+    <Compile Include="Utility\Highscores.cs" />
     <Compile Include="Utility\Utility.cs" />
     <EmbeddedResource Include="Forms\AddDropMultipleForm.resx">
       <DependentUpon>AddDropMultipleForm.cs</DependentUpon>
@@ -153,11 +170,17 @@
     <EmbeddedResource Include="Forms\AddTreasureTrailRewardForm.resx">
       <DependentUpon>AddTreasureTrailRewardForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CompareHighscoresForm.resx">
+      <DependentUpon>CompareHighscoresForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HighscoresForm.resx">
+      <DependentUpon>HighscoresForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\QuantityInputForm.resx">
-      <DependentUpon>QuantityInputForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\TextDialogForm.resx">
+      <DependentUpon>TextDialogForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -174,8 +197,8 @@
     </EmbeddedResource>
     <None Include="OsrsDropLogger_TemporaryKey.pfx" />
     <None Include="packages.config" />
-    <None Include="Properties\DataSources\LoggedDrop.datasource" />
     <None Include="Properties\DataSources\NpcName.datasource" />
+    <None Include="Properties\DataSources\OsrsDropEditor.DataGathering.LoggedDrop.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -209,5 +232,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

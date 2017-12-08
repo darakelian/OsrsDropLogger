@@ -74,8 +74,6 @@ namespace OsrsDropEditor
         /// <returns></returns>
         public static IEnumerable<Bitmap> GetImagesFromDrops(List<Drop> drops)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
             return drops.Select(drop => GetImageFromObject(drop));
         }
 
@@ -88,8 +86,6 @@ namespace OsrsDropEditor
         /// <returns></returns>
         public static IEnumerable<Bitmap> GetImagesFromClues(List<ClueReward> rewards)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
             return rewards.Select(reward => GetImageFromObject(reward));
         }
 
@@ -119,17 +115,30 @@ namespace OsrsDropEditor
                 link = ((ClueReward)dataObject).ImagePath;
             }
 
+            return GetImageFromLink(name, link);
+        }
+
+        /// <summary>
+        /// Returns a Bitmap image from the link provided. If the image has already been downloaded,
+        /// we return that one instead.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="link"></param>
+        /// <returns></returns>
+        public static Bitmap GetImageFromLink(string name, string link, bool relative = false)
+        {
             if (name.Equals("RareDropTable"))
                 return (Bitmap)Image.FromFile(rareDropTableImagePath, true);
             else if (FileExists(name + ".png", "CachedImages"))
-                return (Bitmap)Image.FromFile($@"{RootPath}\CachedImages\{name}.png", true);
+                return GetImageFromFile(name);
             else
             {
                 using (WebClient client = new WebClient())
                 {
                     try
                     {
-                        using (Stream stream = client.OpenRead(link))
+                        string destinationUrl = relative ? OsrsDataContainers.OsrsWikiBase + link : link;
+                        using (Stream stream = client.OpenRead(destinationUrl))
                         {
                             Bitmap bitmap = new Bitmap(stream);
                             if (bitmap != null)
@@ -143,13 +152,17 @@ namespace OsrsDropEditor
                     }
                     catch (WebException e)
                     {
-                        //Return the placeholder image here.
                         return GetPlaceHolderImage(e.StackTrace);
                     }
                 }
             }
 
             return GetPlaceHolderImage();
+        }
+
+        public static Bitmap GetImageFromFile(string name)
+        {
+            return (Bitmap)Image.FromFile($@"{RootPath}\CachedImages\{name}.png", true);
         }
 
         private static Bitmap GetPlaceHolderImage(string stackTrace = "")
@@ -215,6 +228,50 @@ namespace OsrsDropEditor
             item.ImageIndex = slot;
 
             return item;
+        }
+
+        /// <summary>
+        /// Saves the given username in the application settings.
+        /// </summary>
+        /// <param name="username"></param>
+        public static void SaveUsername(string username)
+        {
+            Properties.Settings.Default.username = username;
+            Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Computes the amount of experience necessary for a given level
+        /// </summary>
+        /// <param name="targetLevel"></param>
+        /// <returns></returns>
+        public static double GetExperienceForLevel(int targetLevel)
+        {
+            double experience = 0;
+            for (int x = 1; x <= targetLevel - 1; x++)
+            {
+                double sumTemp = x + 300 * Math.Pow(2, (double)x / 7);
+                experience += Math.Floor(sumTemp);
+            }
+            experience /= 4;
+            //XP in RS is capped to 200M
+            return Math.Min(Math.Floor(experience), 200_000_000_000);
+        }
+
+        /// <summary>
+        /// Computes the percentage towards the next level.
+        /// </summary>
+        /// <param name="currentXp"></param>
+        /// <param name="currentLevel"></param>
+        /// <returns></returns>
+        public static double GetPercentageToNextLevel(int currentXp, int currentLevel)
+        {
+            double xpForNextLevel = GetExperienceForLevel(currentLevel + 1);
+            double xpForCurrentLevel = GetExperienceForLevel(currentLevel);
+            double xpLeft = xpForNextLevel - currentXp;
+            double xpBand = xpForNextLevel - xpForCurrentLevel;
+
+            return 100 * (1 - (xpLeft / xpBand));
         }
     }
 }
