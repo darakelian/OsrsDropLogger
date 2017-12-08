@@ -104,6 +104,7 @@
             this.compareUsername = new System.Windows.Forms.TextBox();
             this.levelProgressBar = new OsrsDropEditor.Components.CustomProgressBar();
             this.progressLabel = new System.Windows.Forms.Label();
+            this.rankingLabel = new System.Windows.Forms.Label();
             this.iconTablePanel.SuspendLayout();
             this.panel23.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hunterIcon)).BeginInit();
@@ -162,6 +163,7 @@
             this.overallLabel.TabIndex = 0;
             this.overallLabel.Text = "Overall:";
             this.overallLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.overallLabel.MouseHover += new System.EventHandler(this.skillLabel_MouseHover);
             // 
             // iconTablePanel
             // 
@@ -948,13 +950,22 @@
             this.progressLabel.Name = "progressLabel";
             this.progressLabel.Size = new System.Drawing.Size(191, 19);
             this.progressLabel.TabIndex = 5;
-            this.progressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.progressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // rankingLabel
+            // 
+            this.rankingLabel.Location = new System.Drawing.Point(12, 388);
+            this.rankingLabel.Name = "rankingLabel";
+            this.rankingLabel.Size = new System.Drawing.Size(191, 19);
+            this.rankingLabel.TabIndex = 6;
+            this.rankingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // HighscoresForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(215, 442);
+            this.Controls.Add(this.rankingLabel);
             this.Controls.Add(this.progressLabel);
             this.Controls.Add(this.levelProgressBar);
             this.Controls.Add(this.compareUsername);
@@ -1096,5 +1107,6 @@
         private System.Windows.Forms.TextBox compareUsername;
         private Components.CustomProgressBar levelProgressBar;
         private System.Windows.Forms.Label progressLabel;
+        private System.Windows.Forms.Label rankingLabel;
     }
 }

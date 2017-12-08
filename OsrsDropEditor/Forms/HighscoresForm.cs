@@ -61,11 +61,11 @@ namespace OsrsDropEditor.Forms
         {
             foreach (string skillName in highscores.playerSkillLevels.Keys)
             {
-                Label skillLabel = (Label)Controls.Find(skillName.ToLower() + "Label", true).FirstOrDefault();
-                PictureBox skillIcon = (PictureBox)Controls.Find(skillName.ToLower() + "Icon", true).FirstOrDefault();
+                Label skillLabel = (Label)Controls.Find(skillName + "Label", true).FirstOrDefault();
+                PictureBox skillIcon = (PictureBox)Controls.Find(skillName + "Icon", true).FirstOrDefault();
                 if (skillLabel != null)
                 {
-                    string prefix = skillName == "Overall" ? "Overall: " : "";
+                    string prefix = skillName == "overall" ? "Overall: " : "";
                     skillLabel.Text = $"{prefix}{highscores.playerSkillLevels[skillName].Level.ToString()}";
                     xpTooltip.SetToolTip(skillLabel, $"XP: {highscores.GetExperienceForSkill(skillName)}");
                     if (skillIcon != null)
@@ -89,8 +89,17 @@ namespace OsrsDropEditor.Forms
         private void updateProgressBar(string skillName)
         {
             double percent = highscores.GetPercentNextLevel(skillName);
-            levelProgressBar.Value = (int)percent;
-            progressLabel.Text = String.Format("{0:0.##}%", percent);
+            int rank = highscores.GetRankForSkill(skillName);
+            if (percent >= 0)
+            {
+                levelProgressBar.Value = (int)percent;
+                progressLabel.Text = String.Format("Progress: {0:0.##}%", percent);
+                rankingLabel.Text = $"Rank: {rank}";
+            }
+            else
+            {
+                progressLabel.Text = $"Rank: {rank}";
+            }
         }
 
         private void compareUsername_KeyDown(object sender, KeyEventArgs e)

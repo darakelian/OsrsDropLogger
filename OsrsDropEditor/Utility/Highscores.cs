@@ -102,7 +102,7 @@ namespace OsrsDropEditor
             string[] experienceRows = browser.InnerText.Split('\n');
 
             for (int i = 0; i < Skills.Length; i++)
-                playerSkillLevels[Skills[i]] = GetLevelContainerForRow(experienceRows[i]);
+                playerSkillLevels[Skills[i].ToLower()] = GetLevelContainerForRow(experienceRows[i]);
 
             return true;
         }
@@ -118,20 +118,26 @@ namespace OsrsDropEditor
             return new LevelContainer(rank, level, experience);
         }
 
+        public int GetRankForSkill(string skillName)
+        {
+            return playerSkillLevels.Where(kvp => skillName.ToLower().Contains(kvp.Key)).FirstOrDefault().Value.Rank;
+        }
+
         public int GetLevelForSkill(string skillName)
         {
-            return playerSkillLevels.Where(kvp => skillName.ToLower().Contains(kvp.Key.ToLower())).FirstOrDefault().Value.Level;
+            return playerSkillLevels.Where(kvp => skillName.ToLower().Contains(kvp.Key)).FirstOrDefault().Value.Level;
         }
 
         public int GetExperienceForSkill(string skillName)
         {
-            return playerSkillLevels.Where(kvp => skillName.ToLower().Contains(kvp.Key.ToLower())).FirstOrDefault().Value.Experience;
+            return playerSkillLevels.Where(kvp => skillName.ToLower().Contains(kvp.Key)).FirstOrDefault().Value.Experience;
         }
 
         public double GetPercentNextLevel(string skillName)
         {
             return Utility.GetPercentageToNextLevel(GetExperienceForSkill(skillName), GetLevelForSkill(skillName));
         }
+
     }
 
     public struct LevelContainer
