@@ -99,6 +99,7 @@ namespace OsrsDropEditor.Forms
             else
             {
                 progressLabel.Text = $"Rank: {rank}";
+                rankingLabel.Text = String.Empty;
             }
         }
 
