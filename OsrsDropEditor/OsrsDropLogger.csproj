@@ -82,6 +82,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\CustomProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DataGathering\Drop.cs" />
     <Compile Include="DataGathering\ItemPrice.cs" />
     <Compile Include="DataGathering\LoggedDrop.cs" />
@@ -229,5 +232,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
