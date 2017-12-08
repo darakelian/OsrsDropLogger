@@ -62,40 +62,55 @@ namespace OsrsDropEditor.Forms
             foreach (string skillName in highscores.playerSkillLevels.Keys)
             {
                 Label skillLabel = (Label)Controls.Find(skillName.ToLower() + "Label", true).FirstOrDefault();
+                PictureBox skillIcon = (PictureBox)Controls.Find(skillName.ToLower() + "Icon", true).FirstOrDefault();
                 if (skillLabel != null)
                 {
                     string prefix = skillName == "Overall" ? "Overall: " : "";
                     skillLabel.Text = $"{prefix}{highscores.playerSkillLevels[skillName].Level.ToString()}";
                     xpTooltip.SetToolTip(skillLabel, $"XP: {highscores.GetExperienceForSkill(skillName)}");
+                    if (skillIcon != null)
+                        xpTooltip.SetToolTip(skillIcon, $"XP: {highscores.GetExperienceForSkill(skillName)}");
                 }
-            }
-        }
-
-        /// <summary>
-        /// Opens up the compare highscores list
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void compareButton_Click(object sender, EventArgs e)
-        {
-            if (String.IsNullOrEmpty(compareUsername.Text))
-                return;
-
-            try
-            {
-                new CompareHighscoresForm(username, compareUsername.Text).ShowDialog(this);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Unable to compare highscores --- check spelling of username.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
         }
 
         private void skillLabel_MouseHover(object sender, EventArgs e)
         {
             string skillName = ((Label)sender).Name.Replace("Label", "");
-            levelProgressBar.Value = (int)highscores.GetPercentNextLevel(skillName);
+            updateProgressBar(skillName);
+        }
+
+        private void skillIcon_MouseHover(object sender, EventArgs e)
+        {
+            string skillName = ((PictureBox)sender).Name.Replace("Icon", "");
+            updateProgressBar(skillName);
+        }
+
+        private void updateProgressBar(string skillName)
+        {
+            double percent = highscores.GetPercentNextLevel(skillName);
+            levelProgressBar.Value = (int)percent;
+            progressLabel.Text = String.Format("{0:0.##}%", percent);
+        }
+
+        private void compareUsername_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return)
+            {
+                e.Handled = e.SuppressKeyPress = true;
+                if (String.IsNullOrEmpty(compareUsername.Text))
+                    return;
+
+                try
+                {
+                    new CompareHighscoresForm(username, compareUsername.Text).Show(this);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Unable to compare highscores --- check spelling of username.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
         }
     }
 }

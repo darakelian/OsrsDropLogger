@@ -87,7 +87,10 @@ namespace OsrsDropEditor
             {
                 TextBox box = sender as TextBox;
                 string name = box.Text;
-                DataGridViewRow newRow = npcListGridView.Rows.Cast<DataGridViewRow>().Where(row => row.DataBoundItem.ToString().ToLower().Equals(name.ToLower())).First();
+                DataGridViewRow newRow = npcListGridView.Rows.Cast<DataGridViewRow>().Where(row => row.DataBoundItem.ToString().ToLower().Equals(name.ToLower())).FirstOrDefault();
+                if (newRow == null)
+                    return;
+
                 int index = newRow.Index;
 
                 if (ShowDropsForNpc(newRow))

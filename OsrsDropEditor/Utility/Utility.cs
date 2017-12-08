@@ -266,7 +266,12 @@ namespace OsrsDropEditor
         /// <returns></returns>
         public static double GetPercentageToNextLevel(int currentXp, int currentLevel)
         {
-            return 100 * currentXp / GetExperienceForLevel(currentLevel + 1);
+            double xpForNextLevel = GetExperienceForLevel(currentLevel + 1);
+            double xpForCurrentLevel = GetExperienceForLevel(currentLevel);
+            double xpLeft = xpForNextLevel - currentXp;
+            double xpBand = xpForNextLevel - xpForCurrentLevel;
+
+            return 100 * (1 - (xpLeft / xpBand));
         }
     }
 }

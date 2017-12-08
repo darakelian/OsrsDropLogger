@@ -110,10 +110,12 @@ namespace OsrsDropEditor
         private LevelContainer GetLevelContainerForRow(string row)
         {
             string[] values = row.Split(',');
-            int experience = Convert.ToInt32(values[2]);
-            int level = Convert.ToInt32(values[1]);
 
-            return new LevelContainer(level, experience);
+            int rank = Convert.ToInt32(values[0]);
+            int level = Convert.ToInt32(values[1]);
+            int experience = Convert.ToInt32(values[2]);
+
+            return new LevelContainer(rank, level, experience);
         }
 
         public int GetLevelForSkill(string skillName)
@@ -134,12 +136,15 @@ namespace OsrsDropEditor
 
     public struct LevelContainer
     {
+        public int Rank { get; }
+
         public int Level { get; }
 
         public int Experience { get; }
 
-        public LevelContainer(int level, int experience)
+        public LevelContainer(int rank, int level, int experience)
         {
+            Rank = rank;
             Level = level;
             Experience = experience;
         }
