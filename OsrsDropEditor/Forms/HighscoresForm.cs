@@ -86,20 +86,30 @@ namespace OsrsDropEditor.Forms
             updateProgressBar(skillName);
         }
 
+        /// <summary>
+        /// Called whenever the progress bar needs to be updated (icon or label mouse hover).
+        /// This method also handles when the user mouses over the "overall" label.
+        /// </summary>
+        /// <param name="skillName"></param>
         private void updateProgressBar(string skillName)
         {
             double percent = highscores.GetPercentNextLevel(skillName);
             int rank = highscores.GetRankForSkill(skillName);
+            int xpLeft = highscores.GetExperienceForNextLevel(skillName);
+
             if (percent >= 0)
             {
                 levelProgressBar.Value = (int)percent;
                 progressLabel.Text = String.Format("Progress: {0:0.##}%", percent);
-                rankingLabel.Text = $"Rank: {rank}";
+                rankingLabel.Text = $"Rank: {rank.ToString("N0")}";
+                xpToLevelLabel.Text = $"XP Left: {xpLeft.ToString("N0")}";
             }
             else
             {
-                progressLabel.Text = $"Rank: {rank}";
-                rankingLabel.Text = String.Empty;
+                progressLabel.Text = $"Rank: {rank.ToString("N0")}";
+                var tuple = highscores.GetExperienceForClosestLevel();
+                rankingLabel.Text = $"Skill closest to leveling: {tuple.Item1}";
+                xpToLevelLabel.Text = $"XP Left: {tuple.Item2.ToString("N0")}";
             }
         }
 

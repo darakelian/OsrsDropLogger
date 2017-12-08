@@ -133,6 +133,18 @@ namespace OsrsDropEditor
             return playerSkillLevels.Where(kvp => skillName.ToLower().Contains(kvp.Key)).FirstOrDefault().Value.Experience;
         }
 
+        public int GetExperienceForNextLevel(string skillName)
+        {
+            return Utility.GetExperienceLeft(GetExperienceForSkill(skillName), GetLevelForSkill(skillName));
+        }
+
+        public Tuple<string, int> GetExperienceForClosestLevel()
+        {
+            string skillClosestToLevel = playerSkillLevels.OrderBy(kvp => GetExperienceForNextLevel(kvp.Key)).First().Key;
+
+            return new Tuple<string, int>(skillClosestToLevel, GetExperienceForNextLevel(skillClosestToLevel));
+        }
+
         public double GetPercentNextLevel(string skillName)
         {
             return Utility.GetPercentageToNextLevel(GetExperienceForSkill(skillName), GetLevelForSkill(skillName));

@@ -105,6 +105,7 @@
             this.levelProgressBar = new OsrsDropEditor.Components.CustomProgressBar();
             this.progressLabel = new System.Windows.Forms.Label();
             this.rankingLabel = new System.Windows.Forms.Label();
+            this.xpToLevelLabel = new System.Windows.Forms.Label();
             this.iconTablePanel.SuspendLayout();
             this.panel23.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hunterIcon)).BeginInit();
@@ -157,7 +158,7 @@
             // overallLabel
             // 
             this.overallLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.overallLabel.Location = new System.Drawing.Point(0, 419);
+            this.overallLabel.Location = new System.Drawing.Point(0, 445);
             this.overallLabel.Name = "overallLabel";
             this.overallLabel.Size = new System.Drawing.Size(215, 23);
             this.overallLabel.TabIndex = 0;
@@ -954,17 +955,26 @@
             // 
             // rankingLabel
             // 
-            this.rankingLabel.Location = new System.Drawing.Point(12, 388);
+            this.rankingLabel.Location = new System.Drawing.Point(12, 391);
             this.rankingLabel.Name = "rankingLabel";
             this.rankingLabel.Size = new System.Drawing.Size(191, 19);
             this.rankingLabel.TabIndex = 6;
             this.rankingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // xpToLevelLabel
+            // 
+            this.xpToLevelLabel.Location = new System.Drawing.Point(12, 417);
+            this.xpToLevelLabel.Name = "xpToLevelLabel";
+            this.xpToLevelLabel.Size = new System.Drawing.Size(191, 19);
+            this.xpToLevelLabel.TabIndex = 7;
+            this.xpToLevelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // HighscoresForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(215, 442);
+            this.ClientSize = new System.Drawing.Size(215, 468);
+            this.Controls.Add(this.xpToLevelLabel);
             this.Controls.Add(this.rankingLabel);
             this.Controls.Add(this.progressLabel);
             this.Controls.Add(this.levelProgressBar);
@@ -1108,5 +1118,6 @@
         private Components.CustomProgressBar levelProgressBar;
         private System.Windows.Forms.Label progressLabel;
         private System.Windows.Forms.Label rankingLabel;
+        private System.Windows.Forms.Label xpToLevelLabel;
     }
 }

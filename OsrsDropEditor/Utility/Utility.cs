@@ -258,6 +258,11 @@ namespace OsrsDropEditor
             return Math.Min(Math.Floor(experience), 200_000_000_000);
         }
 
+        public static int GetExperienceLeft(int currentXp, int currentLevel)
+        {
+            return (int)GetExperienceForLevel(currentLevel + 1) - currentXp;
+        }
+
         /// <summary>
         /// Computes the percentage towards the next level.
         /// </summary>
@@ -268,7 +273,7 @@ namespace OsrsDropEditor
         {
             double xpForNextLevel = GetExperienceForLevel(currentLevel + 1);
             double xpForCurrentLevel = GetExperienceForLevel(currentLevel);
-            double xpLeft = xpForNextLevel - currentXp;
+            double xpLeft = GetExperienceLeft(currentXp, currentLevel);
             double xpBand = xpForNextLevel - xpForCurrentLevel;
 
             return 100 * (1 - (xpLeft / xpBand));
