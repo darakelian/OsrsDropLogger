@@ -226,8 +226,44 @@ namespace OsrsDropEditor
             item.Tag = dataObject;
             item.Text = dataObject is Drop ? ((Drop)dataObject).ToString() : ((ClueReward)dataObject).ToString();
             item.ImageIndex = slot;
+            item.BackColor = GetColorForDataObject(dataObject);
+            if (dataObject is Drop)
+            {
+                Drop drop = (Drop)dataObject;
+                item.ToolTipText = $"{drop.Rarity} {drop.Rate}".Trim();
+            }
 
             return item;
+        }
+
+        public static readonly string ALWAYS_HEX = "#AFEEEE";
+        public static readonly string COMMON_HEX = "#56E156";
+        public static readonly string UNCOMMON_HEX = "#FFED4C";
+        public static readonly string RARE_HEX = "#FF863C";
+        public static readonly string VERY_RARE_HEX = "#FF6262";
+
+        private static Color GetColorForDataObject(object dataObject)
+        {
+            if (dataObject is Drop)
+            {
+                Drop drop = (Drop)dataObject;
+                switch (drop.Rarity?.ToLower())
+                {
+                    case "always":
+                        return ColorTranslator.FromHtml(ALWAYS_HEX);
+                    case "common":
+                        return ColorTranslator.FromHtml(COMMON_HEX);
+                    case "uncommon":
+                        return ColorTranslator.FromHtml(UNCOMMON_HEX);
+                    case "rare":
+                        return ColorTranslator.FromHtml(RARE_HEX);
+                    case "very rare":
+                        return ColorTranslator.FromHtml(VERY_RARE_HEX);
+                    default:
+                        return ColorTranslator.FromHtml(COMMON_HEX);
+                }
+            }
+            return Color.White;
         }
 
         /// <summary>

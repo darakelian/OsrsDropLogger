@@ -273,6 +273,9 @@ namespace OsrsDropEditor
             XmlNode imageRow = row.SelectSingleNode($".//*[local-name()='td'][{headers["Image"]}]//*[local-name()='img']");
             drop.ImageLink = Utility.GetImageLink(imageRow);
             drop.Name = row.SelectSingleNode($".//*[local-name()='td'][{headers["Item"]}]").InnerText.Trim();
+            XmlNode rarityTag = row.SelectSingleNode($".//*[local-name()='td'][{headers["Rarity"]}]");
+            //Have to pass by reference since structs are normally by value.
+            ProcessRarityNode(ref drop, rarityTag);
 
             string quantity = row.SelectSingleNode($".//*[local-name()='td'][{headers["Quantity"]}]").InnerText.Replace("(noted)", "")
                 .Replace(",", "").Trim();
@@ -300,6 +303,24 @@ namespace OsrsDropEditor
             }
 
             return drop;
+        }
+
+        /// <summary>
+        /// Sets more information about the drop based on the rarity node.
+        /// </summary>
+        /// <param name="drop"></param>
+        /// <param name="rarityNode"></param>
+        private void ProcessRarityNode(ref Drop drop, XmlNode rarityNode)
+        {
+            if (rarityNode == null)
+                return;
+
+            string text = rarityNode.InnerText.Replace("~", "");
+            //Some rows have more precise drop rates
+            string actualDropRate = Regex.Match(text, @"(\d+\/\d+,?\d+\.?\d+)")?.Value;
+            string rarity = rarityNode.SelectSingleNode("./text()").InnerText.Trim();
+            drop.Rarity = rarity;
+            drop.Rate = actualDropRate;
         }
 
         private bool IsRangeQuantity(string quantity)
@@ -351,8 +372,6 @@ namespace OsrsDropEditor
                         IEnumerable<XmlNode> dropRows = browser.SelectNodes(tableNode, ".//*[local-name()='tr' and not(.//*[local-name()='th'])]");
                         Dictionary<string, int> headerMap = GetHeaderMap(tableNode);
 
-                        //foreach (Drop drop in dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)))
-                        //drops[drop.Name] = drop;
                         drops.AddRange(dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)));
                     }
 

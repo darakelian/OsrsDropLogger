@@ -126,8 +126,8 @@ namespace OsrsDropEditor
             dropsListView.LargeImageList.ImageSize = new Size(64, 64);
             dropsListView.LargeImageList.ColorDepth = ColorDepth.Depth32Bit;
             dropsListView.LargeImageList.Images.AddRange(images.ToArray());
-
             dropsListView.Items.AddRange(drops.Select(Utility.GetListViewItemFromDrop).ToArray());
+
             currentNpcRow = npcRow;
 
             return true;

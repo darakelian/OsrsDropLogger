@@ -14,6 +14,8 @@ namespace OsrsDropEditor.DataGathering
         public string ImageLink { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }
+        public string Rarity { get; set; }
+        public string Rate { get; set; }
 
         public bool IsRangeOfDrops { get; set; }
         public int? RangeLowBound { get; set; }
