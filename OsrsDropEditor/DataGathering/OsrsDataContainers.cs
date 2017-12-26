@@ -204,7 +204,7 @@ namespace OsrsDropEditor
                     Dictionary<string, int> headerMap = GetHeaderMap(tableNode);
 
                     if (headerMap.ContainsKey("Image"))
-                        RareDropTable.AddRange(dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)));
+                        RareDropTable.AddRange(dropRows.SelectMany(dropRow => GetDropsFromRow(headerMap, dropRow)));
                 }
 
                 Utility.SaveObjectToJson("raredrops.json", "OfflineJson", RareDropTable);
@@ -267,8 +267,10 @@ namespace OsrsDropEditor
         /// <param name="headers"></param>
         /// <param name="row"></param>
         /// <returns></returns>
-        private Drop GetDropFromRow(Dictionary<string, int> headers, XmlNode row)
+        private IEnumerable<Drop> GetDropsFromRow(Dictionary<string, int> headers, XmlNode row)
         {
+            List<Drop> drops = new List<Drop>();
+
             Drop drop = new Drop();
             XmlNode imageRow = row.SelectSingleNode($".//*[local-name()='td'][{headers["Image"]}]//*[local-name()='img']");
             drop.ImageLink = Utility.GetImageLink(imageRow);
@@ -286,7 +288,23 @@ namespace OsrsDropEditor
             }
             if (IsRangeQuantity(quantity))
             {
-                string[] quantities = quantity.Split('–').ToArray();
+                //Some drops have range and hard value
+                if (quantity.Contains(";"))
+                {
+                    string[] q = quantity.Split(';');
+
+                    //Since order is unknown, find token w/o dash
+                    string qString = q.Where(s => !s.Contains('–')).First();
+                    Drop hardValueDrop = new Drop();
+                    hardValueDrop.ImageLink = drop.ImageLink;
+                    hardValueDrop.Name = drop.Name;
+                    hardValueDrop.Quantity = Convert.ToInt32(qString);
+                    drops.Add(hardValueDrop);
+
+                    quantity = q.Where(s => s.Contains('–')).First();
+                }
+
+                string[] quantities = quantity.Split('–');
 
                 drop.Quantity = -1;
                 drop.IsRangeOfDrops = true;
@@ -302,7 +320,9 @@ namespace OsrsDropEditor
                 drop.MultipleQuantities = quantities.Select(q => Convert.ToInt32(q.Trim())).ToArray();
             }
 
-            return drop;
+            drops.Add(drop);
+
+            return drops;
         }
 
         /// <summary>
@@ -372,7 +392,7 @@ namespace OsrsDropEditor
                         IEnumerable<XmlNode> dropRows = browser.SelectNodes(tableNode, ".//*[local-name()='tr' and not(.//*[local-name()='th'])]");
                         Dictionary<string, int> headerMap = GetHeaderMap(tableNode);
 
-                        drops.AddRange(dropRows.Select(dropRow => GetDropFromRow(headerMap, dropRow)));
+                        drops.AddRange(dropRows.SelectMany(dropRow => GetDropsFromRow(headerMap, dropRow)));
                     }
 
                     Utility.SaveObjectToJson($"{npcName}.json", @"OfflineJson\DropTables\", drops);

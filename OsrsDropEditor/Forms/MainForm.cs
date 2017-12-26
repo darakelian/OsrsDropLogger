@@ -179,6 +179,7 @@ namespace OsrsDropEditor
                 addDropRangeFrom.rangeTextBox.KeyDown += RangeTextBox_KeyDown;
                 addDropRangeFrom.addDropButton.Click += AddDropButton_Click;
                 addDropRangeFrom.rangeTextBox.Tag = dropToLog;
+                addDropRangeFrom.addDropButton.Tag = dropToLog;
 
                 addDropRangeFrom.Show(this);
                 hasDropFormOpen = true;
@@ -251,7 +252,7 @@ namespace OsrsDropEditor
         {
             Button button = (Button)sender;
             AddDropRangeForm form = (AddDropRangeForm)button.TopLevelControl;
-            Drop drop = (Drop)form.Tag;
+            Drop drop = (Drop)button.Tag;
             int quantity = 1;
             if (Int32.TryParse(form.rangeTextBox.Text, out quantity))
             {
