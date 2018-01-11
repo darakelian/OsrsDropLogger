@@ -523,6 +523,17 @@ namespace OsrsDropEditor
             HighscoresForm highscoresForm = new HighscoresForm(username, gamemode);
             highscoresForm.Show(this);
         }
+
+        /// <summary>
+        /// Allow the user to input what supplies they started the trip with and compare this
+        /// to the amount of supplies left at the end of the trip.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void logSuppliesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new SuppliesForm().ShowDialog(this);
+        }
     }
 
     /// <summary>
