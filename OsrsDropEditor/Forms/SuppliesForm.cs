@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,13 @@ namespace OsrsDropEditor.Forms
 {
     public partial class SuppliesForm : Form
     {
+        private Dictionary<string, int> supplies = new Dictionary<string, int>();
+
         public SuppliesForm()
         {
             InitializeComponent();
+            if (Utility.FileExists("supplies.json"))
+                LoadSupplies();
         }
 
         /// <summary>
@@ -34,9 +39,39 @@ namespace OsrsDropEditor.Forms
 
                 if (Int32.TryParse(supplyQuantity, out quantity))
                 {
-
+                    if (supplies.ContainsKey(supplyName))
+                        supplies[supplyName] += quantity;
+                    else
+                        supplies[supplyName] = quantity;
+                    RefreshSupplyDisplay();
+                    SaveSupplies();
                 }
             }
+        }
+
+        /// <summary>
+        /// Updates the display of supplies for the trip.
+        /// </summary>
+        private void RefreshSupplyDisplay()
+        {
+            supplyLogBox.Clear();
+            foreach (var kvp in supplies)
+                supplyLogBox.AppendText($"{kvp.Key} x{kvp.Value}\n");
+        }
+
+        /// <summary>
+        /// Save the supplies to JSON so the user can close the program and resume
+        /// it at a later point.
+        /// </summary>
+        private void SaveSupplies()
+        {
+            Utility.SaveObjectToJson("supplies.json", "OfflineJson", supplies);
+        }
+
+        private void LoadSupplies()
+        {
+            supplies = JsonConvert.DeserializeObject<Dictionary<string, int>>(Utility.ReadFileToEnd("supplies.json"));
+            RefreshSupplyDisplay();
         }
     }
 }

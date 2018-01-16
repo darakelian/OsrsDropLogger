@@ -178,7 +178,7 @@ namespace OsrsDropEditor.Forms
                 {
                     clueDrops.Add(drop);
                 }
-                refreshRewardsLog();
+                RefrehRewardsLog();
             }
             catch (FormatException)
             {
@@ -186,7 +186,7 @@ namespace OsrsDropEditor.Forms
             }
         }
 
-        private void refreshRewardsLog()
+        private void RefrehRewardsLog()
         {
             rewardsLogBox.Clear();
             foreach (Drop drop in clueDrops)
