@@ -314,5 +314,33 @@ namespace OsrsDropEditor
 
             return 100 * (1 - (xpLeft / xpBand));
         }
+
+        /// <summary>
+        /// Convert a string to an integer allowing for modifiers such as K or M.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static bool ConvertStringToInt(string input, out int parsedValue)
+        {
+            input = input.ToLower();
+
+            int multiplier = 1;
+            if (input.EndsWith("k"))
+            {
+                multiplier = 1000;
+                input = input.Trim('k');
+            }
+            if (input.EndsWith("m"))
+            {
+                multiplier = 1000000;
+                input = input.Trim('m');
+            }
+
+            int baseValue = 0;
+            Int32.TryParse(input, out baseValue);
+            parsedValue = baseValue * multiplier;
+
+            return baseValue != 0;
+        }
     }
 }

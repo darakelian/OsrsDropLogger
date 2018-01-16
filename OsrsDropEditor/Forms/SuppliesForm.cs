@@ -37,7 +37,7 @@ namespace OsrsDropEditor.Forms
                 string supplyQuantity = supplyDialogForm.quantityInput.Text;
                 int quantity = 1;
 
-                if (Int32.TryParse(supplyQuantity, out quantity))
+                if (Utility.ConvertStringToInt(supplyQuantity, out quantity))
                 {
                     if (supplies.ContainsKey(supplyName))
                         supplies[supplyName] += quantity;
