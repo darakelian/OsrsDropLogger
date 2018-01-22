@@ -12,7 +12,7 @@ using System.Xml;
 
 namespace OsrsDropEditor
 {
-    class Utility
+    public static class Utility
     {
         public static string RootPath => Properties.Settings.Default.FilePath;
 
@@ -341,6 +341,24 @@ namespace OsrsDropEditor
             parsedValue = baseValue * multiplier;
 
             return baseValue != 0;
+        }
+
+        /// <summary>
+        /// Extension method for converting a string to title case.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string ToTitleCase(this string input)
+        {
+            string[] words = input.Split(' ');
+            string output = "";
+            foreach (string s in words)
+            {
+                output += s[0].ToString().ToUpper();
+                output += s.Substring(1);
+                output += " ";
+            }
+            return output.TrimEnd();
         }
     }
 }

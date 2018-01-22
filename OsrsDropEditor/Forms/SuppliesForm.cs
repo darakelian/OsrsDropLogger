@@ -39,10 +39,10 @@ namespace OsrsDropEditor.Forms
 
                 if (Utility.ConvertStringToInt(supplyQuantity, out quantity))
                 {
-                    if (supplies.ContainsKey(supplyName))
-                        supplies[supplyName] += quantity;
+                    if (supplies.ContainsKey(supplyName.ToLower()))
+                        supplies[supplyName.ToLower()] += quantity;
                     else
-                        supplies[supplyName] = quantity;
+                        supplies[supplyName.ToLower()] = quantity;
                     RefreshSupplyDisplay();
                     SaveSupplies();
                 }
@@ -56,7 +56,7 @@ namespace OsrsDropEditor.Forms
         {
             supplyLogBox.Clear();
             foreach (var kvp in supplies)
-                supplyLogBox.AppendText($"{kvp.Key} x{kvp.Value}\n");
+                supplyLogBox.AppendText($"{kvp.Key.ToTitleCase()} x{kvp.Value}\n");
         }
 
         /// <summary>
