@@ -133,6 +133,18 @@
     <Compile Include="Forms\HighscoresForm.Designer.cs">
       <DependentUpon>HighscoresForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SuppliesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SuppliesForm.Designer.cs">
+      <DependentUpon>SuppliesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SupplyDialogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SupplyDialogForm.Designer.cs">
+      <DependentUpon>SupplyDialogForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\TextDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -181,6 +193,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SuppliesForm.resx">
+      <DependentUpon>SuppliesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SupplyDialogForm.resx">
+      <DependentUpon>SupplyDialogForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TextDialogForm.resx">
       <DependentUpon>TextDialogForm.cs</DependentUpon>

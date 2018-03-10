@@ -60,6 +60,10 @@ namespace OsrsDropEditor
             this.updateTreasureTrailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logClueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.highscoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startTripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.endTripToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logSuppliesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopwatchUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.totalValueToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.gpPerHourTimer = new System.Windows.Forms.Timer(this.components);
@@ -172,10 +176,10 @@ namespace OsrsDropEditor
             this.userInteractionPanel.Controls.Add(this.loggedDropView);
             this.userInteractionPanel.Controls.Add(this.buttonTableLayoutPanel);
             this.userInteractionPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.userInteractionPanel.Location = new System.Drawing.Point(966, 44);
+            this.userInteractionPanel.Location = new System.Drawing.Point(966, 46);
             this.userInteractionPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.userInteractionPanel.Name = "userInteractionPanel";
-            this.userInteractionPanel.Size = new System.Drawing.Size(382, 664);
+            this.userInteractionPanel.Size = new System.Drawing.Size(382, 662);
             this.userInteractionPanel.TabIndex = 3;
             // 
             // labelLayoutPanel
@@ -186,7 +190,7 @@ namespace OsrsDropEditor
             this.labelLayoutPanel.Controls.Add(this.totalValueLabel, 0, 0);
             this.labelLayoutPanel.Controls.Add(this.gpPerHourLabel, 1, 0);
             this.labelLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelLayoutPanel.Location = new System.Drawing.Point(0, 574);
+            this.labelLayoutPanel.Location = new System.Drawing.Point(0, 572);
             this.labelLayoutPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.labelLayoutPanel.Name = "labelLayoutPanel";
             this.labelLayoutPanel.RowCount = 1;
@@ -280,7 +284,7 @@ namespace OsrsDropEditor
             this.buttonTableLayoutPanel.Controls.Add(this.pauseButton, 1, 0);
             this.buttonTableLayoutPanel.Controls.Add(this.clearButton, 2, 0);
             this.buttonTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonTableLayoutPanel.Location = new System.Drawing.Point(0, 612);
+            this.buttonTableLayoutPanel.Location = new System.Drawing.Point(0, 610);
             this.buttonTableLayoutPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.buttonTableLayoutPanel.Name = "buttonTableLayoutPanel";
             this.buttonTableLayoutPanel.RowCount = 1;
@@ -330,11 +334,12 @@ namespace OsrsDropEditor
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.logClueToolStripMenuItem,
-            this.highscoresToolStripMenuItem});
+            this.highscoresToolStripMenuItem,
+            this.tripToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(12, 4, 0, 4);
-            this.menuStrip1.Size = new System.Drawing.Size(1348, 44);
+            this.menuStrip1.Size = new System.Drawing.Size(1348, 46);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -389,6 +394,35 @@ namespace OsrsDropEditor
             this.highscoresToolStripMenuItem.Size = new System.Drawing.Size(144, 36);
             this.highscoresToolStripMenuItem.Text = "Highscores";
             this.highscoresToolStripMenuItem.Click += new System.EventHandler(this.highscoresToolStripMenuItem_Click);
+            // 
+            // tripToolStripMenuItem
+            // 
+            this.tripToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.startTripToolStripMenuItem,
+            this.endTripToolStripMenuItem,
+            this.logSuppliesToolStripMenuItem});
+            this.tripToolStripMenuItem.Name = "tripToolStripMenuItem";
+            this.tripToolStripMenuItem.Size = new System.Drawing.Size(66, 36);
+            this.tripToolStripMenuItem.Text = "Trip";
+            // 
+            // startTripToolStripMenuItem
+            // 
+            this.startTripToolStripMenuItem.Name = "startTripToolStripMenuItem";
+            this.startTripToolStripMenuItem.Size = new System.Drawing.Size(250, 38);
+            this.startTripToolStripMenuItem.Text = "Start Trip";
+            // 
+            // endTripToolStripMenuItem
+            // 
+            this.endTripToolStripMenuItem.Name = "endTripToolStripMenuItem";
+            this.endTripToolStripMenuItem.Size = new System.Drawing.Size(250, 38);
+            this.endTripToolStripMenuItem.Text = "End Trip";
+            // 
+            // logSuppliesToolStripMenuItem
+            // 
+            this.logSuppliesToolStripMenuItem.Name = "logSuppliesToolStripMenuItem";
+            this.logSuppliesToolStripMenuItem.Size = new System.Drawing.Size(250, 38);
+            this.logSuppliesToolStripMenuItem.Text = "Log Supplies";
+            this.logSuppliesToolStripMenuItem.Click += new System.EventHandler(this.logSuppliesToolStripMenuItem_Click);
             // 
             // stopwatchUpdateTimer
             // 
@@ -466,6 +500,10 @@ namespace OsrsDropEditor
         private System.Windows.Forms.DataGridViewTextBoxColumn totalPriceDataGridViewTextBoxColumn;
         private System.Windows.Forms.ToolStripMenuItem highscoresToolStripMenuItem;
         private System.Windows.Forms.ToolTip rarityTooltip;
+        private System.Windows.Forms.ToolStripMenuItem tripToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem startTripToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem endTripToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem logSuppliesToolStripMenuItem;
     }
 }
 

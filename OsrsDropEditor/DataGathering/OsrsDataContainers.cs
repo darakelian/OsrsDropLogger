@@ -123,7 +123,7 @@ namespace OsrsDropEditor
             XmlNode nextPageLink = GetNextPageNode();
             if (nextPageLink != null)
             {
-                browser.Navigate(nextPageLink.InnerText, true);
+                browser.Navigate(nextPageLink.InnerText);
                 GetLinksOnPage();
             }
         }
@@ -143,7 +143,7 @@ namespace OsrsDropEditor
         /// <returns></returns>
         private XmlNode GetNextPageNode()
         {
-            return browser.SelectSingleNode("//*[local-name()='a' and contains(@href, 'Category:Bestiary') and contains(@class, 'paginator-next')]/@href");
+            return browser.SelectSingleNode("//*[local-name()='a' and contains(@href, 'Category:Bestiary') and contains(., 'next')]/@href");
         }
 
         /// <summary>

@@ -156,6 +156,7 @@ namespace OsrsDropEditor.Forms
             else
             {
                 TextDialogForm quantityInputForm = new TextDialogForm();
+                quantityInputForm.Text = "Enter Quantity";
                 if (quantityInputForm.ShowDialog(this) == DialogResult.OK)
                 {
                     input = quantityInputForm.textInput.Text;
@@ -164,7 +165,8 @@ namespace OsrsDropEditor.Forms
             }
             try
             {
-                int quantity = Convert.ToInt32(input);
+                int quantity = 1;
+                Utility.ConvertStringToInt(input, out quantity);
                 Drop drop = new Drop();
                 drop.Quantity = quantity;
                 drop.Name = rewardToLog.ItemName.Replace("page", page);
@@ -176,9 +178,12 @@ namespace OsrsDropEditor.Forms
                 }
                 else
                 {
+                    if (drop.Quantity <= 0)
+                        return;
+
                     clueDrops.Add(drop);
                 }
-                refreshRewardsLog();
+                RefrehRewardsLog();
             }
             catch (FormatException)
             {
@@ -186,7 +191,7 @@ namespace OsrsDropEditor.Forms
             }
         }
 
-        private void refreshRewardsLog()
+        private void RefrehRewardsLog()
         {
             rewardsLogBox.Clear();
             foreach (Drop drop in clueDrops)

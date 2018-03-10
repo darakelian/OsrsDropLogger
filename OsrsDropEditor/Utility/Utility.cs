@@ -12,7 +12,7 @@ using System.Xml;
 
 namespace OsrsDropEditor
 {
-    class Utility
+    public static class Utility
     {
         public static string RootPath => Properties.Settings.Default.FilePath;
 
@@ -313,6 +313,52 @@ namespace OsrsDropEditor
             double xpBand = xpForNextLevel - xpForCurrentLevel;
 
             return 100 * (1 - (xpLeft / xpBand));
+        }
+
+        /// <summary>
+        /// Convert a string to an integer allowing for modifiers such as K or M.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static bool ConvertStringToInt(string input, out int parsedValue)
+        {
+            input = input.ToLower();
+
+            int multiplier = 1;
+            if (input.EndsWith("k"))
+            {
+                multiplier = 1000;
+                input = input.Trim('k');
+            }
+            if (input.EndsWith("m"))
+            {
+                multiplier = 1000000;
+                input = input.Trim('m');
+            }
+
+            int baseValue = 0;
+            Int32.TryParse(input, out baseValue);
+            parsedValue = baseValue * multiplier;
+
+            return baseValue != 0;
+        }
+
+        /// <summary>
+        /// Extension method for converting a string to title case.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string ToTitleCase(this string input)
+        {
+            string[] words = input.Split(' ');
+            string output = "";
+            foreach (string s in words)
+            {
+                output += s[0].ToString().ToUpper();
+                output += s.Substring(1);
+                output += " ";
+            }
+            return output.TrimEnd();
         }
     }
 }
