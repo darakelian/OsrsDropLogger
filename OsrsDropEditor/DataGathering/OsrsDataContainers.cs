@@ -271,56 +271,59 @@ namespace OsrsDropEditor
         {
             List<Drop> drops = new List<Drop>();
 
-            Drop drop = new Drop();
             XmlNode imageRow = row.SelectSingleNode($".//*[local-name()='td'][{headers["Image"]}]//*[local-name()='img']");
-            drop.ImageLink = Utility.GetImageLink(imageRow);
-            drop.Name = row.SelectSingleNode($".//*[local-name()='td'][{headers["Item"]}]").InnerText.Trim();
+            string name = row.SelectSingleNode($".//*[local-name()='td'][{headers["Item"]}]").InnerText.Trim();
             XmlNode rarityTag = row.SelectSingleNode($".//*[local-name()='td'][{headers["Rarity"]}]");
-            //Have to pass by reference since structs are normally by value.
-            ProcessRarityNode(ref drop, rarityTag);
 
             string quantity = row.SelectSingleNode($".//*[local-name()='td'][{headers["Quantity"]}]").InnerText.Replace("(noted)", "")
                 .Replace(",", "").Trim();
 
-            if (Regex.IsMatch(quantity, @"^\d+$"))
+            string[] quantities = quantity.Split(';');
+            foreach (string dropQuantity in quantities)
             {
-                drop.Quantity = Convert.ToInt32(quantity);
-            }
-            if (IsRangeQuantity(quantity))
-            {
-                //Some drops have range and hard value
-                if (quantity.Contains(";"))
+                Drop drop = new Drop();
+                drop.ImageLink = Utility.GetImageLink(imageRow);
+                drop.Name = name;
+                ProcessRarityNode(ref drop, rarityTag);
+                if (Regex.IsMatch(dropQuantity, @"^\d+$"))
                 {
-                    string[] q = quantity.Split(';');
-
-                    //Since order is unknown, find token w/o dash
-                    string qString = q.Where(s => !s.Contains('–')).First();
-                    Drop hardValueDrop = new Drop();
-                    hardValueDrop.ImageLink = drop.ImageLink;
-                    hardValueDrop.Name = drop.Name;
-                    hardValueDrop.Quantity = Convert.ToInt32(qString);
-                    drops.Add(hardValueDrop);
-
-                    quantity = q.Where(s => s.Contains('–')).First();
+                    drop.Quantity = Convert.ToInt32(dropQuantity);
                 }
+                if (IsRangeQuantity(dropQuantity))
+                {
+                    //Some drops have range and hard value
+                    if (dropQuantity.Contains(";"))
+                    {
+                        string[] q = dropQuantity.Split(';');
 
-                string[] quantities = quantity.Split('–');
+                        //Since order is unknown, find token w/o dash
+                        string qString = q.Where(s => !s.Contains('–')).First();
+                        Drop hardValueDrop = new Drop();
+                        hardValueDrop.ImageLink = drop.ImageLink;
+                        hardValueDrop.Name = drop.Name;
+                        hardValueDrop.Quantity = Convert.ToInt32(qString);
+                        drops.Add(hardValueDrop);
 
-                drop.Quantity = -1;
-                drop.IsRangeOfDrops = true;
-                drop.RangeLowBound = Convert.ToInt32(quantities[0]);
-                drop.RangeHighBound = Convert.ToInt32(quantities[1]);
+                        quantity = q.Where(s => s.Contains('–')).First();
+                    }
+
+                    string[] quants = dropQuantity.Split('–');
+
+                    drop.Quantity = -1;
+                    drop.IsRangeOfDrops = true;
+                    drop.RangeLowBound = Convert.ToInt32(quants[0]);
+                    drop.RangeHighBound = Convert.ToInt32(quants[1]);
+                }
+                if (Regex.IsMatch(dropQuantity, @"\d+; \d+"))
+                {
+                    string[] quants = quantity.Split(';');
+
+                    drop.Quantity = -1;
+                    drop.HasMultipleQuantities = true;
+                    drop.MultipleQuantities = quants.Select(q => Convert.ToInt32(q.Trim())).ToArray();
+                }
+                drops.Add(drop);
             }
-            if (Regex.IsMatch(quantity, @"\d+; \d+"))
-            {
-                string[] quantities = quantity.Split(';');
-
-                drop.Quantity = -1;
-                drop.HasMultipleQuantities = true;
-                drop.MultipleQuantities = quantities.Select(q => Convert.ToInt32(q.Trim())).ToArray();
-            }
-
-            drops.Add(drop);
 
             return drops;
         }
