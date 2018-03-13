@@ -279,34 +279,19 @@ namespace OsrsDropEditor
                 .Replace(",", "").Trim();
 
             string[] quantities = quantity.Split(';');
+            List<string> uniqueDrops = new List<string>();
             foreach (string dropQuantity in quantities)
             {
                 Drop drop = new Drop();
                 drop.ImageLink = Utility.GetImageLink(imageRow);
                 drop.Name = name;
                 ProcessRarityNode(ref drop, rarityTag);
-                if (Regex.IsMatch(dropQuantity, @"^\d+$"))
+                if (Regex.IsMatch(dropQuantity.Trim(), @"^\d+$"))
                 {
                     drop.Quantity = Convert.ToInt32(dropQuantity);
                 }
                 if (IsRangeQuantity(dropQuantity))
                 {
-                    //Some drops have range and hard value
-                    if (dropQuantity.Contains(";"))
-                    {
-                        string[] q = dropQuantity.Split(';');
-
-                        //Since order is unknown, find token w/o dash
-                        string qString = q.Where(s => !s.Contains('–')).First();
-                        Drop hardValueDrop = new Drop();
-                        hardValueDrop.ImageLink = drop.ImageLink;
-                        hardValueDrop.Name = drop.Name;
-                        hardValueDrop.Quantity = Convert.ToInt32(qString);
-                        drops.Add(hardValueDrop);
-
-                        quantity = q.Where(s => s.Contains('–')).First();
-                    }
-
                     string[] quants = dropQuantity.Split('–');
 
                     drop.Quantity = -1;
@@ -314,16 +299,10 @@ namespace OsrsDropEditor
                     drop.RangeLowBound = Convert.ToInt32(quants[0]);
                     drop.RangeHighBound = Convert.ToInt32(quants[1]);
                 }
-                if (Regex.IsMatch(dropQuantity, @"\d+; \d+"))
-                {
-                    string[] quants = quantity.Split(';');
-
-                    drop.Quantity = -1;
-                    drop.HasMultipleQuantities = true;
-                    drop.MultipleQuantities = quants.Select(q => Convert.ToInt32(q.Trim())).ToArray();
-                }
                 drops.Add(drop);
+                uniqueDrops.Add(name);
             }
+
 
             return drops;
         }

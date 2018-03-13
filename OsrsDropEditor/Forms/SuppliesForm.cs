@@ -34,6 +34,11 @@ namespace OsrsDropEditor.Forms
             {
                 //Attempt to add the supply
                 string supplyName = supplyDialogForm.itemInput.Text;
+
+                if (supplyName.ToLower().Contains("potion"))
+                {
+
+                }
                 string supplyQuantity = supplyDialogForm.quantityInput.Text;
                 int quantity = 1;
 

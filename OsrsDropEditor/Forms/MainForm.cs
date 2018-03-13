@@ -257,7 +257,7 @@ namespace OsrsDropEditor
             if (Int32.TryParse(form.rangeTextBox.Text, out quantity))
             {
                 if (quantity < drop.RangeLowBound || quantity > drop.RangeHighBound)
-                    return;
+                    Console.WriteLine("User maybe entered wrong number");
 
                 drop.Quantity = quantity;
                 osrsDropContainers.LogDrop(drop);
@@ -533,6 +533,21 @@ namespace OsrsDropEditor
         private void logSuppliesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new SuppliesForm().ShowDialog(this);
+        }
+
+        private void jSONToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tXTToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void redditMarkdownToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
