@@ -176,15 +176,24 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="path"></param>
         /// <param name="objectToSave"></param>
-        public static void SaveObjectToJson(string fileName, string filePath, object objectToSave)
+        public static void SaveObjectToJson(string fileName, string filePath, object objectToSave, bool usingRoot = true)
         {
-            string basePath = $@"{RootPath}\{filePath}\";
+            string basePath = usingRoot ? $@"{RootPath}\{filePath}\" : $@"{filePath}\";
 
             FileInfo fileInfo = new FileInfo(basePath);
             fileInfo.Directory.Create();
 
             string json = JsonConvert.SerializeObject(objectToSave);
             File.WriteAllText($"{basePath}{fileName}", json);
+        }
+
+        public static void SaveObjectToJson(string fullPath, object objectToSave)
+        {
+            FileInfo fileInfo = new FileInfo(fullPath);
+            fileInfo.Directory.Create();
+
+            string json = JsonConvert.SerializeObject(objectToSave);
+            File.WriteAllText(fullPath, json);
         }
 
         /// <summary>
@@ -315,12 +324,35 @@ namespace OsrsDropEditor
             return 100 * (1 - (xpLeft / xpBand));
         }
 
+        public static string GetDestinationFromUser(string prompt = "Select a destination to save the file.")
+        {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            folderBrowserDialog.Description = prompt;
+
+            DialogResult dialogResult = folderBrowserDialog.ShowDialog();
+            if (dialogResult == DialogResult.OK)
+                return folderBrowserDialog.SelectedPath;
+            else
+                return String.Empty;
+        }
+
+        #region static extension methods
+        /// <summary>
+        /// Extension method for converting a string to title case.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string ToTitleCase(this string input)
+        {
+            return String.Join(" ", input.Split(' ').Select(s => s[0].ToString().ToUpper() + s.Substring(1)));
+        }
+
         /// <summary>
         /// Convert a string to an integer allowing for modifiers such as K or M.
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static bool ConvertStringToInt(string input, out int parsedValue)
+        public static int ToConvertedInt(this string input)
         {
             input = input.ToLower();
 
@@ -337,28 +369,8 @@ namespace OsrsDropEditor
             }
 
             int baseValue = 0;
-            Int32.TryParse(input, out baseValue);
-            parsedValue = baseValue * multiplier;
-
-            return baseValue != 0;
+            return Int32.TryParse(input, out baseValue) ? baseValue * multiplier : -1;
         }
-
-        /// <summary>
-        /// Extension method for converting a string to title case.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string ToTitleCase(this string input)
-        {
-            string[] words = input.Split(' ');
-            string output = "";
-            foreach (string s in words)
-            {
-                output += s[0].ToString().ToUpper();
-                output += s.Substring(1);
-                output += " ";
-            }
-            return output.TrimEnd();
-        }
+        #endregion
     }
 }

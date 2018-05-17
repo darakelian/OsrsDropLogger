@@ -40,9 +40,9 @@ namespace OsrsDropEditor.Forms
 
                 }
                 string supplyQuantity = supplyDialogForm.quantityInput.Text;
-                int quantity = 1;
+                int quantity = supplyQuantity.ToConvertedInt();
 
-                if (Utility.ConvertStringToInt(supplyQuantity, out quantity))
+                if (quantity != -1)
                 {
                     if (supplies.ContainsKey(supplyName.ToLower()))
                         supplies[supplyName.ToLower()] += quantity;

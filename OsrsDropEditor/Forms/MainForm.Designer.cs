@@ -135,7 +135,7 @@ namespace OsrsDropEditor
             this.npcListGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.npcListGridView.Size = new System.Drawing.Size(207, 321);
             this.npcListGridView.TabIndex = 1;
-            this.npcListGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.npcListGridView_CellMouseDown);
+            this.npcListGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.NpcListGridView_CellMouseDown);
             // 
             // nameDataGridViewTextBoxColumn
             // 
@@ -172,7 +172,7 @@ namespace OsrsDropEditor
             this.dropsListView.Size = new System.Drawing.Size(270, 343);
             this.dropsListView.TabIndex = 0;
             this.dropsListView.UseCompatibleStateImageBehavior = false;
-            this.dropsListView.ItemActivate += new System.EventHandler(this.dropsListView_ItemActivate);
+            this.dropsListView.ItemActivate += new System.EventHandler(this.DropsListView_ItemActivate);
             // 
             // userInteractionPanel
             // 
@@ -301,7 +301,7 @@ namespace OsrsDropEditor
             this.starButton.TabIndex = 0;
             this.starButton.Text = "Start";
             this.starButton.UseVisualStyleBackColor = true;
-            this.starButton.Click += new System.EventHandler(this.startButton_Click);
+            this.starButton.Click += new System.EventHandler(this.StartButton_Click);
             // 
             // pauseButton
             // 
@@ -313,7 +313,7 @@ namespace OsrsDropEditor
             this.pauseButton.TabIndex = 1;
             this.pauseButton.Text = "Pause";
             this.pauseButton.UseVisualStyleBackColor = true;
-            this.pauseButton.Click += new System.EventHandler(this.pauseButton_Click);
+            this.pauseButton.Click += new System.EventHandler(this.PauseButton_Click);
             // 
             // clearButton
             // 
@@ -325,7 +325,7 @@ namespace OsrsDropEditor
             this.clearButton.TabIndex = 2;
             this.clearButton.Text = "Clear";
             this.clearButton.UseVisualStyleBackColor = true;
-            this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
+            this.clearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
             // menuStrip1
             // 
@@ -358,21 +358,21 @@ namespace OsrsDropEditor
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
             // 
             // updatePricesToolStripMenuItem
             // 
             this.updatePricesToolStripMenuItem.Name = "updatePricesToolStripMenuItem";
             this.updatePricesToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.updatePricesToolStripMenuItem.Text = "Update Prices";
-            this.updatePricesToolStripMenuItem.Click += new System.EventHandler(this.updatePricesToolStripMenuItem_Click);
+            this.updatePricesToolStripMenuItem.Click += new System.EventHandler(this.UpdatePricesToolStripMenuItem_Click);
             // 
             // updateDropsToolStripMenuItem
             // 
             this.updateDropsToolStripMenuItem.Name = "updateDropsToolStripMenuItem";
             this.updateDropsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.updateDropsToolStripMenuItem.Text = "Update Drops";
-            this.updateDropsToolStripMenuItem.Click += new System.EventHandler(this.updateDropsToolStripMenuItem_Click);
+            this.updateDropsToolStripMenuItem.Click += new System.EventHandler(this.UpdateDropsToolStripMenuItem_Click);
             // 
             // updateTreasureTrailsToolStripMenuItem
             // 
@@ -385,14 +385,14 @@ namespace OsrsDropEditor
             this.logClueToolStripMenuItem.Name = "logClueToolStripMenuItem";
             this.logClueToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
             this.logClueToolStripMenuItem.Text = "Log Clue";
-            this.logClueToolStripMenuItem.Click += new System.EventHandler(this.logClueToolStripMenuItem_Click);
+            this.logClueToolStripMenuItem.Click += new System.EventHandler(this.LogClueToolStripMenuItem_Click);
             // 
             // highscoresToolStripMenuItem
             // 
             this.highscoresToolStripMenuItem.Name = "highscoresToolStripMenuItem";
             this.highscoresToolStripMenuItem.Size = new System.Drawing.Size(78, 20);
             this.highscoresToolStripMenuItem.Text = "Highscores";
-            this.highscoresToolStripMenuItem.Click += new System.EventHandler(this.highscoresToolStripMenuItem_Click);
+            this.highscoresToolStripMenuItem.Click += new System.EventHandler(this.HighscoresToolStripMenuItem_Click);
             // 
             // tripToolStripMenuItem
             // 
@@ -421,12 +421,12 @@ namespace OsrsDropEditor
             this.logSuppliesToolStripMenuItem.Name = "logSuppliesToolStripMenuItem";
             this.logSuppliesToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.logSuppliesToolStripMenuItem.Text = "Log Supplies";
-            this.logSuppliesToolStripMenuItem.Click += new System.EventHandler(this.logSuppliesToolStripMenuItem_Click);
+            this.logSuppliesToolStripMenuItem.Click += new System.EventHandler(this.LogSuppliesToolStripMenuItem_Click);
             // 
             // stopwatchUpdateTimer
             // 
             this.stopwatchUpdateTimer.Interval = 250;
-            this.stopwatchUpdateTimer.Tick += new System.EventHandler(this.stopwatchUpdateTimer_Tick);
+            this.stopwatchUpdateTimer.Tick += new System.EventHandler(this.StopwatchUpdateTimer_Tick);
             // 
             // gpPerHourTimer
             // 
@@ -448,21 +448,21 @@ namespace OsrsDropEditor
             this.jSONToolStripMenuItem.Name = "jSONToolStripMenuItem";
             this.jSONToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.jSONToolStripMenuItem.Text = "JSON";
-            this.jSONToolStripMenuItem.Click += new System.EventHandler(this.jSONToolStripMenuItem_Click);
+            this.jSONToolStripMenuItem.Click += new System.EventHandler(this.JSONToolStripMenuItem_Click);
             // 
             // tXTToolStripMenuItem
             // 
             this.tXTToolStripMenuItem.Name = "tXTToolStripMenuItem";
             this.tXTToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.tXTToolStripMenuItem.Text = "TXT";
-            this.tXTToolStripMenuItem.Click += new System.EventHandler(this.tXTToolStripMenuItem_Click);
+            this.tXTToolStripMenuItem.Click += new System.EventHandler(this.TXTToolStripMenuItem_Click);
             // 
             // redditMarkdownToolStripMenuItem
             // 
             this.redditMarkdownToolStripMenuItem.Name = "redditMarkdownToolStripMenuItem";
             this.redditMarkdownToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.redditMarkdownToolStripMenuItem.Text = "Reddit Markdown";
-            this.redditMarkdownToolStripMenuItem.Click += new System.EventHandler(this.redditMarkdownToolStripMenuItem_Click);
+            this.redditMarkdownToolStripMenuItem.Click += new System.EventHandler(this.RedditMarkdownToolStripMenuItem_Click);
             // 
             // MainForm
             // 

@@ -165,8 +165,7 @@ namespace OsrsDropEditor.Forms
             }
             try
             {
-                int quantity = 1;
-                Utility.ConvertStringToInt(input, out quantity);
+                int quantity = input.ToConvertedInt();
                 Drop drop = new Drop();
                 drop.Quantity = quantity;
                 drop.Name = rewardToLog.ItemName.Replace("page", page);

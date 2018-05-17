@@ -8,6 +8,8 @@ using System.Diagnostics;
 using OsrsDropEditor.DataGathering;
 using OsrsDropEditor.Forms;
 using System.Net;
+using System.Text;
+using System.IO;
 
 namespace OsrsDropEditor
 {
@@ -65,7 +67,7 @@ namespace OsrsDropEditor
             npcNameTextBox.AutoCompleteCustomSource = autoCompleteSource;
             npcNameTextBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
             npcNameTextBox.AutoCompleteMode = AutoCompleteMode.Suggest;
-            npcNameTextBox.KeyDown += npcNameTextBox_KeyEnter;
+            npcNameTextBox.KeyDown += NpcNameTextBox_KeyEnter;
         }
 
         private void LoggedDropBindingSource_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e)
@@ -81,7 +83,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void npcNameTextBox_KeyEnter(object sender, KeyEventArgs e)
+        private void NpcNameTextBox_KeyEnter(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return)
             {
@@ -139,7 +141,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void npcListGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        private void NpcListGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
             int rowIndex = e.RowIndex;
 
@@ -164,7 +166,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void dropsListView_ItemActivate(object sender, EventArgs e)
+        public void DropsListView_ItemActivate(object sender, EventArgs e)
         {
             if (hasDropFormOpen)
                 return;
@@ -312,7 +314,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void clearButton_Click(object sender, EventArgs e)
+        private void ClearButton_Click(object sender, EventArgs e)
         {
             osrsDropContainers.LoggedDrops.Clear();
             loggedDropBindingSource.Clear();
@@ -333,7 +335,7 @@ namespace OsrsDropEditor
         private Stopwatch stopWatch;
         private int gpAtStart;
 
-        private void startButton_Click(object sender, EventArgs e)
+        private void StartButton_Click(object sender, EventArgs e)
         {
             if (stopWatch == null)
             {
@@ -361,7 +363,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void pauseButton_Click(object sender, EventArgs e)
+        private void PauseButton_Click(object sender, EventArgs e)
         {
             if (stopWatch != null && !stopWatch.IsRunning)
             {
@@ -380,7 +382,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void stopwatchUpdateTimer_Tick(object sender, EventArgs e)
+        private void StopwatchUpdateTimer_Tick(object sender, EventArgs e)
         {
             if (ShouldUpdateTimer())
             {
@@ -441,7 +443,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SettingsForm form = new SettingsForm();
 
@@ -462,7 +464,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void updatePricesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void UpdatePricesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             osrsDropContainers.LoadItemPrices(true);
         }
@@ -472,7 +474,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void updateDropsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void UpdateDropsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (currentNpcRow != null)
                 ShowDropsForNpc(currentNpcRow, true);
@@ -483,7 +485,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void logClueToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LogClueToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new AddTreasureTrailRewardForm(osrsDropContainers).Show(this);
         }
@@ -493,7 +495,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void highscoresToolStripMenuItem_Click(object sender, EventArgs e)
+        private void HighscoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string username = Properties.Settings.Default.username;
             string gamemode = Properties.Settings.Default.gamemode;
@@ -530,24 +532,43 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void logSuppliesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LogSuppliesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new SuppliesForm().ShowDialog(this);
         }
 
-        private void jSONToolStripMenuItem_Click(object sender, EventArgs e)
+        private void JSONToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            string destination = Utility.GetDestinationFromUser();
+            if (!String.IsNullOrEmpty(destination))
+                Utility.SaveObjectToJson("logged_drops.json", destination, osrsDropContainers.LoggedDrops, false);
         }
 
-        private void tXTToolStripMenuItem_Click(object sender, EventArgs e)
+        private void TXTToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            string destination = Utility.GetDestinationFromUser();
+            if (!String.IsNullOrEmpty(destination))
+            {
+                using (StreamWriter writer = new StreamWriter(destination + "\\logged_drops.txt"))
+                {
+                    writer.WriteLine(String.Join("\n\r", osrsDropContainers.LoggedDrops.Select(LoggedDropToMarkdown)));
+                }
+            }
         }
 
-        private void redditMarkdownToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RedditMarkdownToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            StringBuilder markdown = new StringBuilder();
+            markdown.AppendLine("Item Name|Quantity");
+            markdown.AppendLine(":--|:--");
+            markdown.Append(String.Join("\n", osrsDropContainers.LoggedDrops.Select(LoggedDropToMarkdown)));
 
+            Clipboard.SetText(markdown.ToString());
+        }
+
+        private string LoggedDropToMarkdown(LoggedDrop drop)
+        {
+            return $"{drop.Name}|{drop.Quantity}";
         }
     }
 
