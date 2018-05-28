@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace OsrsDropEditor
@@ -24,6 +25,8 @@ namespace OsrsDropEditor
 
         internal bool _expectNonHtmlResponse;
         public bool ExpectNonHtmlResponse { get { return _expectNonHtmlResponse; } set { _expectNonHtmlResponse = value; } }
+
+        private object _lock = new object();
 
         public Browser()
         {
@@ -47,17 +50,59 @@ namespace OsrsDropEditor
                     StreamReader reader = new StreamReader(stream, Encoding.UTF8);
 
                     _sgmlReader.InputStream = reader;
-                    _document = new XmlDocument();
-                    _document.PreserveWhitespace = true;
-                    _document.XmlResolver = null;
-                    if (_expectNonHtmlResponse)
+                    lock (_lock)
                     {
-                        XmlNode wrappedJson = _document.CreateNode("element", "content", "");
-                        wrappedJson.InnerText = _sgmlReader.ReadOuterXml();
-                        _document.AppendChild(wrappedJson);
+                        _document = new XmlDocument();
+                        _document.PreserveWhitespace = true;
+                        _document.XmlResolver = null;
+                        if (_expectNonHtmlResponse)
+                        {
+                            XmlNode wrappedJson = _document.CreateNode("element", "content", "");
+                            wrappedJson.InnerText = _sgmlReader.ReadOuterXml();
+                            _document.AppendChild(wrappedJson);
+                        }
+                        else
+                            _document.Load(_sgmlReader);
                     }
-                    else
-                        _document.Load(_sgmlReader);
+
+                    _uri = request.RequestUri.ToString();
+                }
+            }
+            catch (WebException e)
+            {
+                Console.WriteLine("Unable to navigate to webpage.");
+                throw e;
+            }
+        }
+
+        public async Task NavigateAsync(string url, bool absolute = false)
+        {
+            string destinationUrl = absolute ? url : OsrsDataContainers.OsrsWikiBase + url;
+
+            HttpWebRequest request = WebRequest.Create(destinationUrl) as HttpWebRequest;
+            try
+            {
+                HttpWebResponse response = (await request.GetResponseAsync()) as HttpWebResponse;
+
+                using (Stream stream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(stream, Encoding.UTF8);
+
+                    _sgmlReader.InputStream = reader;
+                    lock (_lock)
+                    {
+                        _document = new XmlDocument();
+                        _document.PreserveWhitespace = true;
+                        _document.XmlResolver = null;
+                        if (_expectNonHtmlResponse)
+                        {
+                            XmlNode wrappedJson = _document.CreateNode("element", "content", "");
+                            wrappedJson.InnerText = _sgmlReader.ReadOuterXml();
+                            _document.AppendChild(wrappedJson);
+                        }
+                        else
+                            _document.Load(_sgmlReader);
+                    }
 
                     _uri = request.RequestUri.ToString();
                 }

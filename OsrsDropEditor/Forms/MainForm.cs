@@ -10,6 +10,7 @@ using OsrsDropEditor.Forms;
 using System.Net;
 using System.Text;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace OsrsDropEditor
 {
@@ -30,7 +31,7 @@ namespace OsrsDropEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MainForm_Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
             //Prompt for folder select
             string savedPath = Properties.Settings.Default.FilePath;
@@ -51,7 +52,7 @@ namespace OsrsDropEditor
             }
             osrsDropContainers = new OsrsDataContainers(this);
 
-            osrsDropContainers.LoadData();
+            await Task.Run(() => osrsDropContainers.LoadData());
 
             //Setup the grid view
             npcNameBindingSource.DataSource = osrsDropContainers.NpcLinks.Keys.Select(key => new NpcName { Name = key });

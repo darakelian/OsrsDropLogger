@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace OsrsDropEditor
@@ -68,26 +70,29 @@ namespace OsrsDropEditor
         /// <summary>
         /// Load up all the data we need for the app.
         /// </summary>
-        public void LoadData()
+        public async Task LoadData()
         {
-            LoadNpcLinks();
-            LoadItemPrices();
-            LoadRareDropTable();
+            await LoadNpcLinks();
+            await LoadItemPrices();
+            await LoadRareDropTable();
             treasureTrailUtility.GetTreasureTrailItems();
 
-            mainForm.loggedDropBindingSource.DataSource = LoggedDrops;
+            mainForm.Invoke((MethodInvoker)(() =>
+            {
+                mainForm.loggedDropBindingSource.DataSource = LoggedDrops;
 
-            TryLoadSavedDrops();
+                TryLoadSavedDrops();
+            }));
         }
 
         /// <summary>
         /// Loads all the links for NPCs from the OSRS wiki and stores them in a dictionary.
         /// </summary>
-        public void LoadNpcLinks()
+        public async Task LoadNpcLinks()
         {
             if (!Utility.FileExists("links.json"))
             {
-                browser.Navigate(osrsWikiBestiaryLink);
+                await browser.NavigateAsync(osrsWikiBestiaryLink);
 
                 GetLinksOnPage();
             }
@@ -119,7 +124,8 @@ namespace OsrsDropEditor
                 }
             }
             browser.Navigate(currentUri, true);
-
+            mainForm.Invoke((MethodInvoker)(() => mainForm.npcNameBindingSource.DataSource = NpcLinks.Keys.Select(key => new NpcName { Name = key })));
+            
             XmlNode nextPageLink = GetNextPageNode();
             if (nextPageLink != null)
             {
@@ -150,14 +156,14 @@ namespace OsrsDropEditor
         /// Loads all the prices for tradeable items from the OSB price data API and stores them in
         /// a dictionary.
         /// </summary>
-        public void LoadItemPrices(bool forceRefresh = false)
+        public async Task LoadItemPrices(bool forceRefresh = false)
         {
             if (!Utility.FileExists("prices.json") || Utility.ShouldRefreshPrices(forceRefresh))
             {
                 try
                 {
                     browser.ExpectNonHtmlResponse = true;
-                    browser.Navigate(osbPriceLink, true);
+                    await browser.NavigateAsync(osbPriceLink, true);
                     browser.ExpectNonHtmlResponse = false;
 
                     JObject priceDataAsJson = (JObject)JToken.Parse(browser.InnerText);
@@ -191,11 +197,11 @@ namespace OsrsDropEditor
         /// <summary>
         /// Loads all the drops from the rare drop table page.
         /// </summary>
-        public void LoadRareDropTable()
+        public async Task LoadRareDropTable()
         {
             if (!Utility.FileExists("raredrops.json"))
             {
-                browser.Navigate(osrsWikiRareDropTableLink);
+                await browser.NavigateAsync(osrsWikiRareDropTableLink);
 
                 IEnumerable<XmlNode> tableNodes = browser.SelectNodes("//*[local-name()='table' and contains(@class, 'wikitable')]");
                 foreach (XmlNode tableNode in tableNodes)
@@ -208,8 +214,6 @@ namespace OsrsDropEditor
                 }
 
                 Utility.SaveObjectToJson("raredrops.json", "OfflineJson", RareDropTable);
-
-                return;
             }
             else
             {

@@ -496,7 +496,7 @@ namespace OsrsDropEditor
         }
 
         #endregion
-        private System.Windows.Forms.BindingSource npcNameBindingSource;
+        public System.Windows.Forms.BindingSource npcNameBindingSource;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.DataGridView npcListGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
